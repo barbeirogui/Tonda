@@ -1,4 +1,5 @@
 ﻿
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -145,15 +146,17 @@ tr:hover td{background:#FAFAF9}
     <div class="login-logo">🍕</div>
     <h1>Tonda Admin</h1>
     <p>Digite seu PIN de acesso</p>
-    <div class="pin-inputs">
-      <input type="password" maxlength="1" inputmode="numeric" class="pin-digit" id="p0" oninput="pinInput(0)">
-      <input type="password" maxlength="1" inputmode="numeric" class="pin-digit" id="p1" oninput="pinInput(1)">
-      <input type="password" maxlength="1" inputmode="numeric" class="pin-digit" id="p2" oninput="pinInput(2)">
-      <input type="password" maxlength="1" inputmode="numeric" class="pin-digit" id="p3" oninput="pinInput(3)">
-    </div>
-    <div class="pin-error" id="pin-error"></div>
-    <button class="login-btn" onclick="doLogin()">Entrar</button>
-    <p class="pin-hint">PIN padrão: 1234 (altere no código)</p>
+    <form onsubmit="doLogin();return false;" aria-label="Tela de login">
+      <div class="pin-inputs">
+        <input type="password" maxlength="1" inputmode="numeric" class="pin-digit" id="p0" oninput="pinInput(0)" aria-label="Dígito 1">
+        <input type="password" maxlength="1" inputmode="numeric" class="pin-digit" id="p1" oninput="pinInput(1)" aria-label="Dígito 2">
+        <input type="password" maxlength="1" inputmode="numeric" class="pin-digit" id="p2" oninput="pinInput(2)" aria-label="Dígito 3">
+        <input type="password" maxlength="1" inputmode="numeric" class="pin-digit" id="p3" oninput="pinInput(3)" aria-label="Dígito 4">
+      </div>
+      <div class="pin-error" id="pin-error" aria-live="polite"></div>
+      <button class="login-btn" type="submit">Entrar</button>
+      <p class="pin-hint">PIN padrão: 1234 (altere no código)</p>
+    </form>
   </div>
 </div>
 
@@ -416,14 +419,41 @@ tr:hover td{background:#FAFAF9}
 <div class="toast" id="toast"></div>
 
 <script>
+// PIN protection (frontend only, not seguro para produção!)
+const PIN = localStorage.getItem('admin_pin') || '1234';
+function doLogin() {
+  const pin = [0,1,2,3].map(i => document.getElementById('p'+i).value).join('');
+  if (pin === PIN) {
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('app').style.display = '';
+    document.getElementById('pin-error').textContent = '';
+  } else {
+    document.getElementById('pin-error').textContent = 'PIN incorreto.';
+    [0,1,2,3].forEach(i => document.getElementById('p'+i).value = '');
+    document.getElementById('p0').focus();
+  }
+}
+function pinInput(idx) {
+  const el = document.getElementById('p'+idx);
+  if (el.value.length === 1 && idx < 3) document.getElementById('p'+(idx+1)).focus();
+}
+// Permite alterar o PIN nas configurações
+function saveConfig() {
+  const newPin = document.getElementById('cfg-pin').value;
+  if (newPin && newPin.length === 4) {
+    localStorage.setItem('admin_pin', newPin);
+    alert('PIN alterado!');
+  }
+  // ...restante do saveConfig...
+}
 // ============================================================
-const PIN = "1234"; // Altere seu PIN aqui
+const PIN = "1103"; // Altere seu PIN aqui
 const STORE_KEY = "tonda_pizzaria";
 // ============================================================
 
 // ---- DEFAULT DATA ----
 const DEFAULT = {
-  config:{nome:"Tonda Pizzaria Artesanal",whatsapp:"5511983746277",taxaEntrega:5,tempoEstimado:"40-50 minutos",pin:PIN},
+  config:{nome:"Tonda Pizzaria Artesanal",whatsapp:"5511983746277",taxaEntrega:0,tempoEstimado:"40-50 minutos",pin:PIN},
   insumos:[
     {id:"i1",nome:"Massa artesanal",unidade:"un",custo:3.50},
     {id:"i2",nome:"Mussarela",unidade:"kg",custo:34.00},
@@ -704,13 +734,13 @@ function renderConfig(){
   const cfg=DB.config;
   document.getElementById("cfg-nome").value=cfg.nome||"";
   document.getElementById("cfg-wp").value=cfg.whatsapp||"";
-  document.getElementById("cfg-taxa").value=cfg.taxaEntrega||5;
+  document.getElementById("cfg-taxa").value=cfg.taxaEntrega||0;
   document.getElementById("cfg-tempo").value=cfg.tempoEstimado||"40-50 minutos";
 }
 function saveConfig(){
   DB.config.nome=document.getElementById("cfg-nome").value.trim();
   DB.config.whatsapp=document.getElementById("cfg-wp").value.trim();
-  DB.config.taxaEntrega=parseNum(document.getElementById("cfg-taxa").value)||5;
+  DB.config.taxaEntrega=parseNum(document.getElementById("cfg-taxa").value)||0;
   DB.config.tempoEstimado=document.getElementById("cfg-tempo").value.trim();
   const newPin=document.getElementById("cfg-pin").value.trim();
   if(newPin.length===4 && /^[0-9]{4}$/.test(newPin)) DB.config.pin=newPin;

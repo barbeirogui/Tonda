@@ -1,0 +1,12 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "tonda-pizzaria",
+  "compatibility_date": "2026-05-26",
+  "observability": {
+    "enabled": true
+  },
+  "main": "src/index.js",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ]
+}

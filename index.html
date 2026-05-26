@@ -1,11 +1,21 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tonda Pizzaria Artesanal</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tonda Pizzaria Artesanal</title>
+  <meta name="description" content="Pizzaria artesanal com entrega rápida e ingredientes selecionados. Peça online!">
+  <meta name="keywords" content="pizza, pizzaria, artesanal, delivery, tonda">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="Tonda Pizzaria Artesanal">
+  <meta property="og:description" content="Pizzaria artesanal com entrega rápida e ingredientes selecionados. Peça online!">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="/logo.png">
+  <meta property="og:locale" content="pt_BR">
+  <link rel="icon" href="/favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --red:#C0392B;--red-dark:#96281B;--red-light:#FAEAEA;
@@ -122,6 +132,7 @@ main{max-width:960px;margin:0 auto;padding:32px 20px 120px}
 </style>
 </head>
 <body>
+<a href="#menu-main" class="skip-link" style="position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:999;background:#fff;color:#c0392b;padding:8px 16px;border-radius:8px;">Pular para o conteúdo</a>
 <header>
   <div class="header-inner">
     <div class="logo">
@@ -170,15 +181,15 @@ main{max-width:960px;margin:0 auto;padding:32px 20px 120px}
         <div id="modal-items"></div>
         <div class="summary-total"><span>Total</span><span id="modal-total">R$0,00</span></div>
       </div>
-      <div class="field" id="field-nome"><label>Seu nome *</label><input type="text" id="inp-nome" placeholder="Ex: João Silva"><div class="required-msg">Por favor, informe seu nome.</div></div>
-      <div class="field" id="field-tel"><label>Seu WhatsApp *</label><input type="tel" id="inp-tel" placeholder="(11) 99999-9999" oninput="maskPhone(this)"><div class="required-msg">Por favor, informe seu telefone.</div></div>
+      <div class="field" id="field-nome"><label for="inp-nome">Seu nome *</label><input type="text" id="inp-nome" placeholder="Ex: João Silva" autocomplete="name" required aria-required="true"><div class="required-msg">Por favor, informe seu nome.</div></div>
+      <div class="field" id="field-tel"><label for="inp-tel">Seu WhatsApp *</label><input type="tel" id="inp-tel" placeholder="(11) 99999-9999" oninput="maskPhone(this)" autocomplete="tel" required aria-required="true"><div class="required-msg">Por favor, informe seu telefone.</div></div>
       <div class="field-row">
-        <div class="field" id="field-rua"><label>Rua *</label><input type="text" id="inp-rua" placeholder="Rua das Flores"><div class="required-msg">Informe a rua.</div></div>
-        <div class="field" id="field-num"><label>Número *</label><input type="text" id="inp-num" placeholder="123"><div class="required-msg">Informe o número.</div></div>
+        <div class="field" id="field-rua"><label for="inp-rua">Rua *</label><input type="text" id="inp-rua" placeholder="Rua das Flores" required aria-required="true"><div class="required-msg">Informe a rua.</div></div>
+        <div class="field" id="field-num"><label for="inp-num">Número *</label><input type="text" id="inp-num" placeholder="123" required aria-required="true"><div class="required-msg">Informe o número.</div></div>
       </div>
       <div class="field-row">
-        <div class="field" id="field-bairro"><label>Bairro *</label><input type="text" id="inp-bairro" placeholder="Centro"><div class="required-msg">Informe o bairro.</div></div>
-        <div class="field"><label>Complemento</label><input type="text" id="inp-comp" placeholder="Apto 12, Bloco B"></div>
+        <div class="field" id="field-bairro"><label for="inp-bairro">Bairro *</label><input type="text" id="inp-bairro" placeholder="Centro" required aria-required="true"><div class="required-msg">Informe o bairro.</div></div>
+        <div class="field"><label for="inp-comp">Complemento</label><input type="text" id="inp-comp" placeholder="Apto 12, Bloco B"></div>
       </div>
       <div class="field">
         <label>Forma de pagamento *</label>
@@ -190,7 +201,7 @@ main{max-width:960px;margin:0 auto;padding:32px 20px 120px}
         </div>
       </div>
       <div class="field"><label>Observações</label><textarea id="inp-obs" placeholder="Ex: sem cebola, borda recheada..."></textarea></div>
-      <button class="whatsapp-btn" onclick="sendToWhatsApp()">
+      <button class="whatsapp-btn" onclick="enviarPedido()" id="btn-enviar-pedido" aria-label="Enviar pedido">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.126 1.531 5.862L.057 23.489a.75.75 0 0 0 .921.921l5.688-1.461A11.943 11.943 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.709 9.709 0 0 1-4.953-1.358l-.354-.211-3.671.943.97-3.598-.232-.371A9.712 9.712 0 0 1 2.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/></svg>
         Enviar pedido pelo WhatsApp
       </button>
@@ -204,6 +215,65 @@ main{max-width:960px;margin:0 auto;padding:32px 20px 120px}
   <button class="back-btn" onclick="resetAll()">Fazer novo pedido</button>
 </div>
 <script>
+// Validação e feedback do formulário de pedido
+function validarCamposPedido() {
+  let ok = true;
+  const campos = [
+    { id: 'nome', label: 'Nome' },
+    { id: 'tel', label: 'WhatsApp' },
+    { id: 'rua', label: 'Rua' },
+    { id: 'num', label: 'Número' },
+    { id: 'bairro', label: 'Bairro' }
+  ];
+  campos.forEach(c => {
+    const field = document.getElementById('field-' + c.id);
+    const input = document.getElementById('inp-' + c.id);
+    if (!input.value.trim()) {
+      field.classList.add('error');
+      ok = false;
+    } else {
+      field.classList.remove('error');
+    }
+  });
+  return ok;
+}
+
+function enviarPedido() {
+  if (!validarCamposPedido()) {
+    alert('Por favor, preencha todos os campos obrigatórios.');
+    return;
+  }
+  const pedido = {
+    nome: document.getElementById('inp-nome').value,
+    tel: document.getElementById('inp-tel').value,
+    rua: document.getElementById('inp-rua').value,
+    num: document.getElementById('inp-num').value,
+    bairro: document.getElementById('inp-bairro').value,
+    comp: document.getElementById('inp-comp').value,
+    obs: document.getElementById('inp-obs').value,
+    pagamento: document.querySelector('input[name="pay"]:checked').value,
+    carrinho: Object.values(cart).map(i => ({ nome: i.nome, qtd: i.qty, preco: i.preco }))
+  };
+  document.getElementById('btn-enviar-pedido').disabled = true;
+  fetch('https://tonda-pizzaria.<subdomínio>.workers.dev/api/pedidos', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(pedido)
+  })
+    .then(r => r.json())
+    .then(resp => {
+      if (resp.status === 'ok') {
+        document.getElementById('success').classList.add('show');
+        closeCheckout();
+      } else {
+        alert('Erro ao enviar pedido. Tente novamente.');
+      }
+    })
+    .catch(() => alert('Erro ao enviar pedido.'))
+    .finally(() => {
+      document.getElementById('btn-enviar-pedido').disabled = false;
+    });
+}
 const STORE_KEY="tonda_pizzaria";
 const FALLBACK={
   config:{nome:"Tonda Pizzaria Artesanal",whatsapp:"5511999999999",taxaEntrega:5,tempoEstimado:"40-50 minutos"},
