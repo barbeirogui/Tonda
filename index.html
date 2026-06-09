@@ -255,7 +255,7 @@ function enviarPedido() {
     carrinho: Object.values(cart).map(i => ({ nome: i.nome, qtd: i.qty, preco: i.preco }))
   };
   document.getElementById('btn-enviar-pedido').disabled = true;
-  fetch('https://tonda-pizzaria.guilhermebarbeiro.workers.dev/api/pedidos', {
+  fetch('https://tondapizzaria.guilhermebarbeiro.workers.dev/api/pedidos', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(pedido)

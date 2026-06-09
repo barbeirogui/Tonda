@@ -155,7 +155,7 @@ tr:hover td{background:#FAFAF9}
       </div>
       <div class="pin-error" id="pin-error" aria-live="polite"></div>
       <button class="login-btn" type="submit">Entrar</button>
-      <p class="pin-hint">PIN</p>
+      <p class="pin-hint">PIN padrão: 1103 (altere no código)</p>
     </form>
   </div>
 </div>
@@ -275,7 +275,7 @@ tr:hover td{background:#FAFAF9}
           <div class="field"><label>Taxa de entrega (R$)</label><input type="number" id="cfg-taxa" step="0.50" value="0.00"></div>
           <div class="field"><label>Tempo estimado</label><input type="text" id="cfg-tempo" value="40-50 minutos"></div>
         </div>
-        <div class="field"><label>PIN de acesso (4 dígitos)</label><input type="password" id="cfg-pin" maxlength="4" placeholder="1234"></div>
+        <div class="field"><label>PIN de acesso (4 dígitos)</label><input type="password" id="cfg-pin" maxlength="4" placeholder="1103"></div>
         <button class="btn btn-primary" onclick="saveConfig()">Salvar configurações</button>
       </div>
     </div>
@@ -420,7 +420,6 @@ tr:hover td{background:#FAFAF9}
 
 <script>
 // PIN protection (frontend only, not seguro para produção!)
-const PIN = localStorage.getItem('admin_pin') || '1234';
 function doLogin() {
   const pin = [0,1,2,3].map(i => document.getElementById('p'+i).value).join('');
   if (pin === PIN) {
@@ -436,15 +435,6 @@ function doLogin() {
 function pinInput(idx) {
   const el = document.getElementById('p'+idx);
   if (el.value.length === 1 && idx < 3) document.getElementById('p'+(idx+1)).focus();
-}
-// Permite alterar o PIN nas configurações
-function saveConfig() {
-  const newPin = document.getElementById('cfg-pin').value;
-  if (newPin && newPin.length === 4) {
-    localStorage.setItem('admin_pin', newPin);
-    alert('PIN alterado!');
-  }
-  // ...restante do saveConfig...
 }
 // ============================================================
 const PIN = "1103"; // Altere seu PIN aqui
