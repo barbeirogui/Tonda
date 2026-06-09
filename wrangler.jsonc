@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "tonda-pizzaria",
+  "name": "tondapizzaria",
   "compatibility_date": "2026-05-26",
   "observability": {
     "enabled": true
@@ -8,5 +8,16 @@
   "main": "src/index.js",
   "compatibility_flags": [
     "nodejs_compat"
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "TONDA_DB",
+      "id": "721c35209dbb4c62a38b6a11a504bdb9"
+    }
+    ,
+    {
+      "binding": "KV",
+      "id": "721c35209dbb4c62a38b6a11a504bdb9"
+    }
   ]
 }
