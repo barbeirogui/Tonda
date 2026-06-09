@@ -6,9 +6,6 @@
     "enabled": true
   },
   "main": "src/index.js",
-  "site": {
-    "bucket": "./"
-  },
   "compatibility_flags": [
     "nodejs_compat"
   ],
