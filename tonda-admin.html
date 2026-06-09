@@ -266,7 +266,10 @@ tr:hover td{background:#FAFAF9}
     <!-- CONFIG -->
     <div class="tab-content" id="tab-config">
       <div class="page-header">
-        <div class="page-title">Configurações <small>Dados da pizzaria e WhatsApp</small></div>
+          <div class="page-title">Configurações <small>Dados da pizzaria e WhatsApp</small></div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <button class="btn btn-ghost" id="btn-reload-server" onclick="reloadServerData()">🔄 Recarregar do servidor</button>
+          </div>
       </div>
       <div style="background:var(--white);border-radius:var(--radius);border:1px solid var(--border);padding:24px;max-width:520px">
         <div class="field"><label>Nome da pizzaria</label><input type="text" id="cfg-nome" value="Tonda Pizzaria Artesanal"></div>
@@ -509,13 +512,28 @@ function save(data){
 }
 async function saveToServer(data){
   try{
-    await fetch(`${API_HOST}/api/admin/save`, {
+    const resp = await fetch(`${API_HOST}/api/admin/save`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
+    if (!resp.ok) {
+      const text = await resp.text().catch(() => resp.statusText);
+      console.warn("Erro ao salvar no servidor:", resp.status, text);
+      toast("⚠️ Não foi possível salvar no servidor. Dados gravados localmente.");
+      return false;
+    }
+    const json = await resp.json().catch(() => null);
+    if (json && json.status && json.status !== "ok") {
+      console.warn("Resposta inesperada ao salvar no servidor:", json);
+      toast("⚠️ Não foi possível salvar no servidor. Dados gravados localmente.");
+      return false;
+    }
+    toast("✅ Dados salvos no servidor e localmente.");
+    return true;
   }catch(e){
     console.warn("Não foi possível salvar no KV:", e);
+    toast("⚠️ Não foi possível salvar no servidor. Dados gravados localmente.");
   }
 }
 async function loadServerData(){
@@ -523,13 +541,20 @@ async function loadServerData(){
     const resp = await fetch(`${API_HOST}/api/admin/load`);
     if(!resp.ok) throw new Error(resp.statusText);
     const data = await resp.json();
-    if(data && typeof data === "object"){
+    if (data && typeof data === "object" && Object.keys(data).length > 0) {
       DB = normalizeDb(data);
-      localStorage.setItem(STORE_KEY,JSON.stringify(DB));
-      if(document.getElementById('app').style.display !== 'none') renderAll();
+      localStorage.setItem(STORE_KEY, JSON.stringify(DB));
+      if (document.getElementById('app').style.display !== 'none') renderAll();
+      toast('✅ Dados do servidor carregados.');
+      return true;
     }
-  }catch(e){
+    console.warn('Servidor retornou dados vazios; mantendo dados locais.');
+    if (document.getElementById('app').style.display !== 'none') renderAll();
+    return false;
+  } catch(e) {
     console.warn("Não foi possível carregar dados do servidor:", e);
+    toast('⚠️ Não foi possível carregar dados do servidor. Usando cache local.');
+    return false;
   }
 }
 let DB=load();
@@ -593,6 +618,25 @@ function doLogin() {
     document.getElementById("pin-error").textContent = "PIN incorreto. Tente novamente.";
     [0, 1, 2, 3].forEach(i => document.getElementById("p" + i).value = "");
     document.getElementById("p0").focus();
+  }
+}
+
+// Forçar recarga dos dados remotos e atualizar cache local
+async function reloadServerData(){
+  const btn = document.getElementById('btn-reload-server');
+  if(btn) btn.disabled = true;
+  try{
+    const ok = await loadServerData();
+    if(ok){
+      toast('✅ Dados atualizados a partir do servidor.');
+    } else {
+      toast('⚠️ Nenhum dado novo no servidor.');
+    }
+  }catch(e){
+    console.warn('Erro ao recarregar dados do servidor:', e);
+    toast('⚠️ Erro ao recarregar dados.');
+  }finally{
+    if(btn) btn.disabled = false;
   }
 }
 
