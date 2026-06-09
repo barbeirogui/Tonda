@@ -255,7 +255,7 @@ function enviarPedido() {
     carrinho: Object.values(cart).map(i => ({ nome: i.nome, qtd: i.qty, preco: i.preco }))
   };
   document.getElementById('btn-enviar-pedido').disabled = true;
-  fetch('https://tondapizzaria.guilhermebarbeiro.workers.dev/api/pedidos', {
+  fetch(`${API_HOST}/api/pedidos`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(pedido)
@@ -274,6 +274,7 @@ function enviarPedido() {
       document.getElementById('btn-enviar-pedido').disabled = false;
     });
 }
+const API_HOST = "https://tondapizzaria.tondapizzaria.workers.dev";
 const STORE_KEY="tonda_pizzaria";
 const FALLBACK={
   config:{nome:"Tonda Pizzaria Artesanal",whatsapp:"5511999999999",taxaEntrega:0,tempoEstimado:"30-40 minutos"},
@@ -292,41 +293,55 @@ const FALLBACK={
 function toArray(value){
   return Array.isArray(value) ? value : (value && typeof value === "object" ? Object.values(value) : null);
 }
-function loadDB(){
+function normalizeData(data){
+  const base = JSON.parse(JSON.stringify(FALLBACK));
+  const db = data && typeof data === "object" ? data : {};
+  return {
+    ...base,
+    ...db,
+    config:{...base.config,...(db.config||{})},
+    insumos:toArray(db.insumos) || base.insumos,
+    pizzas:toArray(db.pizzas) || base.pizzas,
+    estoque:toArray(db.estoque) || [],
+    vendas:toArray(db.vendas) || [],
+  };
+}
+function loadLocalDB(){
   try{
     const d = localStorage.getItem(STORE_KEY);
-    if(!d) return FALLBACK;
-    const parsed = JSON.parse(d);
-    return {
-      ...FALLBACK,
-      ...parsed,
-      config:{...FALLBACK.config,...(parsed.config||{})},
-      insumos:toArray(parsed.insumos) || FALLBACK.insumos,
-      pizzas:toArray(parsed.pizzas) || FALLBACK.pizzas,
-      estoque:toArray(parsed.estoque) || [],
-      vendas:toArray(parsed.vendas) || [],
-    };
+    return d ? normalizeData(JSON.parse(d)) : FALLBACK;
   }catch(e){
     console.warn('Erro ao carregar dados do localStorage:', e);
     return FALLBACK;
   }
 }
-function saveDB(data){
-  localStorage.setItem(STORE_KEY,JSON.stringify(data));
+function saveLocalDB(data){
+  localStorage.setItem(STORE_KEY,JSON.stringify(normalizeData(data)));
+}
+async function loadServerDB(){
+  try{
+    const resp = await fetch(`${API_HOST}/api/admin/load`);
+    if(!resp.ok) throw new Error(resp.statusText);
+    const data = await resp.json();
+    return normalizeData(data);
+  }catch(e){
+    console.warn('Não foi possível carregar dados do servidor:', e);
+    return null;
+  }
 }
 
-const DB=loadDB();
-const CFG=DB.config||FALLBACK.config;
-const MENU=DB.pizzas.filter(p=>p.ativo);
-const CATS=[...new Set(MENU.map(p=>p.categoria))];
+let DB = FALLBACK;
+let CFG = DB.config;
+let MENU = [];
 let cart={};
-let activecat=CATS[0];
+let activecat="";
 
-// Update UI from config
-document.getElementById("logo-name").innerHTML=`${CFG.nome.split(" ")[0]} <span>${CFG.nome.split(" ").slice(1).join(" ")||"Pizzaria"}</span>`;
-document.getElementById("tag-tempo").textContent=`⏱ ${CFG.tempoEstimado}`;
-document.getElementById("tag-taxa").textContent=`🚚 Entrega R$${(CFG.taxaEntrega ?? 0).toFixed(2).replace(".",",")}`;
-document.getElementById("cart-taxa-label").textContent=`R$${(CFG.taxaEntrega ?? 0).toFixed(2).replace(".",",")}`;
+function updateConfigUI(){
+  document.getElementById("logo-name").innerHTML=`${CFG.nome.split(" ")[0]} <span>${CFG.nome.split(" ").slice(1).join(" ")||"Pizzaria"}</span>`;
+  document.getElementById("tag-tempo").textContent=`⏱ ${CFG.tempoEstimado}`;
+  document.getElementById("tag-taxa").textContent=`🚚 Entrega R$${(CFG.taxaEntrega ?? 0).toFixed(2).replace(".",",")}`;
+  document.getElementById("cart-taxa-label").textContent=`R$${(CFG.taxaEntrega ?? 0).toFixed(2).replace(".",",")}`;
+}
 
 function catIcon(c){return c==="Bebidas"?"🥤":c==="Doces"?"🍰":c==="Especiais"?"⭐":"🍕"}
 function renderCats(){
@@ -472,7 +487,29 @@ function maskPhone(el){
   v=v.length<=10?v.replace(/(\d{2})(\d{4})(\d{0,4})/,"($1) $2-$3"):v.replace(/(\d{2})(\d{5})(\d{0,4})/,"($1) $2-$3");
   el.value=v;
 }
-renderCats();renderMenu();updateCart();
+async function init(){
+  DB = loadLocalDB();
+  CFG = DB.config||FALLBACK.config;
+  MENU = DB.pizzas.filter(p=>p.ativo);
+  activecat = [...new Set(MENU.map(p=>p.categoria))][0] || "";
+  updateConfigUI();
+  renderCats();
+  renderMenu();
+  updateCart();
+  const remote = await loadServerDB();
+  if(remote){
+    DB = remote;
+    CFG = DB.config||FALLBACK.config;
+    MENU = DB.pizzas.filter(p=>p.ativo);
+    activecat = [...new Set(MENU.map(p=>p.categoria))][0] || "";
+    updateConfigUI();
+    renderCats();
+    renderMenu();
+    updateCart();
+  }
+}
+
+init();
 </script>
 </body>
 </html>

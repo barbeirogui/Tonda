@@ -444,6 +444,7 @@ function pinInput(idx) {
 // ============================================================
 const PIN = "1103"; // Altere seu PIN aqui
 const STORE_KEY = "tonda_pizzaria";
+const API_HOST = "https://tondapizzaria.tondapizzaria.workers.dev";
 // ============================================================
 
 // ---- DEFAULT DATA ----
@@ -496,12 +497,39 @@ function load(){
 }
 function save(data){
   try{
-    localStorage.setItem(STORE_KEY,JSON.stringify(normalizeDb(data)));
+    const normalized = normalizeDb(data);
+    localStorage.setItem(STORE_KEY,JSON.stringify(normalized));
+    saveToServer(normalized);
     return true;
   }catch(e){
     console.error(e);
     toast("⚠️ Não foi possível salvar. Verifique o armazenamento do navegador.");
     return false;
+  }
+}
+async function saveToServer(data){
+  try{
+    await fetch(`${API_HOST}/api/admin/save`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+  }catch(e){
+    console.warn("Não foi possível salvar no KV:", e);
+  }
+}
+async function loadServerData(){
+  try{
+    const resp = await fetch(`${API_HOST}/api/admin/load`);
+    if(!resp.ok) throw new Error(resp.statusText);
+    const data = await resp.json();
+    if(data && typeof data === "object"){
+      DB = normalizeDb(data);
+      localStorage.setItem(STORE_KEY,JSON.stringify(DB));
+      if(document.getElementById('app').style.display !== 'none') renderAll();
+    }
+  }catch(e){
+    console.warn("Não foi possível carregar dados do servidor:", e);
   }
 }
 let DB=load();
@@ -551,6 +579,7 @@ window.addEventListener('DOMContentLoaded', function() {
   });
   // Foco inicial
   setTimeout(()=>{document.getElementById('p0').focus();}, 100);
+  loadServerData();
 });
 
 function doLogin() {
