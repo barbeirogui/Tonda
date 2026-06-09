@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tonda Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
+<style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --red:#C0392B;--red-dark:#96281B;--red-light:#FAEAEA;
@@ -50,11 +50,93 @@ nav{display:flex;flex-direction:column;gap:5px;flex:1}
 .page-title small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
 .btn{display:inline-flex;align-items:center;gap:6px;border:none;border-radius:var(--radius);padding:9px 16px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit}
 .btn-primary{background:var(--red);color:#fff}.btn-primary:hover{background:var(--red-dark)}
-.btn-ghost{background:var(--white);color:var(--text);border:1px solid var(--border)}.btn-ghost:hover{background:var(--bg)}.btn-danger{background:var(--red-light);color:var(--red)}.btn-danger:hover{background:#fcd5d5}
+.btn-ghost{background:var(--white);color:var(--text);border:1px solid var(--border)}.btn-ghost:hover{background:var(--bg)}
+.btn-danger{background:var(--red-light);color:var(--red)}.btn-danger:hover{background:#fcd5d5}
 .btn-success{background:var(--green-light);color:var(--green)}.btn-success:hover{background:#bbf7d0}
 .btn-sm{padding:6px 10px;font-size:12px}
 
-  </style>
+/* CARDS */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:28px}
+.stat-card{background:var(--white);border-radius:var(--radius);padding:16px;border:1px solid var(--border)}
+.stat-label{font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:500;text-transform:uppercase;letter-spacing:.04em}
+.stat-value{font-size:26px;font-weight:700}
+.stat-sub{font-size:12px;color:var(--muted);margin-top:4px}
+
+/* TABLE */
+.table-wrap{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden}
+table{width:100%;border-collapse:collapse}
+thead tr{border-bottom:1px solid var(--border)}
+th{padding:11px 14px;text-align:left;font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;background:var(--bg)}
+td{padding:12px 14px;font-size:13px;border-bottom:1px solid var(--border)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#FAFAF9}
+.badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
+.badge-green{background:var(--green-light);color:var(--green)}
+.badge-amber{background:var(--amber-light);color:var(--amber)}
+.badge-red{background:#FEE2E2;color:#DC2626}
+.badge-gray{background:#F5F5F4;color:#78716C}
+
+/* CMV BAR */
+.cmv-bar-wrap{display:flex;align-items:center;gap:8px}
+.cmv-bar-bg{flex:1;height:6px;background:#E7E5E4;border-radius:3px;overflow:hidden;max-width:80px}
+.cmv-bar-fill{height:100%;border-radius:3px;transition:width .4s}
+.cmv-pct{font-size:13px;font-weight:700;min-width:40px}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;display:none;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto}
+.modal-overlay.open{display:flex}
+.modal{background:var(--white);border-radius:14px;width:100%;max-width:560px;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.modal-head{padding:20px 20px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.modal-head h3{font-size:17px;font-weight:700}
+.modal-body{padding:20px}
+.modal-foot{padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end}
+.close-x{background:none;border:none;font-size:20px;color:var(--muted);cursor:pointer;width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:6px}
+.close-x:hover{background:var(--bg);color:var(--text)}
+
+/* FORM */
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em}
+.field input,.field select,.field textarea{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;color:var(--text);background:var(--white);transition:border-color .2s}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--red)}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field-row-3{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px}
+
+/* INGREDIENT LIST IN MODAL */
+.ing-list{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:12px}
+.ing-row{display:grid;grid-template-columns:1fr 100px 90px 32px;gap:8px;align-items:center;padding:8px 10px;border-bottom:1px solid var(--border);font-size:13px}
+.ing-row:last-child{border-bottom:none}
+.ing-head{background:var(--bg);font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.ing-row select,.ing-row input{padding:5px 8px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;width:100%}
+.ing-row input:focus,.ing-row select:focus{outline:none;border-color:var(--red)}
+.ing-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:4px}
+.ing-del:hover{background:var(--red-light);color:var(--red)}
+.cmv-preview{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:13px}
+.cmv-preview-row{display:flex;justify-content:space-between;margin-bottom:6px}
+.cmv-preview-row:last-child{margin-bottom:0;font-weight:700;font-size:14px;border-top:1px solid var(--border);padding-top:8px;margin-top:8px}
+
+/* DASHBOARD CMV TABLE */
+.cmv-table-row{display:grid;grid-template-columns:1fr 90px 90px 90px 130px;gap:8px;align-items:center;padding:11px 14px;border-bottom:1px solid var(--border);font-size:13px}
+.cmv-table-row:last-child{border-bottom:none}
+.cmv-table-head{background:var(--bg);font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;border-radius:var(--radius) var(--radius) 0 0}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--sidebar);color:#fff;padding:12px 18px;border-radius:10px;font-size:13px;font-weight:500;z-index:999;transform:translateY(80px);opacity:0;transition:all .3s;display:flex;align-items:center;gap:8px}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* TOGGLE */
+.toggle-wrap{display:flex;align-items:center;gap:8px}
+.toggle{position:relative;display:inline-block;width:36px;height:20px}
+.toggle input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;inset:0;background:#D6D3D1;border-radius:20px;cursor:pointer;transition:.2s}
+.toggle-slider::before{content:'';position:absolute;height:14px;width:14px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s}
+.toggle input:checked+.toggle-slider{background:var(--green)}
+.toggle input:checked+.toggle-slider::before{transform:translateX(16px)}
+
+@media(max-width:768px){
+  aside{display:none}
+  .field-row,.field-row-3{grid-template-columns:1fr}
+}
+</style>
 </head>
 <body>
   
