@@ -19,7 +19,7 @@
 1. Crie um repositório no GitHub com index.html, tonda-admin.html e demais arquivos estáticos.
 2. No painel Cloudflare, acesse "Pages" e conecte seu repositório.
 3. Siga o fluxo (build command: vazio, output: root).
-4. O site será publicado em https://tondapizzaria.pages.dev
+4. O site será publicado em https://<seu-projeto>.pages.dev
 
 ### 2. Backend (Cloudflare Workers)
 1. Instale o Wrangler CLI:
@@ -27,11 +27,11 @@
 2. Faça login:
    wrangler login
 3. No terminal, dentro da pasta do projeto, rode:
-   wrangler deploy
-4. O endpoint será https://tondapizzaria.<subdomínio>.workers.dev
+   wrangler publish
+4. O endpoint será https://<nome-do-worker>.<subdomínio>.workers.dev
 
 ### 3. Conectar frontend e backend
-- No frontend, envie pedidos para o endpoint do Worker (exemplo: fetch('https://tondapizzaria.<subdomínio>.workers.dev/api/pedidos'))
+- No frontend, envie pedidos para o endpoint do Worker (exemplo: fetch('https://<nome-do-worker>.<subdomínio>.workers.dev/api/pedidos'))
 
 ### 4. (Opcional) Receber pedidos por e-mail
 - Crie conta no Formspree, EmailJS ou similar.

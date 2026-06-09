@@ -7,6 +7,14 @@
   <title>Tonda Pizzaria Artesanal</title>
   <meta name="description" content="Pizzaria artesanal com entrega rápida e ingredientes selecionados. Peça online!">
   <meta name="keywords" content="pizza, pizzaria, artesanal, delivery, tonda">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="Tonda Pizzaria Artesanal">
+  <meta property="og:description" content="Pizzaria artesanal com entrega rápida e ingredientes selecionados. Peça online!">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="/logo.png">
+  <meta property="og:locale" content="pt_BR">
+  <link rel="icon" href="/favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -31,9 +39,6 @@ header{background:var(--white);border-bottom:1px solid var(--border);position:st
 .cart-btn:hover{background:var(--red-dark)}
 .cart-badge{background:#fff;color:var(--red);border-radius:50%;width:20px;height:20px;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
 .hero{background:var(--red);color:#fff;text-align:center;padding:56px 20px 48px;position:relative;overflow:hidden}
-.hero{background-image:linear-gradient(rgba(192,57,43,0.65), rgba(192,57,43,0.65)), url('src/header-top.png');
-  background-size:cover;background-position:center;background-repeat:no-repeat;
-height: 450px;}
 .hero::before{content:'🍕';position:absolute;font-size:120px;opacity:.07;top:-20px;left:-30px;transform:rotate(-20deg)}
 .hero::after{content:'🍕';position:absolute;font-size:100px;opacity:.07;bottom:-20px;right:-20px;transform:rotate(15deg)}
 .hero h1{font-family:var(--font-display);font-size:clamp(28px,5vw,48px);line-height:1.2;margin-bottom:12px}
@@ -124,7 +129,7 @@ main{max-width:960px;margin:0 auto;padding:32px 20px 120px}
   .field-row{grid-template-columns:1fr}
   .menu-grid{grid-template-columns:1fr}
 }
-  </style>
+</style>
 </head>
 <body>
 <a href="#menu-main" class="skip-link" style="position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:999;background:#fff;color:#c0392b;padding:8px 16px;border-radius:8px;">Pular para o conteúdo</a>
@@ -140,11 +145,11 @@ main{max-width:960px;margin:0 auto;padding:32px 20px 120px}
   </div>
 </header>
 <section class="hero">
-  <!--<h1>Pizza <em>artesanal</em><br>na sua porta 🍕</h1>
-  <p id="hero-sub">Massa fresca todos os dias, ingredientes selecionados.</p>-->
+  <h1>Pizza <em>artesanal</em><br>na sua porta 🍕</h1>
+  <p id="hero-sub">Massa fresca todos os dias, ingredientes selecionados.</p>
   <div class="hero-tags">
-    <span class="hero-tag" id="tag-tempo">⏱ 30-40 min</span>
-    <span class="hero-tag" id="tag-taxa">🚚 Entrega R$0,00</span>
+    <span class="hero-tag" id="tag-tempo">⏱ 40-50 min</span>
+    <span class="hero-tag" id="tag-taxa">🚚 Entrega R$5,00</span>
     <span class="hero-tag">💳 Cartão ou Pix</span>
   </div>
 </section>
@@ -196,7 +201,7 @@ main{max-width:960px;margin:0 auto;padding:32px 20px 120px}
         </div>
       </div>
       <div class="field"><label>Observações</label><textarea id="inp-obs" placeholder="Ex: sem cebola, borda recheada..."></textarea></div>
-      <button class="whatsapp-btn" onclick="sendToWhatsApp()" id="btn-enviar-pedido" aria-label="Enviar pedido">
+      <button class="whatsapp-btn" onclick="enviarPedido()" id="btn-enviar-pedido" aria-label="Enviar pedido">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.126 1.531 5.862L.057 23.489a.75.75 0 0 0 .921.921l5.688-1.461A11.943 11.943 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.709 9.709 0 0 1-4.953-1.358l-.354-.211-3.671.943.97-3.598-.232-.371A9.712 9.712 0 0 1 2.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/></svg>
         Enviar pedido pelo WhatsApp
       </button>
@@ -250,7 +255,7 @@ function enviarPedido() {
     carrinho: Object.values(cart).map(i => ({ nome: i.nome, qtd: i.qty, preco: i.preco }))
   };
   document.getElementById('btn-enviar-pedido').disabled = true;
-  fetch(`${API_HOST}/api/pedidos`, {
+  fetch('https://tonda-pizzaria.guilhermebarbeiro.workers.dev/api/pedidos', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(pedido)
@@ -269,10 +274,9 @@ function enviarPedido() {
       document.getElementById('btn-enviar-pedido').disabled = false;
     });
 }
-const API_HOST = "https://tondapizzaria.tondapizzaria.workers.dev";
 const STORE_KEY="tonda_pizzaria";
 const FALLBACK={
-  config:{nome:"Tonda Pizzaria Artesanal",whatsapp:"5511999999999",taxaEntrega:0,tempoEstimado:"30-40 minutos"},
+  config:{nome:"Tonda Pizzaria Artesanal",whatsapp:"5511999999999",taxaEntrega:5,tempoEstimado:"40-50 minutos"},
   insumos:[],
   pizzas:[
     {id:"p1",nome:"Margherita",categoria:"Tradicionais",preco:52,ativo:true,ingredientes:[]},
@@ -285,58 +289,26 @@ const FALLBACK={
   ]
 };
 
-function toArray(value){
-  return Array.isArray(value) ? value : (value && typeof value === "object" ? Object.values(value) : null);
+function loadDB(){
+  try{const d=localStorage.getItem(STORE_KEY);return d?JSON.parse(d):FALLBACK}
+  catch{return FALLBACK}
 }
-function normalizeData(data){
-  const base = JSON.parse(JSON.stringify(FALLBACK));
-  const db = data && typeof data === "object" ? data : {};
-  return {
-    ...base,
-    ...db,
-    config:{...base.config,...(db.config||{})},
-    insumos:toArray(db.insumos) || base.insumos,
-    pizzas:toArray(db.pizzas) || base.pizzas,
-    estoque:toArray(db.estoque) || [],
-    vendas:toArray(db.vendas) || [],
-  };
-}
-function loadLocalDB(){
-  try{
-    const d = localStorage.getItem(STORE_KEY);
-    return d ? normalizeData(JSON.parse(d)) : FALLBACK;
-  }catch(e){
-    console.warn('Erro ao carregar dados do localStorage:', e);
-    return FALLBACK;
-  }
-}
-function saveLocalDB(data){
-  localStorage.setItem(STORE_KEY,JSON.stringify(normalizeData(data)));
-}
-async function loadServerDB(){
-  try{
-    const resp = await fetch(`${API_HOST}/api/admin/load`);
-    if(!resp.ok) throw new Error(resp.statusText);
-    const data = await resp.json();
-    return normalizeData(data);
-  }catch(e){
-    console.warn('Não foi possível carregar dados do servidor:', e);
-    return null;
-  }
+function saveDB(data){
+  localStorage.setItem(STORE_KEY,JSON.stringify(data));
 }
 
-let DB = FALLBACK;
-let CFG = DB.config;
-let MENU = [];
+const DB=loadDB();
+const CFG=DB.config||FALLBACK.config;
+const MENU=DB.pizzas.filter(p=>p.ativo);
+const CATS=[...new Set(MENU.map(p=>p.categoria))];
 let cart={};
-let activecat="";
+let activecat=CATS[0];
 
-function updateConfigUI(){
-  document.getElementById("logo-name").innerHTML=`${CFG.nome.split(" ")[0]} <span>${CFG.nome.split(" ").slice(1).join(" ")||"Pizzaria"}</span>`;
-  document.getElementById("tag-tempo").textContent=`⏱ ${CFG.tempoEstimado}`;
-  document.getElementById("tag-taxa").textContent=`🚚 Entrega R$${(CFG.taxaEntrega ?? 0).toFixed(2).replace(".",",")}`;
-  document.getElementById("cart-taxa-label").textContent=`R$${(CFG.taxaEntrega ?? 0).toFixed(2).replace(".",",")}`;
-}
+// Update UI from config
+document.getElementById("logo-name").innerHTML=`${CFG.nome.split(" ")[0]} <span>${CFG.nome.split(" ").slice(1).join(" ")||"Pizzaria"}</span>`;
+document.getElementById("tag-tempo").textContent=`⏱ ${CFG.tempoEstimado}`;
+document.getElementById("tag-taxa").textContent=`🚚 Entrega R$${(CFG.taxaEntrega||5).toFixed(2).replace(".",",")}`;
+document.getElementById("cart-taxa-label").textContent=`R$${(CFG.taxaEntrega||5).toFixed(2).replace(".",",")}`;
 
 function catIcon(c){return c==="Bebidas"?"🥤":c==="Doces"?"🍰":c==="Especiais"?"⭐":"🍕"}
 function renderCats(){
@@ -385,7 +357,7 @@ function changeQty(id,d){
 }
 function cartCount(){return Object.values(cart).reduce((s,i)=>s+i.qty,0)}
 function cartSub(){return Object.values(cart).reduce((s,i)=>s+(i.preco*i.qty),0)}
-function cartTotal(){return cartSub()+(CFG.taxaEntrega ?? 0)}
+function cartTotal(){return cartSub()+(CFG.taxaEntrega||5)}
 function fmtR(n){return"R$ "+n.toFixed(2).replace(".",",")}
 function updateCart(){
   const count=cartCount();
@@ -418,7 +390,7 @@ function toggleCart(){
 function openCheckout(){
   document.getElementById("checkout-modal").classList.add("open");
   const lines=Object.values(cart).map(i=>`<div class="summary-item"><span>${i.qty}x ${i.nome}</span><span>${fmtR(i.preco*i.qty)}</span></div>`).join("");
-  const del=`<div class="summary-item"><span>Taxa de entrega</span><span>${fmtR(CFG.taxaEntrega ?? 0)}</span></div>`;
+  const del=`<div class="summary-item"><span>Taxa de entrega</span><span>${fmtR(CFG.taxaEntrega||5)}</span></div>`;
   document.getElementById("modal-items").innerHTML=lines+del;
   document.getElementById("modal-total").textContent=fmtR(cartTotal());
 }
@@ -444,28 +416,16 @@ function recordCheckoutVenda(){
   });
   saveDB(db);
 }
-function normalizeWhatsAppNumber(number){
-  return String(number||"").replace(/\D/g,"");
-}
 function sendToWhatsApp(){
   if(!validate()) return;
-  if(cartCount()===0){
-    alert('Adicione pelo menos um item ao carrinho para enviar o pedido.');
-    return;
-  }
   const g=id=>document.getElementById(id).value.trim();
   const nome=g("inp-nome"),tel=g("inp-tel"),rua=g("inp-rua"),num=g("inp-num"),bairro=g("inp-bairro"),comp=g("inp-comp"),obs=g("inp-obs");
   const pay=document.querySelector("input[name='pay']:checked").value;
   const end=[`${rua}, ${num}`,comp,bairro].filter(Boolean).join(" — ");
   const itens=Object.values(cart).map(i=>`  • ${i.qty}x ${i.nome} — ${fmtR(i.preco*i.qty)}`).join("\n");
-  const msg=`NOVO PEDIDO - ${CFG.nome}\n\nCliente: ${nome}\nTelefone: ${tel}\nEndereço: ${end}\n\nItens:\n${itens}\n\nSubtotal: ${fmtR(cartSub())}\nEntrega: ${fmtR(CFG.taxaEntrega ?? 0)}\nTotal: ${fmtR(cartTotal())}\nPagamento: ${pay}${obs?`\nObs: ${obs}`:""}\nTempo estimado: ${CFG.tempoEstimado}`;
-  const whatsapp=normalizeWhatsAppNumber(CFG.whatsapp);
-  if(!whatsapp || whatsapp.length < 10){
-    alert('Número do WhatsApp da loja inválido. Verifique a configuração.');
-    return;
-  }
+  const msg=`🍕 *NOVO PEDIDO — ${CFG.nome}*\n\n👤 *Cliente:* ${nome}\n📱 *Telefone:* ${tel}\n📍 *Endereço:* ${end}\n\n📋 *Itens:*\n${itens}\n\n💰 *Subtotal:* ${fmtR(cartSub())}\n🚚 *Entrega:* ${fmtR(CFG.taxaEntrega||5)}\n✅ *Total:* ${fmtR(cartTotal())}\n💳 *Pagamento:* ${pay}${obs?`\n📝 *Obs:* ${obs}`:""}\n⏱ *Tempo estimado:* ${CFG.tempoEstimado}`;
   recordCheckoutVenda();
-  window.open(`https://wa.me/${whatsapp}?text=${encodeURIComponent(msg)}`,"_blank");
+  window.open(`https://wa.me/${CFG.whatsapp}?text=${encodeURIComponent(msg)}`,"_blank");
   closeCheckout();
   document.getElementById("success").classList.add("show");
 }
@@ -482,30 +442,7 @@ function maskPhone(el){
   v=v.length<=10?v.replace(/(\d{2})(\d{4})(\d{0,4})/,"($1) $2-$3"):v.replace(/(\d{2})(\d{5})(\d{0,4})/,"($1) $2-$3");
   el.value=v;
 }
-async function init(){
-  DB = loadLocalDB();
-  CFG = DB.config||FALLBACK.config;
-  MENU = DB.pizzas.filter(p=>p.ativo);
-  activecat = [...new Set(MENU.map(p=>p.categoria))][0] || "";
-  updateConfigUI();
-  renderCats();
-  renderMenu();
-  updateCart();
-  const remote = await loadServerDB();
-  if(remote){
-    DB = remote;
-    CFG = DB.config||FALLBACK.config;
-    MENU = DB.pizzas.filter(p=>p.ativo);
-    activecat = [...new Set(MENU.map(p=>p.categoria))][0] || "";
-    updateConfigUI();
-    renderCats();
-    renderMenu();
-    updateCart();
-    saveLocalDB(DB);
-  }
-}
-
-init();
+renderCats();renderMenu();updateCart();
 </script>
 </body>
 </html>
