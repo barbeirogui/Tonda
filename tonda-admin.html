@@ -277,6 +277,11 @@ tr:hover td{background:#FAFAF9}
         </div>
         <div class="field"><label>PIN de acesso (4 dígitos)</label><input type="password" id="cfg-pin" maxlength="4" placeholder="1103"></div>
         <button class="btn btn-primary" onclick="saveConfig()">Salvar configurações</button>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:16px">
+          <button class="btn btn-ghost" onclick="exportBackup()">Exportar backup</button>
+          <button class="btn btn-ghost" onclick="document.getElementById('backup-file').click()">Importar backup</button>
+          <input type="file" id="backup-file" accept=".json,application/json" style="display:none" onchange="handleBackupFile(event)">
+        </div>
       </div>
     </div>
 
@@ -738,6 +743,52 @@ function saveConfig(){
   const newPin=document.getElementById("cfg-pin").value.trim();
   if(newPin.length===4 && /^[0-9]{4}$/.test(newPin)) DB.config.pin=newPin;
   if(save(DB)) toast("✅ Configurações salvas!");
+}
+
+function exportBackup(){
+  const backup = {
+    meta: {
+      createdAt: new Date().toISOString(),
+      source: "tonda-admin"
+    },
+    data: DB
+  };
+  const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
+  const filename = `tonda_backup_${new Date().toISOString().slice(0,19).replace(/[:T]/g, "-")}.json`;
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast("✅ Backup exportado!");
+}
+
+function handleBackupFile(event){
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e){
+    try{
+      const parsed = JSON.parse(e.target.result);
+      const imported = parsed && parsed.data ? parsed.data : parsed;
+      if(!imported || typeof imported !== "object") throw new Error("Arquivo inválido");
+      applyImportedBackup(imported);
+    }catch(err){
+      alert("Arquivo de backup inválido. Verifique o JSON e tente novamente.");
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = "";
+}
+
+function applyImportedBackup(data){
+  DB = normalizeDb(data);
+  save(DB);
+  renderAll();
+  toast("✅ Backup importado!");
 }
 
 // ---- INSUMO MODAL ----
