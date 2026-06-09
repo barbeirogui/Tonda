@@ -273,7 +273,7 @@ tr:hover td{background:#FAFAF9}
         <div class="field"><label>Número WhatsApp (55 + DDD + número)</label><input type="text" id="cfg-wp" placeholder="5511999999999"></div>
         <div class="field-row">
           <div class="field"><label>Taxa de entrega (R$)</label><input type="number" id="cfg-taxa" step="0.50" value="0.00"></div>
-          <div class="field"><label>Tempo estimado</label><input type="text" id="cfg-tempo" value="40-50 minutos"></div>
+          <div class="field"><label>Tempo estimado</label><input type="text" id="cfg-tempo" value="30-40 minutos"></div>
         </div>
         <div class="field"><label>PIN de acesso (4 dígitos)</label><input type="password" id="cfg-pin" maxlength="4" placeholder="1103"></div>
         <button class="btn btn-primary" onclick="saveConfig()">Salvar configurações</button>
@@ -443,8 +443,8 @@ const STORE_KEY = "tonda_pizzaria";
 
 // ---- DEFAULT DATA ----
 const DEFAULT = {
-  config:{nome:"Tonda Pizzaria Artesanal",whatsapp:"5511983746277",taxaEntrega:0,tempoEstimado:"40-50 minutos",pin:PIN},
-  insumos:[
+  config:{nome:"Tonda Pizzaria Artesanal",whatsapp:"5511983746277",taxaEntrega:0,tempoEstimado:"30-40 minutos",pin:PIN},
+  insumos:[ 
     {id:"i1",nome:"Massa artesanal",unidade:"un",custo:3.50},
     {id:"i2",nome:"Mussarela",unidade:"kg",custo:34.00},
     {id:"i3",nome:"Molho de tomate",unidade:"kg",custo:8.00},
@@ -472,14 +472,17 @@ function cloneDefault(){return JSON.parse(JSON.stringify(DEFAULT))}
 function normalizeDb(data){
   const base=cloneDefault();
   const db=data&&typeof data==="object"?data:{};
+  const toArray = value => Array.isArray(value)
+    ? value
+    : (value && typeof value === "object" ? Object.values(value) : null);
   return {
     ...base,
     ...db,
     config:{...base.config,...(db.config||{})},
-    insumos:Array.isArray(db.insumos)?db.insumos:base.insumos,
-    pizzas:Array.isArray(db.pizzas)?db.pizzas:base.pizzas,
-    estoque:Array.isArray(db.estoque)?db.estoque:[],
-    vendas:Array.isArray(db.vendas)?db.vendas:[],
+    insumos:toArray(db.insumos) || base.insumos,
+    pizzas:toArray(db.pizzas) || base.pizzas,
+    estoque:toArray(db.estoque) || [],
+    vendas:toArray(db.vendas) || [],
   };
 }
 function load(){
@@ -725,7 +728,7 @@ function renderConfig(){
   document.getElementById("cfg-nome").value=cfg.nome||"";
   document.getElementById("cfg-wp").value=cfg.whatsapp||"";
   document.getElementById("cfg-taxa").value=cfg.taxaEntrega||0;
-  document.getElementById("cfg-tempo").value=cfg.tempoEstimado||"40-50 minutos";
+  document.getElementById("cfg-tempo").value=cfg.tempoEstimado||"30-40 minutos";
 }
 function saveConfig(){
   DB.config.nome=document.getElementById("cfg-nome").value.trim();

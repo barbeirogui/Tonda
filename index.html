@@ -148,8 +148,8 @@ main{max-width:960px;margin:0 auto;padding:32px 20px 120px}
   <h1>Pizza <em>artesanal</em><br>na sua porta 🍕</h1>
   <p id="hero-sub">Massa fresca todos os dias, ingredientes selecionados.</p>
   <div class="hero-tags">
-    <span class="hero-tag" id="tag-tempo">⏱ 40-50 min</span>
-    <span class="hero-tag" id="tag-taxa">🚚 Entrega R$5,00</span>
+    <span class="hero-tag" id="tag-tempo">⏱ 30-40 min</span>
+    <span class="hero-tag" id="tag-taxa">🚚 Entrega R$0,00</span>
     <span class="hero-tag">💳 Cartão ou Pix</span>
   </div>
 </section>
@@ -276,7 +276,7 @@ function enviarPedido() {
 }
 const STORE_KEY="tonda_pizzaria";
 const FALLBACK={
-  config:{nome:"Tonda Pizzaria Artesanal",whatsapp:"5511999999999",taxaEntrega:5,tempoEstimado:"40-50 minutos"},
+  config:{nome:"Tonda Pizzaria Artesanal",whatsapp:"5511999999999",taxaEntrega:0,tempoEstimado:"30-40 minutos"},
   insumos:[],
   pizzas:[
     {id:"p1",nome:"Margherita",categoria:"Tradicionais",preco:52,ativo:true,ingredientes:[]},
@@ -289,9 +289,27 @@ const FALLBACK={
   ]
 };
 
+function toArray(value){
+  return Array.isArray(value) ? value : (value && typeof value === "object" ? Object.values(value) : null);
+}
 function loadDB(){
-  try{const d=localStorage.getItem(STORE_KEY);return d?JSON.parse(d):FALLBACK}
-  catch{return FALLBACK}
+  try{
+    const d = localStorage.getItem(STORE_KEY);
+    if(!d) return FALLBACK;
+    const parsed = JSON.parse(d);
+    return {
+      ...FALLBACK,
+      ...parsed,
+      config:{...FALLBACK.config,...(parsed.config||{})},
+      insumos:toArray(parsed.insumos) || FALLBACK.insumos,
+      pizzas:toArray(parsed.pizzas) || FALLBACK.pizzas,
+      estoque:toArray(parsed.estoque) || [],
+      vendas:toArray(parsed.vendas) || [],
+    };
+  }catch(e){
+    console.warn('Erro ao carregar dados do localStorage:', e);
+    return FALLBACK;
+  }
 }
 function saveDB(data){
   localStorage.setItem(STORE_KEY,JSON.stringify(data));
@@ -307,8 +325,8 @@ let activecat=CATS[0];
 // Update UI from config
 document.getElementById("logo-name").innerHTML=`${CFG.nome.split(" ")[0]} <span>${CFG.nome.split(" ").slice(1).join(" ")||"Pizzaria"}</span>`;
 document.getElementById("tag-tempo").textContent=`⏱ ${CFG.tempoEstimado}`;
-document.getElementById("tag-taxa").textContent=`🚚 Entrega R$${(CFG.taxaEntrega||5).toFixed(2).replace(".",",")}`;
-document.getElementById("cart-taxa-label").textContent=`R$${(CFG.taxaEntrega||5).toFixed(2).replace(".",",")}`;
+document.getElementById("tag-taxa").textContent=`🚚 Entrega R$${(CFG.taxaEntrega ?? 0).toFixed(2).replace(".",",")}`;
+document.getElementById("cart-taxa-label").textContent=`R$${(CFG.taxaEntrega ?? 0).toFixed(2).replace(".",",")}`;
 
 function catIcon(c){return c==="Bebidas"?"🥤":c==="Doces"?"🍰":c==="Especiais"?"⭐":"🍕"}
 function renderCats(){
@@ -357,7 +375,7 @@ function changeQty(id,d){
 }
 function cartCount(){return Object.values(cart).reduce((s,i)=>s+i.qty,0)}
 function cartSub(){return Object.values(cart).reduce((s,i)=>s+(i.preco*i.qty),0)}
-function cartTotal(){return cartSub()+(CFG.taxaEntrega||5)}
+function cartTotal(){return cartSub()+(CFG.taxaEntrega ?? 0)}
 function fmtR(n){return"R$ "+n.toFixed(2).replace(".",",")}
 function updateCart(){
   const count=cartCount();
@@ -390,7 +408,7 @@ function toggleCart(){
 function openCheckout(){
   document.getElementById("checkout-modal").classList.add("open");
   const lines=Object.values(cart).map(i=>`<div class="summary-item"><span>${i.qty}x ${i.nome}</span><span>${fmtR(i.preco*i.qty)}</span></div>`).join("");
-  const del=`<div class="summary-item"><span>Taxa de entrega</span><span>${fmtR(CFG.taxaEntrega||5)}</span></div>`;
+  const del=`<div class="summary-item"><span>Taxa de entrega</span><span>${fmtR(CFG.taxaEntrega ?? 0)}</span></div>`;
   document.getElementById("modal-items").innerHTML=lines+del;
   document.getElementById("modal-total").textContent=fmtR(cartTotal());
 }
@@ -430,7 +448,7 @@ function sendToWhatsApp(){
   const pay=document.querySelector("input[name='pay']:checked").value;
   const end=[`${rua}, ${num}`,comp,bairro].filter(Boolean).join(" — ");
   const itens=Object.values(cart).map(i=>`  • ${i.qty}x ${i.nome} — ${fmtR(i.preco*i.qty)}`).join("\n");
-  const msg=`🍕 *NOVO PEDIDO — ${CFG.nome}*\n\n👤 *Cliente:* ${nome}\n📱 *Telefone:* ${tel}\n📍 *Endereço:* ${end}\n\n📋 *Itens:*\n${itens}\n\n💰 *Subtotal:* ${fmtR(cartSub())}\n🚚 *Entrega:* ${fmtR(CFG.taxaEntrega||5)}\n✅ *Total:* ${fmtR(cartTotal())}\n💳 *Pagamento:* ${pay}${obs?`\n📝 *Obs:* ${obs}`:""}\n⏱ *Tempo estimado:* ${CFG.tempoEstimado}`;
+  const msg=`NOVO PEDIDO - ${CFG.nome}\n\nCliente: ${nome}\nTelefone: ${tel}\nEndereço: ${end}\n\nItens:\n${itens}\n\nSubtotal: ${fmtR(cartSub())}\nEntrega: ${fmtR(CFG.taxaEntrega ?? 0)}\nTotal: ${fmtR(cartTotal())}\nPagamento: ${pay}${obs?`\nObs: ${obs}`:""}\nTempo estimado: ${CFG.tempoEstimado}`;
   const whatsapp=normalizeWhatsAppNumber(CFG.whatsapp);
   if(!whatsapp || whatsapp.length < 10){
     alert('Número do WhatsApp da loja inválido. Verifique a configuração.');
