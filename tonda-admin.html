@@ -881,13 +881,21 @@
         <button class="btn btn-primary" onclick="calcMassa()">🔄 Recalcular custo</button>
       </div>
       <div style="background:var(--white);border-radius:var(--radius);border:1px solid var(--border);padding:20px;max-width:600px">
-        <p style="font-size:13px;color:var(--muted);margin-bottom:14px">Defina quantos gramas de cada ingrediente vai em <strong>1 bola de massa</strong>.</p>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:14px">Cadastre os ingredientes do <strong>lote total</strong> e o rendimento em bolas.</p>
+        <div class="field" style="margin-bottom:14px">
+          <label>Rendimento (bolas de massa)</label>
+          <input type="number" id="massa-rend" step="1" min="1" value="4" oninput="calcMassa()" style="max-width:120px">
+        </div>
         <div class="ing-list" id="massa-rows"></div>
         <button class="btn btn-ghost btn-sm" onclick="addMassaRow()" style="margin-bottom:16px">+ Adicionar ingrediente</button>
         <div style="background:var(--bg);border-radius:8px;padding:14px;margin-top:8px">
           <div style="display:flex;justify-content:space-between;font-size:14px">
-            <span style="font-weight:600">Custo por bola de massa</span>
-            <span id="massa-custo" style="font-weight:700;color:var(--red)">R$ 0,00</span>
+            <span style="font-weight:600">Custo total do lote</span>
+            <span id="massa-custo-total" style="font-weight:700">R$ 0,00</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:14px;margin-top:4px">
+            <span style="font-weight:600">Custo por bola</span>
+            <span id="massa-custo" style="font-weight:700;color:var(--red);font-size:18px">R$ 0,00</span>
           </div>
           <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-top:6px">
             <span>Preço atual da Massa artesanal</span>
@@ -1068,6 +1076,13 @@
           <div class="field"><label>Custo por unidade (R$) *</label><input type="number" id="ins-custo" step="0.01"
               min="0" placeholder="0,00"></div>
         </div>
+        <div class="field">
+          <label>Grupo *</label>
+          <select id="ins-grupo">
+            <option value="cobertura">Cobertura</option>
+            <option value="massa">Massa</option>
+          </select>
+        </div>
       </div>
       <div class="modal-foot">
         <button class="btn btn-ghost" onclick="closeModal('modal-insumo')">Cancelar</button>
@@ -1168,28 +1183,28 @@
 
     // ---- DEFAULT DATA ----
     const DEFAULT = {
-      config: { nome: "Tonda Pizzaria Artesanal", whatsapp: "5511983746277", taxaEntrega: 0, tempoEstimado: "30-40 minutos", pin: PIN, cmvIdeal: 30, massaRecipe: [{insumoId:"i16",qtd:250},{insumoId:"i17",qtd:150},{insumoId:"i18",qtd:2},{insumoId:"i19",qtd:5},{insumoId:"i20",qtd:10}] },
+      config: { nome: "Tonda Pizzaria Artesanal", whatsapp: "5511983746277", taxaEntrega: 0, tempoEstimado: "30-40 minutos", pin: PIN, cmvIdeal: 30, massaRecipe: [{insumoId:"i16",qtd:1000},{insumoId:"i17",qtd:600},{insumoId:"i18",qtd:8},{insumoId:"i19",qtd:20},{insumoId:"i20",qtd:40}], massaRend: 4 },
       insumos: [
-        { id: "i1", nome: "Massa artesanal", unidade: "un", custo: 3.50 },
-        { id: "i2", nome: "Mussarela Bacio", unidade: "g", custo: 0.04183 },
-        { id: "i3", nome: "Molho de tomate", unidade: "g", custo: 0.008 },
-        { id: "i4", nome: "Linguiça Calabresa Reta Prieto", unidade: "g", custo: 0.01804 },
-        { id: "i5", nome: "Frango desfiado", unidade: "g", custo: 0.020 },
-        { id: "i6", nome: "Requeijão Catupiry", unidade: "g", custo: 0.03895 },
-        { id: "i7", nome: "Pepperoni Fatiado Ceratti", unidade: "g", custo: 0.06131 },
-        { id: "i8", nome: "Presunto", unidade: "g", custo: 0.024 },
-        { id: "i9", nome: "Parmesão 6 Meses Fracionado Scala", unidade: "g", custo: 0.08988 },
-        { id: "i10", nome: "Gorgonzola", unidade: "g", custo: 0.052 },
-        { id: "i11", nome: "Queijo Pecorino Cunha di Salerno", unidade: "g", custo: 0.30410 },
-        { id: "i12", nome: "Tomate Pelado Italiano San Marzano", unidade: "g", custo: 0.01274 },
-        { id: "i13", nome: "Mussarela de Búfala Cereja Yema", unidade: "g", custo: 0.06203 },
-        { id: "i14", nome: "Caixa Oitavada Comum 35cm", unidade: "un", custo: 1.74 },
-        { id: "i15", nome: "Água Mineral Buona Vita 6x1,5L", unidade: "cx", custo: 15.96 },
-        { id: "i16", nome: "Farinha de trigo", unidade: "g", custo: 0.005 },
-        { id: "i17", nome: "Água filtrada", unidade: "g", custo: 0.001 },
-        { id: "i18", nome: "Fermento biológico", unidade: "g", custo: 0.05 },
-        { id: "i19", nome: "Sal", unidade: "g", custo: 0.002 },
-        { id: "i20", nome: "Azeite de oliva", unidade: "g", custo: 0.08 },
+        { id: "i1", nome: "Massa artesanal", unidade: "un", custo: 3.50, grupo: "massa" },
+        { id: "i2", nome: "Mussarela Bacio", unidade: "g", custo: 0.04183, grupo: "cobertura" },
+        { id: "i3", nome: "Molho de tomate", unidade: "g", custo: 0.008, grupo: "cobertura" },
+        { id: "i4", nome: "Linguiça Calabresa Reta Prieto", unidade: "g", custo: 0.01804, grupo: "cobertura" },
+        { id: "i5", nome: "Frango desfiado", unidade: "g", custo: 0.020, grupo: "cobertura" },
+        { id: "i6", nome: "Requeijão Catupiry", unidade: "g", custo: 0.03895, grupo: "cobertura" },
+        { id: "i7", nome: "Pepperoni Fatiado Ceratti", unidade: "g", custo: 0.06131, grupo: "cobertura" },
+        { id: "i8", nome: "Presunto", unidade: "g", custo: 0.024, grupo: "cobertura" },
+        { id: "i9", nome: "Parmesão 6 Meses Fracionado Scala", unidade: "g", custo: 0.08988, grupo: "cobertura" },
+        { id: "i10", nome: "Gorgonzola", unidade: "g", custo: 0.052, grupo: "cobertura" },
+        { id: "i11", nome: "Queijo Pecorino Cunha di Salerno", unidade: "g", custo: 0.30410, grupo: "cobertura" },
+        { id: "i12", nome: "Tomate Pelado Italiano San Marzano", unidade: "g", custo: 0.01274, grupo: "cobertura" },
+        { id: "i13", nome: "Mussarela de Búfala Cereja Yema", unidade: "g", custo: 0.06203, grupo: "cobertura" },
+        { id: "i14", nome: "Caixa Oitavada Comum 35cm", unidade: "un", custo: 1.74, grupo: "cobertura" },
+        { id: "i15", nome: "Água Mineral Buona Vita 6x1,5L", unidade: "cx", custo: 15.96, grupo: "cobertura" },
+        { id: "i16", nome: "Farinha de trigo", unidade: "g", custo: 0.005, grupo: "massa" },
+        { id: "i17", nome: "Água filtrada", unidade: "g", custo: 0.001, grupo: "massa" },
+        { id: "i18", nome: "Fermento biológico", unidade: "g", custo: 0.05, grupo: "massa" },
+        { id: "i19", nome: "Sal", unidade: "g", custo: 0.002, grupo: "massa" },
+        { id: "i20", nome: "Azeite de oliva", unidade: "g", custo: 0.08, grupo: "massa" },
       ],
       pizzas: [
         { id: "p1", nome: "Margherita", categoria: "Tradicionais", preco: 52, ativo: true, ingredientes: [{ insumoId: "i1", quantidade: 1 }, { insumoId: "i2", quantidade: 250 }, { insumoId: "i3", quantidade: 120 }] },
@@ -1214,6 +1229,9 @@
       const insumos = toArray(db.insumos) || base.insumos;
       const kgIds = {};
       insumos.forEach(ins => {
+        if (!ins.grupo) {
+          ins.grupo = (ins.id === "i1" || ["i16","i17","i18","i19","i20"].includes(ins.id)) ? "massa" : "cobertura";
+        }
         if (ins.unidade === "kg") {
           ins.unidade = "g";
           ins.custo = ins.custo / 1000;
@@ -1508,22 +1526,34 @@
 
     // ---- INSUMOS ----
     function renderInsumos() {
-      const rows = DB.insumos.map(ins => {
-        const usadoEm = DB.pizzas.filter(p => (p.ingredientes || []).some(i => i.insumoId === ins.id)).length;
-        return `<tr>
-      <td><strong>${ins.nome}</strong></td>
-      <td><span class="badge badge-gray">${ins.unidade}</span></td>
-      <td>${fmtR(ins.custo)}<span style="color:var(--muted);font-size:11px"> / ${ins.unidade}</span></td>
-      <td>${usadoEm > 0 ? `<span class="badge badge-green">${usadoEm} pizza${usadoEm > 1 ? "s" : ""}</span>` : "<span class='badge badge-gray'>Não usado</span>"}</td>
-      <td>
-        <div style="display:flex;gap:6px">
-          <button class="btn btn-ghost btn-sm" onclick="editInsumo('${ins.id}')">✏️</button>
-          <button class="btn btn-danger btn-sm" onclick="delInsumo('${ins.id}')">🗑</button>
-        </div>
-      </td>
-    </tr>`;
-      }).join("");
-      document.getElementById("insumos-list").innerHTML = rows || "<tr><td colspan='5' style='text-align:center;color:var(--muted);padding:24px'>Nenhum insumo cadastrado.</td></tr>";
+      const grupos = { massa: [], cobertura: [] };
+      DB.insumos.forEach(ins => {
+        const g = ins.grupo === "massa" ? "massa" : "cobertura";
+        grupos[g].push(ins);
+      });
+      const nomesGrupo = { massa: "🍞 Ingredientes da Massa", cobertura: "🧀 Coberturas" };
+      let html = "";
+      ["massa", "cobertura"].forEach(g => {
+        const items = grupos[g];
+        if (!items.length) return;
+        html += `<tr style="background:var(--bg)"><td colspan="5" style="font-weight:700;font-size:13px;padding:8px 14px">${nomesGrupo[g]}</td></tr>`;
+        html += items.map(ins => {
+          const usadoEm = DB.pizzas.filter(p => (p.ingredientes || []).some(i => i.insumoId === ins.id)).length;
+          return `<tr>
+        <td><strong>${ins.nome}</strong></td>
+        <td><span class="badge badge-gray">${ins.unidade}</span></td>
+        <td>${fmtR(ins.custo)}<span style="color:var(--muted);font-size:11px"> / ${ins.unidade}</span></td>
+        <td>${usadoEm > 0 ? `<span class="badge badge-green">${usadoEm} pizza${usadoEm > 1 ? "s" : ""}</span>` : "<span class='badge badge-gray'>—</span>"}</td>
+        <td>
+          <div style="display:flex;gap:6px">
+            <button class="btn btn-ghost btn-sm" onclick="editInsumo('${ins.id}')">✏️</button>
+            <button class="btn btn-danger btn-sm" onclick="delInsumo('${ins.id}')">🗑</button>
+          </div>
+        </td>
+      </tr>`;
+        }).join("");
+      });
+      document.getElementById("insumos-list").innerHTML = html || "<tr><td colspan='5' style='text-align:center;color:var(--muted);padding:24px'>Nenhum insumo cadastrado.</td></tr>";
     }
 
     // ---- PIZZAS ----
@@ -1621,6 +1651,7 @@
       document.getElementById("ins-nome").value = "";
       document.getElementById("ins-un").value = "kg";
       document.getElementById("ins-custo").value = "";
+      document.getElementById("ins-grupo").value = "cobertura";
       openModal("modal-insumo");
     }
     function editInsumo(id) {
@@ -1630,19 +1661,21 @@
       document.getElementById("ins-nome").value = ins.nome;
       document.getElementById("ins-un").value = ins.unidade;
       document.getElementById("ins-custo").value = ins.custo;
+      document.getElementById("ins-grupo").value = ins.grupo || "cobertura";
       openModal("modal-insumo");
     }
     function saveInsumo() {
       const nome = document.getElementById("ins-nome").value.trim();
       const un = document.getElementById("ins-un").value;
       const custo = parseNum(document.getElementById("ins-custo").value);
+      const grupo = document.getElementById("ins-grupo").value;
       if (!nome || isNaN(custo)) { toast("⚠️ Preencha todos os campos."); return }
       const editId = document.getElementById("insumo-edit-id").value;
       if (editId) {
         const ins = DB.insumos.find(i => i.id === editId);
-        if (ins) { ins.nome = nome; ins.unidade = un; ins.custo = custo }
+        if (ins) { ins.nome = nome; ins.unidade = un; ins.custo = custo; ins.grupo = grupo }
       } else {
-        DB.insumos.push({ id: uid(), nome, unidade: un, custo });
+        DB.insumos.push({ id: uid(), nome, unidade: un, custo, grupo });
       }
       if (save(DB)) {
         renderInsumos(); renderPizzas(); renderDashboard();
@@ -1686,7 +1719,7 @@
     }
     function addIngRow(data) {
       const rowId = ingRowCount++;
-      const opts = DB.insumos.map(ins => `<option value="${ins.id}" ${data && data.insumoId === ins.id ? "selected" : ""}>${ins.nome} (${ins.unidade})</option>`).join("");
+      const opts = DB.insumos.filter(ins => ins.grupo === "cobertura" || ins.id === "i1").map(ins => `<option value="${ins.id}" ${data && data.insumoId === ins.id ? "selected" : ""}>${ins.nome} (${ins.unidade})</option>`).join("");
       const row = document.createElement("div");
       row.className = "ing-row";
       row.id = "ing-row-" + rowId;
@@ -1826,7 +1859,8 @@
     // ---- MASSA ----
     let massaRowCount = 0;
     function renderMassa() {
-      const recipe = DB.config.massaRecipe || [{ insumoId: "i16", qtd: 250 }, { insumoId: "i17", qtd: 150 }, { insumoId: "i18", qtd: 2 }, { insumoId: "i19", qtd: 5 }, { insumoId: "i20", qtd: 10 }];
+      const recipe = DB.config.massaRecipe || [{ insumoId: "i16", qtd: 1000 }, { insumoId: "i17", qtd: 600 }, { insumoId: "i18", qtd: 8 }, { insumoId: "i19", qtd: 20 }, { insumoId: "i20", qtd: 40 }];
+      document.getElementById("massa-rend").value = DB.config.massaRend || 4;
       document.getElementById("massa-rows").innerHTML = "";
       massaRowCount = 0;
       recipe.forEach(r => addMassaRow(r));
@@ -1834,26 +1868,33 @@
     }
     function addMassaRow(data) {
       const rowId = massaRowCount++;
-      const opts = DB.insumos.map(ins => `<option value="${ins.id}" ${data && data.insumoId === ins.id ? "selected" : ""}>${ins.nome} (${ins.unidade})</option>`).join("");
+      const opts = DB.insumos.filter(ins => ins.grupo === "massa").map(ins => `<option value="${ins.id}" ${data && data.insumoId === ins.id ? "selected" : ""}>${ins.nome} (${ins.unidade})</option>`).join("");
       const row = document.createElement("div");
       row.className = "ing-row";
       row.id = "massa-row-" + rowId;
       row.innerHTML = `
-        <select onchange="calcMassa()">${opts || "<option>Cadastre insumos</option>"}</select>
-        <input type="number" step="1" min="0" value="${data ? data.qtd : ""}" placeholder="gramas" oninput="calcMassa()">
+        <select onchange="updateMassaRow('${rowId}')">${opts || "<option>Cadastre insumos</option>"}</select>
+        <input type="number" step="1" min="0" value="${data ? data.qtd : ""}" placeholder="gramas" oninput="updateMassaRow('${rowId}')">
         <span style="font-size:12px;color:var(--muted);align-self:center">g</span>
         <span style="font-size:11px;color:#888;align-self:center" id="massa-preco-${rowId}"></span>
         <button class="ing-del" onclick="document.getElementById('massa-row-${rowId}').remove();calcMassa()">✕</button>
       `;
       document.getElementById("massa-rows").appendChild(row);
+      updateMassaRow(rowId);
+      calcMassa();
+    }
+    function updateMassaRow(rowId) {
+      const row = document.getElementById("massa-row-" + rowId);
+      if (!row) return;
       const sel = row.querySelector("select");
+      const inp = row.querySelector("input");
+      const ins = DB.insumos.find(i => i.id === sel.value);
       const precoSpan = document.getElementById("massa-preco-" + rowId);
-      function updateInfo() {
-        const ins = DB.insumos.find(i => i.id === sel.value);
-        precoSpan.textContent = ins ? `R$ ${ins.custo.toFixed(2).replace('.', ',')}/g` : "";
+      if (ins && inp.value) {
+        precoSpan.textContent = fmtR(ins.custo * parseNum(inp.value));
+      } else {
+        precoSpan.textContent = "";
       }
-      sel.addEventListener("change", updateInfo);
-      updateInfo();
       calcMassa();
     }
     function getMassaRows() {
@@ -1869,29 +1910,35 @@
     }
     function calcMassa() {
       const rows = getMassaRows();
-      const custo = rows.reduce((s, r) => {
+      const rend = parseInt(document.getElementById("massa-rend").value) || 1;
+      const custoTotal = rows.reduce((s, r) => {
         const ins = DB.insumos.find(i => i.id === r.insumoId);
         return s + (ins ? ins.custo * r.qtd : 0);
       }, 0);
-      document.getElementById("massa-custo").textContent = fmtR(custo);
+      const custoBola = custoTotal / rend;
+      document.getElementById("massa-custo-total").textContent = fmtR(custoTotal);
+      document.getElementById("massa-custo").textContent = fmtR(custoBola);
       const massaIns = DB.insumos.find(i => i.id === "i1");
       document.getElementById("massa-atual").textContent = massaIns ? fmtR(massaIns.custo) : "—";
     }
     function saveMassa() {
       const rows = getMassaRows();
       if (rows.length === 0) { toast("⚠️ Adicione pelo menos um ingrediente."); return }
+      const rend = parseInt(document.getElementById("massa-rend").value) || 1;
       DB.config.massaRecipe = rows;
-      const custo = rows.reduce((s, r) => {
+      DB.config.massaRend = rend;
+      const custoTotal = rows.reduce((s, r) => {
         const ins = DB.insumos.find(i => i.id === r.insumoId);
         return s + (ins ? ins.custo * r.qtd : 0);
       }, 0);
+      const custoBola = custoTotal / rend;
       const massaIns = DB.insumos.find(i => i.id === "i1");
       if (massaIns) {
-        massaIns.custo = custo;
+        massaIns.custo = custoBola;
         massaIns.unidade = "un";
       }
       if (save(DB)) {
-        toast("✅ Massa atualizada! Custo: " + fmtR(custo));
+        toast("✅ Massa atualizada! " + fmtR(custoTotal) + " / " + rend + " bolas = " + fmtR(custoBola) + " cada");
         renderMassa();
         renderInsumos();
         renderPizzas();
