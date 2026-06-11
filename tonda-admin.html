@@ -1256,35 +1256,24 @@
       const toArray = value => Array.isArray(value)
         ? value
         : (value && typeof value === "object" ? Object.values(value) : null);
-      // Migração: converte insumos de kg para g
-      let insumos = toArray(db.insumos) || base.insumos;
-      // Migração: se existir massaInsumos separado (mi1-mi5), migra de volta pra i16-i20
-      const migrados = toArray(db.massaInsumos);
-      if (migrados && migrados.length) {
-        const miMap = { mi1:"i16", mi2:"i17", mi3:"i18", mi4:"i19", mi5:"i20" };
-        const miNomes = { mi1:"Farinha de trigo", mi2:"Água", mi3:"Fermento biológico", mi4:"Sal", mi5:"Azeite de oliva" };
-        Object.entries(miMap).forEach(([miId, oldId]) => {
-          const mi = migrados.find(m => m.id === miId);
-          if (mi && !insumos.some(i => i.id === oldId)) {
-            insumos.push({ id: oldId, nome: miNomes[miId], unidade: "g", custo: mi.custo || 0, grupo: "massa" });
-          }
-        });
-      }
-      // Migração: mescla estoqueMassa no estoque principal
-      const estoqueMassa = toArray(db.estoqueMassa) || [];
-      let estoque = toArray(db.estoque) || [];
-      if (estoqueMassa.length) {
-        estoque = [...estoque, ...estoqueMassa.map(e => ({
-          ...e,
-          insumoId: { mi1:"i16", mi2:"i17", mi3:"i18", mi4:"i19", mi5:"i20" }[e.insumoId] || e.insumoId
-        }))];
-      }
+      // Merge: base.insumos serve como seed, valores do KV sobrescrevem
+      let insumos = base.insumos.map(bi => {
+        const saved = toArray(db.insumos)?.find(i => i.id === bi.id);
+        return saved ? { ...bi, ...saved } : bi;
+      });
+      // Adiciona insumos novos que existem no KV mas não no base
+      toArray(db.insumos)?.forEach(si => {
+        if (!insumos.some(i => i.id === si.id)) {
+          insumos.push({ grupo: "cobertura", ...si });
+        }
+      });
       // Garante grupo nos insumos existentes
       insumos.forEach(ins => {
         if (!ins.grupo) {
           ins.grupo = ["i16","i17","i18","i19","i20"].includes(ins.id) ? "massa" : (ins.id === "i1" ? "massa" : "cobertura");
         }
       });
+      let estoque = toArray(db.estoque) || [];
       // Migra massaRecipe IDs de mi→i
       let config = { ...base.config, ...(db.config || {}) };
       if (config.massaRecipe) {
