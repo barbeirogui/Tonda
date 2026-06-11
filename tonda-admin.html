@@ -619,7 +619,7 @@
     }
     .ing-row > select { flex: 1; min-width: 0 }
     .ing-row > input[type="number"] { width: 100px; flex: none }
-    .ing-row > span { width: 90px; flex: none }
+    .ing-row > span:nth-last-child(2) { width: 90px; flex: none; text-align: right }
     .ing-row > .ing-del { width: 32px; flex: none }
 
     .ing-row:last-child {
@@ -1108,7 +1108,7 @@
               <option value="cx">cx (caixa)</option>
             </select>
           </div>
-          <div class="field"><label>Custo por unidade (R$) *</label><input type="number" id="ins-custo" step="0.01"
+          <div class="field"><label>Custo por unidade (R$) *</label><input type="number" id="ins-custo" step="any"
               min="0" placeholder="0,00"></div>
         </div>
       </div>
@@ -1209,12 +1209,12 @@
     // ============================================================
     const PIN = "1103"; // Altere seu PIN aqui
     const STORE_KEY = "tonda_pizzaria";
-    const API_HOST = "https://tondapizzaria.tondapizzaria.workers.dev";
+    const API_HOST = "";
     // ============================================================
 
     // ---- DEFAULT DATA ----
     const DEFAULT = {
-      config: { nome: "Tonda Pizzaria Artesanal", whatsapp: "5511983746277", taxaEntrega: 0, tempoEstimado: "30-40 minutos", pin: PIN, cmvIdeal: 30, massaRecipe: [{insumoId:"i16",qtd:1000},{insumoId:"i17",qtd:650},{insumoId:"i18",qtd:1},{insumoId:"i19",qtd:24},{insumoId:"i20",qtd:13}], massaPesoPaneto: 270 },
+      config: { nome: "Tonda Pizzaria Artesanal", whatsapp: "5511983746277", taxaEntrega: 0, tempoEstimado: "30-40 minutos", pin: PIN, cmvIdeal: 30, massaRecipe: [{insumoId:"i16",qtd:1},{insumoId:"i17",qtd:650},{insumoId:"i18",qtd:1},{insumoId:"i19",qtd:24},{insumoId:"i20",qtd:13}], massaPesoPaneto: 270 },
       insumos: [
         { id: "i1", nome: "Massa artesanal", unidade: "un", custo: 3.50, grupo: "massa" },
         { id: "i2", nome: "Mussarela Bacio", unidade: "g", custo: 0.04183, grupo: "cobertura" },
@@ -1231,7 +1231,7 @@
         { id: "i13", nome: "Mussarela de Búfala Cereja Yema", unidade: "g", custo: 0.06203, grupo: "cobertura" },
         { id: "i14", nome: "Caixa Oitavada Comum 35cm", unidade: "un", custo: 1.74, grupo: "cobertura" },
         { id: "i15", nome: "Água Mineral Buona Vita 6x1,5L", unidade: "cx", custo: 15.96, grupo: "cobertura" },
-        { id: "i16", nome: "Farinha de trigo", unidade: "g", custo: 0.005, grupo: "massa" },
+        { id: "i16", nome: "Farinha de trigo", unidade: "kg", custo: 5.00, grupo: "massa" },
         { id: "i17", nome: "Água", unidade: "g", custo: 0.001, grupo: "massa" },
         { id: "i18", nome: "Fermento biológico", unidade: "g", custo: 0.05, grupo: "massa" },
         { id: "i19", nome: "Sal", unidade: "g", custo: 0.002, grupo: "massa" },
@@ -1258,7 +1258,6 @@
         : (value && typeof value === "object" ? Object.values(value) : null);
       // Migração: converte insumos de kg para g
       let insumos = toArray(db.insumos) || base.insumos;
-      const kgIds = {};
       // Migração: se existir massaInsumos separado (mi1-mi5), migra de volta pra i16-i20
       const migrados = toArray(db.massaInsumos);
       if (migrados && migrados.length) {
@@ -1285,11 +1284,6 @@
         if (!ins.grupo) {
           ins.grupo = ["i16","i17","i18","i19","i20"].includes(ins.id) ? "massa" : (ins.id === "i1" ? "massa" : "cobertura");
         }
-        if (ins.unidade === "kg") {
-          ins.unidade = "g";
-          ins.custo = ins.custo / 1000;
-          kgIds[ins.id] = true;
-        }
       });
       // Migra massaRecipe IDs de mi→i
       let config = { ...base.config, ...(db.config || {}) };
@@ -1299,17 +1293,7 @@
           return m[r.insumoId] ? { ...r, insumoId: m[r.insumoId] } : r;
         });
       }
-      const pizzas = (toArray(db.pizzas) || base.pizzas).map(p => {
-        if (p.ingredientes) {
-          p.ingredientes = p.ingredientes.map(ing => {
-            if (kgIds[ing.insumoId] && ing.quantidade < 1) {
-              ing.quantidade = Math.round(ing.quantidade * 1000);
-            }
-            return ing;
-          });
-        }
-        return p;
-      });
+      const pizzas = toArray(db.pizzas) || base.pizzas;
       // Remove campos legados que não existem mais no DEFAULT
       const { massaInsumos: _, estoqueMassa: __, ...dbClean } = db;
       return {
@@ -1548,7 +1532,12 @@
       if (pct <= 42) return "#D97706";
       return "#DC2626";
     }
-    function fmtR(n) { return "R$ " + n.toFixed(2).replace(".", ",") }
+    function fmtR(n) {
+      if (n === 0) return "R$ 0,00";
+      if (Math.abs(n) >= 0.01) return "R$ " + n.toFixed(2).replace(".", ",");
+      const dec = Math.max(2, Math.min(6, Math.ceil(-Math.log10(Math.abs(n))) + 2));
+      return "R$ " + n.toFixed(dec).replace(".", ",");
+    }
     function fmtP(n) { return n.toFixed(1).replace(".", ",") + "%" }
     function uid() { return "x" + Math.random().toString(36).slice(2, 9) }
 
@@ -1918,7 +1907,7 @@
     // ---- MASSA ----
     let massaRowCount = 0;
     function renderMassa() {
-      const recipe = DB.config.massaRecipe || [{ insumoId: "i16", qtd: 1000 }, { insumoId: "i17", qtd: 650 }, { insumoId: "i18", qtd: 1 }, { insumoId: "i19", qtd: 24 }, { insumoId: "i20", qtd: 13 }];
+      const recipe = DB.config.massaRecipe || [{ insumoId: "i16", qtd: 1 }, { insumoId: "i17", qtd: 650 }, { insumoId: "i18", qtd: 1 }, { insumoId: "i19", qtd: 24 }, { insumoId: "i20", qtd: 13 }];
       document.getElementById("massa-peso-paneto").value = DB.config.massaPesoPaneto || 270;
       document.getElementById("massa-rows").innerHTML = "";
       massaRowCount = 0;
@@ -1933,8 +1922,8 @@
       row.id = "massa-row-" + rowId;
       row.innerHTML = `
         <select onchange="updateMassaRow('${rowId}')">${opts || "<option>Cadastre insumos</option>"}</select>
-        <input type="number" step="1" min="0" value="${data ? data.qtd : ""}" placeholder="gramas" oninput="updateMassaRow('${rowId}')">
-        <span style="font-size:12px;color:var(--muted);align-self:center">g</span>
+        <input type="number" step="any" min="0" value="${data ? data.qtd : ""}" placeholder="qtd" oninput="updateMassaRow('${rowId}')">
+        <span style="font-size:12px;color:var(--muted);align-self:center" id="massa-un-${rowId}"></span>
         <span style="font-size:11px;color:#888;align-self:center" id="massa-preco-${rowId}"></span>
         <button class="ing-del" onclick="document.getElementById('massa-row-${rowId}').remove();calcMassa()">✕</button>
       `;
@@ -1949,10 +1938,13 @@
       const inp = row.querySelector("input");
       const mi = DB.insumos.find(i => i.id === sel.value);
       const precoSpan = document.getElementById("massa-preco-" + rowId);
+      const unSpan = document.getElementById("massa-un-" + rowId);
       if (mi && inp.value) {
         precoSpan.textContent = fmtR(mi.custo * parseNum(inp.value));
+        unSpan.textContent = mi.unidade;
       } else {
         precoSpan.textContent = "";
+        unSpan.textContent = "";
       }
       calcMassa();
     }
@@ -1967,17 +1959,25 @@
       });
       return rows;
     }
+    function toGrama(qtd, unidade) {
+      if (unidade === "kg") return qtd * 1000;
+      if (unidade === "g") return qtd;
+      return qtd;
+    }
     function calcMassa() {
       const rows = getMassaRows();
       const pesoPaneto = parseInt(document.getElementById("massa-peso-paneto").value) || 270;
-      const pesoTotal = rows.reduce((s, r) => s + r.qtd, 0);
-      const rend = Math.floor(pesoTotal / pesoPaneto) || 1;
+      const pesoTotalG = rows.reduce((s, r) => {
+        const mi = DB.insumos.find(i => i.id === r.insumoId);
+        return s + (mi ? toGrama(r.qtd, mi.unidade) : 0);
+      }, 0);
+      const rend = Math.floor(pesoTotalG / pesoPaneto) || 1;
       const custoTotal = rows.reduce((s, r) => {
         const mi = DB.insumos.find(i => i.id === r.insumoId);
         return s + (mi ? mi.custo * r.qtd : 0);
       }, 0);
       const custoBola = custoTotal / rend;
-      document.getElementById("massa-peso-total").textContent = pesoTotal + " g";
+      document.getElementById("massa-peso-total").textContent = pesoTotalG + " g";
       document.getElementById("massa-rend").textContent = rend + " bola" + (rend > 1 ? "s" : "");
       document.getElementById("massa-custo-total").textContent = fmtR(custoTotal);
       document.getElementById("massa-custo").textContent = fmtR(custoBola);
@@ -1988,8 +1988,11 @@
       const rows = getMassaRows();
       if (rows.length === 0) { toast("⚠️ Adicione pelo menos um ingrediente."); return }
       const pesoPaneto = parseInt(document.getElementById("massa-peso-paneto").value) || 270;
-      const pesoTotal = rows.reduce((s, r) => s + r.qtd, 0);
-      const rend = Math.floor(pesoTotal / pesoPaneto) || 1;
+      const pesoTotalG = rows.reduce((s, r) => {
+        const mi = DB.insumos.find(i => i.id === r.insumoId);
+        return s + (mi ? toGrama(r.qtd, mi.unidade) : 0);
+      }, 0);
+      const rend = Math.floor(pesoTotalG / pesoPaneto) || 1;
       DB.config.massaRecipe = rows;
       DB.config.massaPesoPaneto = pesoPaneto;
       const custoTotal = rows.reduce((s, r) => {
@@ -2003,7 +2006,7 @@
         massaIns.unidade = "un";
       }
       if (save(DB)) {
-        toast("✅ Massa atualizada! " + pesoTotal + "g · " + rend + " bolas · " + fmtR(custoBola) + "/bola");
+        toast("✅ Massa atualizada! " + pesoTotalG + "g · " + rend + " bolas · " + fmtR(custoBola) + "/bola");
         renderMassa();
         renderPizzas();
         renderDashboard();

@@ -269,7 +269,7 @@ function enviarPedido() {
       document.getElementById('btn-enviar-pedido').disabled = false;
     });
 }
-const API_HOST = "https://tondapizzaria.tondapizzaria.workers.dev";
+const API_HOST = "";
 const STORE_KEY="tonda_pizzaria";
 const FALLBACK={
   config:{nome:"Tonda Pizzaria Artesanal",whatsapp:"5511999999999",taxaEntrega:0,tempoEstimado:"30-40 minutos"},
@@ -425,7 +425,12 @@ function changeQty(id,d){
 function cartCount(){return Object.values(cart).reduce((s,i)=>s+i.qty,0)}
 function cartSub(){return Object.values(cart).reduce((s,i)=>s+(i.preco*i.qty),0)}
 function cartTotal(){return cartSub()+(CFG.taxaEntrega ?? 0)}
-function fmtR(n){return"R$ "+n.toFixed(2).replace(".",",")}
+function fmtR(n){
+  if(n===0)return"R$ 0,00";
+  if(Math.abs(n)>=0.01)return"R$ "+n.toFixed(2).replace(".",",");
+  const d=Math.max(2,Math.min(6,Math.ceil(-Math.log10(Math.abs(n)))+2));
+  return"R$ "+n.toFixed(d).replace(".",",")
+}
 function updateCart(){
   const count=cartCount();
   document.getElementById("cart-badge").textContent=count;
