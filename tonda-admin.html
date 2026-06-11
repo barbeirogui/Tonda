@@ -800,6 +800,8 @@
         Cardápio</button>
       <button class="nav-btn" data-tab="estoque" onclick="showTab('estoque')"><span class="ni">📦</span>
         Estoque</button>
+      <button class="nav-btn" data-tab="massa" onclick="showTab('massa')"><span class="ni">🍞</span>
+        Massa</button>
       <button class="nav-btn" data-tab="vendas" onclick="showTab('vendas')"><span class="ni">🧾</span> Vendas</button>
       <button class="nav-btn" data-tab="config" onclick="showTab('config')"><span class="ni">⚙️</span>
         Configurações</button>
@@ -870,6 +872,29 @@
           </thead>
           <tbody id="pizzas-list"></tbody>
         </table>
+      </div>
+    </div>
+    <!-- MASSA -->
+    <div class="tab-content" id="tab-massa">
+      <div class="page-header">
+        <div class="page-title">Massa <small>Receita e custo da massa artesanal</small></div>
+        <button class="btn btn-primary" onclick="calcMassa()">🔄 Recalcular custo</button>
+      </div>
+      <div style="background:var(--white);border-radius:var(--radius);border:1px solid var(--border);padding:20px;max-width:600px">
+        <p style="font-size:13px;color:var(--muted);margin-bottom:14px">Defina quantos gramas de cada ingrediente vai em <strong>1 bola de massa</strong>.</p>
+        <div class="ing-list" id="massa-rows"></div>
+        <button class="btn btn-ghost btn-sm" onclick="addMassaRow()" style="margin-bottom:16px">+ Adicionar ingrediente</button>
+        <div style="background:var(--bg);border-radius:8px;padding:14px;margin-top:8px">
+          <div style="display:flex;justify-content:space-between;font-size:14px">
+            <span style="font-weight:600">Custo por bola de massa</span>
+            <span id="massa-custo" style="font-weight:700;color:var(--red)">R$ 0,00</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-top:6px">
+            <span>Preço atual da Massa artesanal</span>
+            <span id="massa-atual">R$ 0,00</span>
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="saveMassa()" style="margin-top:14px">💾 Salvar receita e atualizar custo</button>
       </div>
     </div>
     <!-- VENDAS -->
@@ -978,10 +1003,11 @@
       </div>
       <div class="modal-body">
         <div class="field"><label>Insumo *</label>
-          <select id="compra-insumo"></select>
+          <select id="compra-insumo" onchange="calcCompraValor()"></select>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px" id="compra-custo-ref">Custo atual: —</div>
         </div>
         <div class="field-row">
-          <div class="field"><label>Quantidade *</label><input type="number" id="compra-qtd" step="0.001" min="0"></div>
+          <div class="field"><label>Quantidade *</label><input type="number" id="compra-qtd" step="0.001" min="0" oninput="calcCompraValor()"></div>
           <div class="field"><label>Valor total (R$) *</label><input type="number" id="compra-valor" step="0.01"
               min="0"></div>
         </div>
@@ -1142,7 +1168,7 @@
 
     // ---- DEFAULT DATA ----
     const DEFAULT = {
-      config: { nome: "Tonda Pizzaria Artesanal", whatsapp: "5511983746277", taxaEntrega: 0, tempoEstimado: "30-40 minutos", pin: PIN, cmvIdeal: 30 },
+      config: { nome: "Tonda Pizzaria Artesanal", whatsapp: "5511983746277", taxaEntrega: 0, tempoEstimado: "30-40 minutos", pin: PIN, cmvIdeal: 30, massaRecipe: [{insumoId:"i16",qtd:250},{insumoId:"i17",qtd:150},{insumoId:"i18",qtd:2},{insumoId:"i19",qtd:5},{insumoId:"i20",qtd:10}] },
       insumos: [
         { id: "i1", nome: "Massa artesanal", unidade: "un", custo: 3.50 },
         { id: "i2", nome: "Mussarela Bacio", unidade: "g", custo: 0.04183 },
@@ -1159,6 +1185,11 @@
         { id: "i13", nome: "Mussarela de Búfala Cereja Yema", unidade: "g", custo: 0.06203 },
         { id: "i14", nome: "Caixa Oitavada Comum 35cm", unidade: "un", custo: 1.74 },
         { id: "i15", nome: "Água Mineral Buona Vita 6x1,5L", unidade: "cx", custo: 15.96 },
+        { id: "i16", nome: "Farinha de trigo", unidade: "g", custo: 0.005 },
+        { id: "i17", nome: "Água filtrada", unidade: "g", custo: 0.001 },
+        { id: "i18", nome: "Fermento biológico", unidade: "g", custo: 0.05 },
+        { id: "i19", nome: "Sal", unidade: "g", custo: 0.002 },
+        { id: "i20", nome: "Azeite de oliva", unidade: "g", custo: 0.08 },
       ],
       pizzas: [
         { id: "p1", nome: "Margherita", categoria: "Tradicionais", preco: 52, ativo: true, ingredientes: [{ insumoId: "i1", quantidade: 1 }, { insumoId: "i2", quantidade: 250 }, { insumoId: "i3", quantidade: 120 }] },
@@ -1369,8 +1400,9 @@
       if (id === "config") renderConfig();
       if (id === "estoque") renderEstoque();
       if (id === "vendas") renderVendas();
+      if (id === "massa") renderMassa();
     }
-    function renderAll() { renderDashboard(); renderInsumos(); renderPizzas(); renderConfig() }
+    function renderAll() { renderDashboard(); renderInsumos(); renderPizzas(); renderConfig(); renderMassa() }
     // ---- VENDAS ----
     function renderVendas() {
       document.getElementById('vendas-list').innerHTML = (DB.vendas || []).sort((a, b) => b.data.localeCompare(a.data)).map(v => {
@@ -1729,7 +1761,23 @@
       sel.innerHTML = DB.insumos.map(ins => `<option value="${ins.id}">${ins.nome} (${ins.unidade})</option>`).join('');
       document.getElementById('compra-qtd').value = '';
       document.getElementById('compra-valor').value = '';
+      calcCompraValor();
       openModal('modal-compra');
+    }
+
+    function calcCompraValor() {
+      const insumoId = document.getElementById('compra-insumo').value;
+      const qtd = parseNum(document.getElementById('compra-qtd').value) || 0;
+      const ins = DB.insumos.find(i => i.id === insumoId);
+      const refEl = document.getElementById('compra-custo-ref');
+      if (ins) {
+        refEl.textContent = `Custo atual: ${fmtR(ins.custo)}/${ins.unidade}`;
+        if (qtd > 0) {
+          document.getElementById('compra-valor').value = (ins.custo * qtd).toFixed(2);
+        }
+      } else {
+        refEl.textContent = 'Custo atual: —';
+      }
     }
 
     function saveCompra() {
@@ -1774,6 +1822,81 @@
         }
       });
       return rows;
+    }
+    // ---- MASSA ----
+    let massaRowCount = 0;
+    function renderMassa() {
+      const recipe = DB.config.massaRecipe || [{ insumoId: "i16", qtd: 250 }, { insumoId: "i17", qtd: 150 }, { insumoId: "i18", qtd: 2 }, { insumoId: "i19", qtd: 5 }, { insumoId: "i20", qtd: 10 }];
+      document.getElementById("massa-rows").innerHTML = "";
+      massaRowCount = 0;
+      recipe.forEach(r => addMassaRow(r));
+      calcMassa();
+    }
+    function addMassaRow(data) {
+      const rowId = massaRowCount++;
+      const opts = DB.insumos.map(ins => `<option value="${ins.id}" ${data && data.insumoId === ins.id ? "selected" : ""}>${ins.nome} (${ins.unidade})</option>`).join("");
+      const row = document.createElement("div");
+      row.className = "ing-row";
+      row.id = "massa-row-" + rowId;
+      row.innerHTML = `
+        <select onchange="calcMassa()">${opts || "<option>Cadastre insumos</option>"}</select>
+        <input type="number" step="1" min="0" value="${data ? data.qtd : ""}" placeholder="gramas" oninput="calcMassa()">
+        <span style="font-size:12px;color:var(--muted);align-self:center">g</span>
+        <span style="font-size:11px;color:#888;align-self:center" id="massa-preco-${rowId}"></span>
+        <button class="ing-del" onclick="document.getElementById('massa-row-${rowId}').remove();calcMassa()">✕</button>
+      `;
+      document.getElementById("massa-rows").appendChild(row);
+      const sel = row.querySelector("select");
+      const precoSpan = document.getElementById("massa-preco-" + rowId);
+      function updateInfo() {
+        const ins = DB.insumos.find(i => i.id === sel.value);
+        precoSpan.textContent = ins ? `R$ ${ins.custo.toFixed(2).replace('.', ',')}/g` : "";
+      }
+      sel.addEventListener("change", updateInfo);
+      updateInfo();
+      calcMassa();
+    }
+    function getMassaRows() {
+      const rows = [];
+      document.querySelectorAll("#massa-rows .ing-row").forEach(row => {
+        const sel = row.querySelector("select");
+        const inp = row.querySelector("input");
+        if (sel && inp && sel.value && inp.value) {
+          rows.push({ insumoId: sel.value, qtd: parseNum(inp.value) || 0 });
+        }
+      });
+      return rows;
+    }
+    function calcMassa() {
+      const rows = getMassaRows();
+      const custo = rows.reduce((s, r) => {
+        const ins = DB.insumos.find(i => i.id === r.insumoId);
+        return s + (ins ? ins.custo * r.qtd : 0);
+      }, 0);
+      document.getElementById("massa-custo").textContent = fmtR(custo);
+      const massaIns = DB.insumos.find(i => i.id === "i1");
+      document.getElementById("massa-atual").textContent = massaIns ? fmtR(massaIns.custo) : "—";
+    }
+    function saveMassa() {
+      const rows = getMassaRows();
+      if (rows.length === 0) { toast("⚠️ Adicione pelo menos um ingrediente."); return }
+      DB.config.massaRecipe = rows;
+      const custo = rows.reduce((s, r) => {
+        const ins = DB.insumos.find(i => i.id === r.insumoId);
+        return s + (ins ? ins.custo * r.qtd : 0);
+      }, 0);
+      const massaIns = DB.insumos.find(i => i.id === "i1");
+      if (massaIns) {
+        massaIns.custo = custo;
+        massaIns.unidade = "un";
+      }
+      if (save(DB)) {
+        toast("✅ Massa atualizada! Custo: " + fmtR(custo));
+        renderMassa();
+        renderInsumos();
+        renderPizzas();
+        renderDashboard();
+      }
     }
     function updateCmvPreview() {
       const ings = getIngRows();
