@@ -881,14 +881,22 @@
         <button class="btn btn-primary" onclick="calcMassa()">🔄 Recalcular custo</button>
       </div>
       <div style="background:var(--white);border-radius:var(--radius);border:1px solid var(--border);padding:20px;max-width:600px">
-        <p style="font-size:13px;color:var(--muted);margin-bottom:14px">Quantidades do <strong>lote total</strong> e rendimento em bolas.</p>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:14px">Quantidades do <strong>lote total</strong>. O rendimento é calculado automaticamente.</p>
         <div class="field" style="margin-bottom:14px">
-          <label>Rendimento (bolas de massa)</label>
-          <input type="number" id="massa-rend" step="1" min="1" value="4" oninput="calcMassa()" style="max-width:120px">
+          <label>Peso por paneto (g)</label>
+          <input type="number" id="massa-peso-paneto" step="1" min="1" value="270" oninput="calcMassa()" style="max-width:120px">
         </div>
         <div id="massa-rows"></div>
         <div style="background:var(--bg);border-radius:8px;padding:14px;margin-top:8px">
           <div style="display:flex;justify-content:space-between;font-size:14px">
+            <span style="font-weight:600">Peso total do lote</span>
+            <span id="massa-peso-total" style="font-weight:700">0 g</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:14px;margin-top:4px">
+            <span style="font-weight:600">Rendimento</span>
+            <span id="massa-rend" style="font-weight:700">0 bolas</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:14px;margin-top:4px">
             <span style="font-weight:600">Custo total do lote</span>
             <span id="massa-custo-total" style="font-weight:700">R$ 0,00</span>
           </div>
@@ -1209,7 +1217,7 @@
 
     // ---- DEFAULT DATA ----
     const DEFAULT = {
-      config: { nome: "Tonda Pizzaria Artesanal", whatsapp: "5511983746277", taxaEntrega: 0, tempoEstimado: "30-40 minutos", pin: PIN, cmvIdeal: 30, massaRecipe: [{insumoId:"mi1",qtd:1000},{insumoId:"mi2",qtd:600},{insumoId:"mi3",qtd:8},{insumoId:"mi4",qtd:20},{insumoId:"mi5",qtd:40}], massaRend: 4 },
+      config: { nome: "Tonda Pizzaria Artesanal", whatsapp: "5511983746277", taxaEntrega: 0, tempoEstimado: "30-40 minutos", pin: PIN, cmvIdeal: 30, massaRecipe: [{insumoId:"mi1",qtd:1000},{insumoId:"mi2",qtd:650},{insumoId:"mi3",qtd:1},{insumoId:"mi4",qtd:24},{insumoId:"mi5",qtd:13}], massaPesoPaneto: 270 },
       insumos: [
         { id: "i1", nome: "Massa artesanal", unidade: "un", custo: 3.50 },
         { id: "i2", nome: "Mussarela Bacio", unidade: "g", custo: 0.04183 },
@@ -1959,8 +1967,8 @@
     }
     // ---- MASSA ----
     function renderMassa() {
-      const recipe = DB.config.massaRecipe || [{ insumoId: "mi1", qtd: 1000 }, { insumoId: "mi2", qtd: 600 }, { insumoId: "mi3", qtd: 8 }, { insumoId: "mi4", qtd: 20 }, { insumoId: "mi5", qtd: 40 }];
-      document.getElementById("massa-rend").value = DB.config.massaRend || 4;
+      const recipe = DB.config.massaRecipe || [{ insumoId: "mi1", qtd: 1000 }, { insumoId: "mi2", qtd: 650 }, { insumoId: "mi3", qtd: 1 }, { insumoId: "mi4", qtd: 24 }, { insumoId: "mi5", qtd: 13 }];
+      document.getElementById("massa-peso-paneto").value = DB.config.massaPesoPaneto || 270;
       const container = document.getElementById("massa-rows");
       container.innerHTML = "";
       recipe.forEach(r => {
@@ -1988,17 +1996,20 @@
     }
     function calcMassa() {
       const rows = getMassaRows();
-      const rend = parseInt(document.getElementById("massa-rend").value) || 1;
+      const pesoPaneto = parseInt(document.getElementById("massa-peso-paneto").value) || 270;
+      const pesoTotal = rows.reduce((s, r) => s + r.qtd, 0);
+      const rend = Math.floor(pesoTotal / pesoPaneto) || 1;
       const custoTotal = rows.reduce((s, r) => {
         const mi = DB.massaInsumos.find(m => m.id === r.insumoId);
         return s + (mi ? mi.custo * r.qtd : 0);
       }, 0);
       const custoBola = custoTotal / rend;
+      document.getElementById("massa-peso-total").textContent = pesoTotal + " g";
+      document.getElementById("massa-rend").textContent = rend + " bola" + (rend > 1 ? "s" : "");
       document.getElementById("massa-custo-total").textContent = fmtR(custoTotal);
       document.getElementById("massa-custo").textContent = fmtR(custoBola);
       const massaIns = DB.insumos.find(i => i.id === "i1");
       document.getElementById("massa-atual").textContent = massaIns ? fmtR(massaIns.custo) : "—";
-      // atualiza preview dos custos nas linhas
       const inputs = document.querySelectorAll("#massa-rows .ing-row input");
       inputs.forEach((inp, i) => {
         const spans = inp.parentElement.querySelectorAll("span");
@@ -2011,9 +2022,11 @@
     function saveMassa() {
       const rows = getMassaRows();
       if (rows.length === 0) { toast("⚠️ Preencha as quantidades."); return }
-      const rend = parseInt(document.getElementById("massa-rend").value) || 1;
+      const pesoPaneto = parseInt(document.getElementById("massa-peso-paneto").value) || 270;
+      const pesoTotal = rows.reduce((s, r) => s + r.qtd, 0);
+      const rend = Math.floor(pesoTotal / pesoPaneto) || 1;
       DB.config.massaRecipe = rows;
-      DB.config.massaRend = rend;
+      DB.config.massaPesoPaneto = pesoPaneto;
       const custoTotal = rows.reduce((s, r) => {
         const mi = DB.massaInsumos.find(m => m.id === r.insumoId);
         return s + (mi ? mi.custo * r.qtd : 0);
@@ -2025,7 +2038,7 @@
         massaIns.unidade = "un";
       }
       if (save(DB)) {
-        toast("✅ Massa atualizada! " + fmtR(custoTotal) + " / " + rend + " bolas = " + fmtR(custoBola) + " cada");
+        toast("✅ Massa atualizada! " + pesoTotal + "g · " + rend + " bolas · " + fmtR(custoBola) + "/bola");
         renderMassa();
         renderPizzas();
         renderDashboard();
