@@ -14,10 +14,5 @@
       "binding": "TONDA_DB",
       "id": "721c35209dbb4c62a38b6a11a504bdb9"
     }
-    ,
-    {
-      "binding": "KV",
-      "id": "721c35209dbb4c62a38b6a11a504bdb9"
-    }
   ]
 }
