@@ -1306,10 +1306,10 @@
       const toArray = value => Array.isArray(value)
         ? value
         : (value && typeof value === "object" ? Object.values(value) : null);
-      // Merge: base.insumos serve como seed, valores do KV sobrescrevem
+      // Merge: base.insumos é a fonte primária; valores do KV só sobrescrevem se existirem
       let insumos = base.insumos.map(bi => {
         const saved = toArray(db.insumos)?.find(i => i.id === bi.id);
-        return saved ? { ...bi, ...saved } : bi;
+        return saved ? { ...bi, nome: saved.nome ?? bi.nome, unidade: saved.unidade ?? bi.unidade, custo: saved.custo ?? bi.custo } : bi;
       });
       // Adiciona insumos novos que existem no KV mas não no base
       toArray(db.insumos)?.forEach(si => {
@@ -1317,16 +1317,26 @@
           insumos.push({ grupo: "cobertura", ...si });
         }
       });
-      // Garante grupo nos insumos existentes
+      // Migra g → kg nos insumos salvos (dados legados)
+      const gToKg = ["i2","i4","i5","i6","i7","i8","i9","i10","i11","i12","i13"];
+      insumos.forEach(ins => {
+        if (gToKg.includes(ins.id) && ins.unidade === "g") {
+          ins.unidade = "kg";
+          ins.custo = ins.custo * 1000;
+        }
+      });
+      // Garante grupo nos insumos existentes; garante custo mínimo (massa i1 nunca zero)
       insumos.forEach(ins => {
         if (!ins.grupo) {
           ins.grupo = ["i16","i17","i18","i19","i20"].includes(ins.id) ? "massa" : (ins.id === "i1" ? "massa" : "cobertura");
+        }
+        if (ins.id === "i1" && (!ins.custo || ins.custo < 0.01)) {
+          ins.custo = base.insumos.find(bi => bi.id === "i1")?.custo ?? 3.50;
         }
       });
       let estoque = toArray(db.estoque) || [];
       // Migra i3 (Molho de tomate) → i12 (Tomate Pelado)
       // Migra insumos de g → kg (divide qtd por 1000)
-      const gToKg = ["i2","i4","i5","i6","i7","i8","i9","i10","i11","i12","i13"];
       const pizzas = (toArray(db.pizzas) || base.pizzas).map(p => {
         if (p.ingredientes) {
           p.ingredientes = p.ingredientes.map(ing => {
