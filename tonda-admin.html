@@ -1357,12 +1357,22 @@
           return { ...e, insumoId: id, qtd };
         });
       }
-      // Migra massaRecipe IDs de mi→i
+      // Força insumos da massa (i16-i20) a usar valores do DEFAULT (nunca devem vir do KV)
+      base.insumos.filter(i => ["i16","i17","i18","i19","i20"].includes(i.id)).forEach(bi => {
+        const idx = insumos.findIndex(x => x.id === bi.id);
+        if (idx >= 0) insumos[idx] = { ...bi };
+      });
+      // Migra massaRecipe IDs de mi→i e converte qtd de g → unidade nativa
       let config = { ...base.config, ...(db.config || {}) };
       if (config.massaRecipe) {
+        const nativeUnit = { i16:"kg", i17:"g", i18:"g", i19:"g", i20:"g" };
         config.massaRecipe = config.massaRecipe.map(r => {
           const m = { mi1:"i16", mi2:"i17", mi3:"i18", mi4:"i19", mi5:"i20" };
-          return m[r.insumoId] ? { ...r, insumoId: m[r.insumoId] } : r;
+          const newId = m[r.insumoId] || r.insumoId;
+          let qtd = r.qtd;
+          // Se veio do formato antigo (mi1-mi5 com qtd em gramas), converte
+          if (m[r.insumoId] && nativeUnit[newId] === "kg" && qtd > 10) qtd = qtd / 1000;
+          return { ...r, insumoId: newId, qtd };
         });
       }
       // Remove campos legados que não existem mais no DEFAULT
