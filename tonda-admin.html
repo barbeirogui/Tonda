@@ -881,12 +881,13 @@
         <button class="btn btn-primary" onclick="calcMassa()">🔄 Recalcular custo</button>
       </div>
       <div style="background:var(--white);border-radius:var(--radius);border:1px solid var(--border);padding:20px;max-width:600px">
-        <p style="font-size:13px;color:var(--muted);margin-bottom:14px">Quantidades do <strong>lote total</strong>. O rendimento é calculado automaticamente.</p>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:14px">Cadastre os ingredientes do <strong>lote total</strong>. O rendimento é calculado automaticamente.</p>
         <div class="field" style="margin-bottom:14px">
           <label>Peso por paneto (g)</label>
           <input type="number" id="massa-peso-paneto" step="1" min="1" value="270" oninput="calcMassa()" style="max-width:120px">
         </div>
-        <div id="massa-rows"></div>
+        <div class="ing-list" id="massa-rows"></div>
+        <button class="btn btn-ghost btn-sm" onclick="addMassaRow()" style="margin-bottom:16px">+ Adicionar ingrediente</button>
         <div style="background:var(--bg);border-radius:8px;padding:14px;margin-top:8px">
           <div style="display:flex;justify-content:space-between;font-size:14px">
             <span style="font-weight:600">Peso total do lote</span>
@@ -1966,33 +1967,56 @@
       return rows;
     }
     // ---- MASSA ----
+    let massaRowCount = 0;
     function renderMassa() {
       const recipe = DB.config.massaRecipe || [{ insumoId: "mi1", qtd: 1000 }, { insumoId: "mi2", qtd: 650 }, { insumoId: "mi3", qtd: 1 }, { insumoId: "mi4", qtd: 24 }, { insumoId: "mi5", qtd: 13 }];
       document.getElementById("massa-peso-paneto").value = DB.config.massaPesoPaneto || 270;
-      const container = document.getElementById("massa-rows");
-      container.innerHTML = "";
-      recipe.forEach(r => {
-        const mi = DB.massaInsumos.find(m => m.id === r.insumoId);
-        if (!mi) return;
-        const row = document.createElement("div");
-        row.className = "ing-row";
-        row.innerHTML = `
-          <span style="font-weight:600;min-width:140px">${mi.nome}</span>
-          <input type="number" step="1" min="0" value="${r.qtd}" placeholder="gramas" oninput="calcMassa()">
-          <span style="font-size:12px;color:var(--muted);align-self:center">g</span>
-          <span style="font-size:11px;color:#888;align-self:center">${fmtR(mi.custo * r.qtd)}</span>
-        `;
-        container.appendChild(row);
-      });
+      document.getElementById("massa-rows").innerHTML = "";
+      massaRowCount = 0;
+      recipe.forEach(r => addMassaRow(r));
+      calcMassa();
+    }
+    function addMassaRow(data) {
+      const rowId = massaRowCount++;
+      const opts = DB.massaInsumos.map(mi => `<option value="${mi.id}" ${data && data.insumoId === mi.id ? "selected" : ""}>${mi.nome} (${mi.unidade})</option>`).join("");
+      const row = document.createElement("div");
+      row.className = "ing-row";
+      row.id = "massa-row-" + rowId;
+      row.innerHTML = `
+        <select onchange="updateMassaRow('${rowId}')">${opts || "<option>Cadastre insumos</option>"}</select>
+        <input type="number" step="1" min="0" value="${data ? data.qtd : ""}" placeholder="gramas" oninput="updateMassaRow('${rowId}')">
+        <span style="font-size:12px;color:var(--muted);align-self:center">g</span>
+        <span style="font-size:11px;color:#888;align-self:center" id="massa-preco-${rowId}"></span>
+        <button class="ing-del" onclick="document.getElementById('massa-row-${rowId}').remove();calcMassa()">✕</button>
+      `;
+      document.getElementById("massa-rows").appendChild(row);
+      updateMassaRow(rowId);
+      calcMassa();
+    }
+    function updateMassaRow(rowId) {
+      const row = document.getElementById("massa-row-" + rowId);
+      if (!row) return;
+      const sel = row.querySelector("select");
+      const inp = row.querySelector("input");
+      const mi = DB.massaInsumos.find(m => m.id === sel.value);
+      const precoSpan = document.getElementById("massa-preco-" + rowId);
+      if (mi && inp.value) {
+        precoSpan.textContent = fmtR(mi.custo * parseNum(inp.value));
+      } else {
+        precoSpan.textContent = "";
+      }
       calcMassa();
     }
     function getMassaRows() {
-      const inputs = document.querySelectorAll("#massa-rows .ing-row input");
-      const recipe = DB.config.massaRecipe || [];
-      return recipe.map((r, i) => {
-        const qtd = inputs[i] ? parseNum(inputs[i].value) || 0 : r.qtd;
-        return { insumoId: r.insumoId, qtd };
+      const rows = [];
+      document.querySelectorAll("#massa-rows .ing-row").forEach(row => {
+        const sel = row.querySelector("select");
+        const inp = row.querySelector("input");
+        if (sel && inp && sel.value && inp.value) {
+          rows.push({ insumoId: sel.value, qtd: parseNum(inp.value) || 0 });
+        }
       });
+      return rows;
     }
     function calcMassa() {
       const rows = getMassaRows();
@@ -2010,18 +2034,10 @@
       document.getElementById("massa-custo").textContent = fmtR(custoBola);
       const massaIns = DB.insumos.find(i => i.id === "i1");
       document.getElementById("massa-atual").textContent = massaIns ? fmtR(massaIns.custo) : "—";
-      const inputs = document.querySelectorAll("#massa-rows .ing-row input");
-      inputs.forEach((inp, i) => {
-        const spans = inp.parentElement.querySelectorAll("span");
-        const mi = DB.massaInsumos.find(m => m.id === rows[i]?.insumoId);
-        if (mi && spans.length > 1) {
-          spans[1].textContent = fmtR(mi.custo * parseNum(inp.value || 0));
-        }
-      });
     }
     function saveMassa() {
       const rows = getMassaRows();
-      if (rows.length === 0) { toast("⚠️ Preencha as quantidades."); return }
+      if (rows.length === 0) { toast("⚠️ Adicione pelo menos um ingrediente."); return }
       const pesoPaneto = parseInt(document.getElementById("massa-peso-paneto").value) || 270;
       const pesoTotal = rows.reduce((s, r) => s + r.qtd, 0);
       const rend = Math.floor(pesoTotal / pesoPaneto) || 1;
