@@ -817,6 +817,8 @@
         Insumos</button>
       <button class="nav-btn" data-tab="cardapio" onclick="showTab('cardapio')"><span class="ni">🍕</span>
         Cardápio</button>
+      <button class="nav-btn" data-tab="bebidas" onclick="showTab('bebidas')"><span class="ni">🥤</span>
+        Bebidas</button>
       <button class="nav-btn" data-tab="estoque" onclick="showTab('estoque')"><span class="ni">📦</span>
         Estoque</button>
       <button class="nav-btn" data-tab="massa" onclick="showTab('massa')"><span class="ni">🍞</span>
@@ -892,6 +894,25 @@
             </tr>
           </thead>
           <tbody id="pizzas-list"></tbody>
+        </table>
+      </div>
+    </div>
+    <!-- BEBIDAS -->
+    <div class="tab-content" id="tab-bebidas">
+      <div class="page-header">
+        <div class="page-title">Bebidas <small>Catálogo de bebidas</small></div>
+        <button class="btn btn-primary" onclick="openBebidaModal()">+ Nova bebida</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Bebida</th>
+              <th>Preço venda</th>
+              <th style="width:110px">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="bebidas-list"></tbody>
         </table>
       </div>
     </div>
@@ -1262,6 +1283,27 @@
       </div>
     </div>
   </div>
+  <!-- MODAL BEBIDA -->
+  <div class="modal-overlay" id="modal-bebida">
+    <div class="modal">
+      <div class="modal-head">
+        <span id="bebida-modal-title">Nova bebida</span>
+        <button class="close-x" onclick="closeModal('modal-bebida')">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="beb-edit-id">
+        <div class="field"><label>Nome da bebida *</label><input type="text" id="beb-nome" placeholder="Ex: Coca-Cola 2L"></div>
+        <div class="field-row">
+          <div class="field"><label>Preço de venda (R$) *</label><input type="number" id="beb-preco" step="0.50" min="0" placeholder="0,00"></div>
+          <div class="field"><label style="opacity:0">Ativo</label><label style="display:flex;align-items:center;gap:6px;margin-top:4px"><input type="checkbox" id="beb-ativo" checked> Ativo no cardápio</label></div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn btn-ghost" onclick="closeModal('modal-bebida')">Cancelar</button>
+        <button class="btn btn-primary" onclick="saveBebida()">Salvar bebida</button>
+      </div>
+    </div>
+  </div>
   <!-- TOAST -->
   <div class="toast" id="toast"></div>
 
@@ -1308,10 +1350,6 @@
         { id: "i13", nome: "Mussarela de Búfala Cereja Yema", unidade: "kg", custo: 62.03, grupo: "cobertura" },
         { id: "i14", nome: "Caixa Oitavada Comum 35cm", unidade: "un", custo: 1.74, grupo: "cobertura" },
         { id: "i15", nome: "Água Mineral Buona Vita 6x1,5L", unidade: "cx", custo: 15.96, grupo: "cobertura" },
-        { id: "i21", nome: "Coca-Cola 2L", unidade: "un", custo: 6.00, grupo: "cobertura" },
-        { id: "i22", nome: "Água Mineral 500ml", unidade: "un", custo: 1.80, grupo: "cobertura" },
-        { id: "i23", nome: "Guaraná Antarctica 2L", unidade: "un", custo: 5.50, grupo: "cobertura" },
-        { id: "i24", nome: "Heineken Long Neck", unidade: "un", custo: 4.50, grupo: "cobertura" },
         { id: "i16", nome: "Farinha de trigo", unidade: "kg", custo: 5.00, grupo: "massa" },
         { id: "i17", nome: "Água", unidade: "g", custo: 0.001, grupo: "massa" },
         { id: "i18", nome: "Fermento biológico", unidade: "g", custo: 0.05, grupo: "massa" },
@@ -1324,10 +1362,12 @@
         { id: "p3", nome: "Quatro Queijos", categoria: "Premium", preco: 64, ativo: true, foto: "", complementos: [], ingredientes: [{ insumoId: "i1", quantidade: 1 }, { insumoId: "i2", quantidade: 0.20 }, { insumoId: "i6", quantidade: 0.10 }, { insumoId: "i9", quantidade: 0.05 }, { insumoId: "i10", quantidade: 0.05 }] },
         { id: "p4", nome: "Frango c/ Catupiry", categoria: "Tradicionais", preco: 58, ativo: true, foto: "", complementos: [], ingredientes: [{ insumoId: "i1", quantidade: 1 }, { insumoId: "i2", quantidade: 0.10 }, { insumoId: "i5", quantidade: 0.20 }, { insumoId: "i6", quantidade: 0.12 }] },
         { id: "p5", nome: "Pepperoni", categoria: "Premium", preco: 72, ativo: true, foto: "", complementos: [{ nome: "Extra pepperoni", preco: 8 }], ingredientes: [{ insumoId: "i1", quantidade: 1 }, { insumoId: "i2", quantidade: 0.20 }, { insumoId: "i12", quantidade: 0.10 }, { insumoId: "i7", quantidade: 0.15 }] },
-        { id: "p6", nome: "Coca-Cola 2L", categoria: "Bebidas", preco: 12, ativo: true, foto: "", complementos: [], ingredientes: [{ insumoId: "i21", quantidade: 1 }] },
-        { id: "p7", nome: "Água Mineral 500ml", categoria: "Bebidas", preco: 5, ativo: true, foto: "", complementos: [], ingredientes: [{ insumoId: "i22", quantidade: 1 }] },
-        { id: "p8", nome: "Guaraná Antarctica 2L", categoria: "Bebidas", preco: 10, ativo: true, foto: "", complementos: [], ingredientes: [{ insumoId: "i23", quantidade: 1 }] },
-        { id: "p9", nome: "Heineken Long Neck", categoria: "Bebidas", preco: 9, ativo: true, foto: "", complementos: [], ingredientes: [{ insumoId: "i24", quantidade: 1 }] },
+      ],
+      bebidas: [
+        { id: "b1", nome: "Coca-Cola 2L", preco: 12, ativo: true },
+        { id: "b2", nome: "Água Mineral 500ml", preco: 5, ativo: true },
+        { id: "b3", nome: "Guaraná Antarctica 2L", preco: 10, ativo: true },
+        { id: "b4", nome: "Heineken Long Neck", preco: 9, ativo: true },
       ],
       estoque: [], // [{insumoId, qtd, data, valorTotal}]
       vendas: [], // [{pizzaId, qtd, data}]
@@ -1413,12 +1453,21 @@
       }
       // Remove campos legados que não existem mais no DEFAULT
       const { massaInsumos: _, estoqueMassa: __, ...dbClean } = db;
+      const bebidasDoDb = toArray(db.bebidas) || [];
+      const bebidasMigradas = bebidasDoDb.length ? bebidasDoDb : [];
+      // Migra pizzas da categoria Bebidas para o array bebidas
+      const pizzasSemBebidas = pizzas.filter(p => p.categoria !== "Bebidas");
+      const bebidasDePizzas = pizzas.filter(p => p.categoria === "Bebidas").map(p => ({
+        id: p.id.replace("p", "b"), nome: p.nome, preco: p.preco, ativo: p.ativo,
+      }));
+      const bebidas = bebidasMigradas.length ? bebidasMigradas : bebidasDePizzas;
       return {
         ...base,
         ...dbClean,
         config,
         insumos,
-        pizzas,
+        pizzas: pizzasSemBebidas,
+        bebidas: bebidas.length ? bebidas : base.bebidas,
         estoque,
         vendas: toArray(db.vendas) || [],
         consumo: toArray(db.consumo) || [],
@@ -1581,6 +1630,7 @@
       if (id === "dashboard") renderDashboard();
       if (id === "insumos") renderInsumos();
       if (id === "cardapio") renderPizzas();
+      if (id === "bebidas") renderBebidas();
       if (id === "config") renderConfig();
       if (id === "estoque") renderEstoque();
       if (id === "vendas") renderVendas();
@@ -1588,7 +1638,7 @@
       if (id === "analise") renderAnalise();
       if (id === "massa") renderMassa();
     }
-    function renderAll() { renderDashboard(); renderInsumos(); renderPizzas(); renderConfig(); renderMassa(); renderAnalise(); renderPedidos() }
+    function renderAll() { renderDashboard(); renderInsumos(); renderPizzas(); renderBebidas(); renderConfig(); renderMassa(); renderAnalise(); renderPedidos() }
     // ---- VENDAS ----
     function renderVendas() {
       document.getElementById('vendas-list').innerHTML = (DB.vendas || []).sort((a, b) => b.data.localeCompare(a.data)).map(v => {
@@ -1719,9 +1769,11 @@
       const avgCmv = cmvs.length ? cmvs.reduce((s, p) => s + p.pct, 0) / cmvs.length : 0;
       const best = cmvs.length ? cmvs.reduce((a, b) => a.pct < b.pct ? a : b) : null;
       const worst = cmvs.length ? cmvs.reduce((a, b) => a.pct > b.pct ? a : b) : null;
-      const totalCats = [...new Set(DB.pizzas.map(p => p.categoria))].length;
+      const totalCats = [...new Set(DB.pizzas.map(p => p.categoria).filter(c => c !== "Bebidas"))].length;
+      const bebAtivas = (DB.bebidas || []).filter(b => b.ativo).length;
       document.getElementById("dash-stats").innerHTML = `
     <div class="stat-card"><div class="stat-label">Pizzas no cardápio</div><div class="stat-value">${DB.pizzas.filter(p => p.ativo).length}</div><div class="stat-sub">${DB.pizzas.length} cadastradas</div></div>
+    <div class="stat-card"><div class="stat-label">Bebidas no cardápio</div><div class="stat-value">${bebAtivas}</div><div class="stat-sub">${(DB.bebidas || []).length} cadastradas</div></div>
     <div class="stat-card"><div class="stat-label">CMV médio</div><div class="stat-value" style="color:${cmvColor(avgCmv)}">${fmtP(avgCmv)}</div><div class="stat-sub">Meta ideal: ≤ 35%</div></div>
     <div class="stat-card"><div class="stat-label">Menor CMV 🏆</div><div class="stat-value" style="font-size:16px;margin-top:4px">${best ? best.nome : "—"}</div><div class="stat-sub">${best ? fmtP(best.pct) : "—"}</div></div>
     <div class="stat-card"><div class="stat-label">Maior CMV ⚠️</div><div class="stat-value" style="font-size:16px;margin-top:4px">${worst ? worst.nome : "—"}</div><div class="stat-sub">${worst ? fmtP(worst.pct) : "—"}</div></div>
@@ -2285,6 +2337,57 @@
       save(DB); renderPizzas(); renderDashboard(); toast("Pizza removida.");
     }
 
+    // ---- BEBIDAS ----
+    function renderBebidas() {
+      document.getElementById("bebidas-list").innerHTML = (DB.bebidas || []).map(b => `
+        <tr>
+          <td><strong>${b.nome}</strong>${!b.ativo ? '<span class="badge badge-gray" style="margin-left:6px">Inativo</span>' : ''}</td>
+          <td>${fmtR(b.preco)}</td>
+          <td>
+            <button class="btn btn-sm btn-ghost" onclick="editBebida('${b.id}')">✏️</button>
+            <button class="btn btn-sm btn-danger" onclick="delBebida('${b.id}')">🗑️</button>
+          </td>
+        </tr>
+      `).join("") || `<tr><td colspan="3" style="text-align:center;color:var(--muted);padding:24px">Nenhuma bebida cadastrada.</td></tr>`;
+    }
+    function openBebidaModal() {
+      document.getElementById("bebida-modal-title").textContent = "Nova bebida";
+      document.getElementById("beb-edit-id").value = "";
+      document.getElementById("beb-nome").value = "";
+      document.getElementById("beb-preco").value = "";
+      document.getElementById("beb-ativo").checked = true;
+      openModal("modal-bebida");
+    }
+    function editBebida(id) {
+      const b = DB.bebidas.find(x => x.id === id);
+      if (!b) return;
+      document.getElementById("bebida-modal-title").textContent = "Editar bebida";
+      document.getElementById("beb-edit-id").value = id;
+      document.getElementById("beb-nome").value = b.nome;
+      document.getElementById("beb-preco").value = b.preco;
+      document.getElementById("beb-ativo").checked = b.ativo !== false;
+      openModal("modal-bebida");
+    }
+    function saveBebida() {
+      const editId = document.getElementById("beb-edit-id").value;
+      const nome = document.getElementById("beb-nome").value.trim();
+      const preco = parseNum(document.getElementById("beb-preco").value);
+      const ativo = document.getElementById("beb-ativo").checked;
+      if (!nome || !preco || preco <= 0) { toast("⚠️ Preencha nome e preço."); return }
+      DB.bebidas = DB.bebidas || [];
+      if (editId) {
+        const b = DB.bebidas.find(x => x.id === editId);
+        if (b) { b.nome = nome; b.preco = preco; b.ativo = ativo }
+      } else {
+        DB.bebidas.push({ id: uid(), nome, preco, ativo });
+      }
+      save(DB); renderBebidas(); closeModal("modal-bebida"); toast("✅ Bebida salva!");
+    }
+    function delBebida(id) {
+      if (!confirm("Remover esta bebida?")) return;
+      DB.bebidas = DB.bebidas.filter(b => b.id !== id);
+      save(DB); renderBebidas(); toast("Bebida removida.");
+    }
     // ---- COMPLEMENTOS ----
     let compCount = 0;
     function addComp(data) {

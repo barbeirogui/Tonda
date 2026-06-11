@@ -982,10 +982,12 @@
         { id: "p3", nome: "Quatro Queijos", categoria: "Premium", preco: 64, ativo: true, ingredientes: [] },
         { id: "p4", nome: "Frango c/ Catupiry", categoria: "Tradicionais", preco: 58, ativo: true, ingredientes: [] },
         { id: "p5", nome: "Pepperoni", categoria: "Premium", preco: 72, ativo: true, ingredientes: [] },
-        { id: "p6", nome: "Coca-Cola 2L", categoria: "Bebidas", preco: 12, ativo: true, ingredientes: [] },
-        { id: "p7", nome: "Água Mineral 500ml", categoria: "Bebidas", preco: 5, ativo: true, ingredientes: [] },
-        { id: "p8", nome: "Guaraná Antarctica 2L", categoria: "Bebidas", preco: 10, ativo: true, ingredientes: [] },
-        { id: "p9", nome: "Heineken Long Neck", categoria: "Bebidas", preco: 9, ativo: true, ingredientes: [] },
+      ],
+      bebidas: [
+        { id: "b1", nome: "Coca-Cola 2L", preco: 12, ativo: true },
+        { id: "b2", nome: "Água Mineral 500ml", preco: 5, ativo: true },
+        { id: "b3", nome: "Guaraná Antarctica 2L", preco: 10, ativo: true },
+        { id: "b4", nome: "Heineken Long Neck", preco: 9, ativo: true },
       ]
     };
 
@@ -1033,6 +1035,7 @@
         },
         insumos: toArray(db.insumos) || base.insumos,
         pizzas,
+        bebidas: toArray(db.bebidas) || base.bebidas,
         estoque: toArray(db.estoque) || [],
         vendas: toArray(db.vendas) || [],
       };
@@ -1067,6 +1070,7 @@
     let cart = {};
     let selectedComps = {};
     let activecat = "";
+    let BEBIDAS = [];
 
     function updateConfigUI() {
       document.getElementById("logo-name").innerHTML = `${CFG.nome.split(" ")[0]} <span>${CFG.nome.split(" ").slice(1).join(" ") || "Pizzaria"}</span>`;
@@ -1080,18 +1084,19 @@
       return [...new Set(MENU.map(p => p.categoria).filter(Boolean))];
     }
     function renderCats() {
-      const cats = getCategories().filter(c => c !== "Bebidas");
-      document.getElementById("cat-tabs").innerHTML = cats.map(c => `<button class="cat-btn${c === activecat ? " active" : ""}" onclick="setcat('${c}')">${catIcon(c)} ${c}</button>`).join("") + `<button class="cat-btn${activecat === "Bebidas" ? " active" : ""}" onclick="setcat('Bebidas')">🥤 Bebidas</button>`;
+      const cats = getCategories();
+      let html = cats.map(c => `<button class="cat-btn${c === activecat ? " active" : ""}" onclick="setcat('${c}')">${catIcon(c)} ${c}</button>`).join("");
+      if (BEBIDAS.length) html += `<button class="cat-btn${activecat === "Bebidas" ? " active" : ""}" onclick="setcat('Bebidas')">🥤 Bebidas</button>`;
+      document.getElementById("cat-tabs").innerHTML = html;
     }
     function setcat(c) { activecat = c; renderCats(); renderMenu() }
     function renderMenu() {
-      const cats = activecat ? [activecat] : getCategories().filter(c => c !== "Bebidas");
+      const cats = activecat ? [activecat] : getCategories();
       const showBebidas = activecat === "" || activecat === "Bebidas";
-      if (!MENU.length) {
-        document.getElementById("menu-main").innerHTML = `<div class="empty-menu"><strong>Nenhuma pizza ativa no cardápio.</strong>Cadastre ou ative pizzas no painel administrativo.</div>`;
+      if (!MENU.length && !BEBIDAS.length) {
+        document.getElementById("menu-main").innerHTML = `<div class="empty-menu"><strong>Nenhum item ativo no cardápio.</strong>Cadastre ou ative itens no painel administrativo.</div>`;
         return;
       }
-      const bebidas = MENU.filter(p => p.categoria === "Bebidas");
       const html = cats.map(cat => {
         const items = MENU.filter(p => p.categoria === cat);
         if (!items.length) return "";
@@ -1106,7 +1111,7 @@
           <div class="card-body">
             <div class="card-name">${item.nome}</div>
             <div class="card-desc">${item.desc || ""}</div>
-            ${item.ingredientes && item.ingredientes.length ? `<div style="margin:4px 0 8px;font-size:12px;color:var(--muted);line-height:1.4">${item.ingredientes.map(ing => { const ins = DB.insumos.find(i => i.id === ing.insumoId); return ins ? ins.nome : ''; }).filter(Boolean).join(', ')}</div>` : ''}
+            ${item.ingredientes && item.ingredientes.length ? `<div style="margin:4px 0 8px;font-size:12px;color:var(--muted);line-height:1.4">${item.ingredientes.map(ing => { const ins = DB.insumos.find(i => i.id === ing.insumoId); if (!ins || ins.id === "i14" || ins.nome.toLowerCase().includes("caixa")) return ''; return ins.nome; }).filter(Boolean).join(', ')}</div>` : ''}
             ${item.complementos && item.complementos.length ? `<div style="margin:6px 0;font-size:12px">${item.complementos.map((c, j) => `<label style="display:flex;align-items:center;gap:4px;margin:2px 0;cursor:pointer"><input type="checkbox" data-pizza="${item.id}" data-comp-index="${j}" data-comp-nome="${c.nome}" data-comp-preco="${c.preco}" onchange="toggleComp(this)"><span>${c.nome} (+R$${c.preco.toFixed(2).replace(".", ",")})</span></label>`).join("")}</div>` : ""}
             <div class="card-footer">
               <div class="card-price"><span>R$ </span>${item.preco.toFixed(2).replace(".", ",")}</div>
@@ -1118,16 +1123,16 @@
         </div>`;
         }).join("")}
     </div></section>`;
-      }).join("") + (bebidas.length && !showBebidas ? `
+      }).join("");
+      document.getElementById("menu-main").innerHTML = html + (BEBIDAS.length && showBebidas ? `
     <section><h2 class="section-title" style="margin-top:32px">🥤 Bebidas</h2>
-    <div class="menu-grid" style="opacity:.75">
-      ${bebidas.map(item => {
+    <div class="menu-grid">
+      ${BEBIDAS.map(item => {
         const qty = cart[item.id]?.qty || 0;
         return `<div class="card">
           <div class="card-emoji">🥤</div>
           <div class="card-body">
             <div class="card-name">${item.nome}</div>
-            <div class="card-desc">${item.desc || ""}</div>
             <div class="card-footer">
               <div class="card-price"><span>R$ </span>${item.preco.toFixed(2).replace(".", ",")}</div>
               <button class="add-btn${qty > 0 ? " in-cart" : ""}" onclick="addItem('${item.id}')">
@@ -1137,8 +1142,7 @@
           </div>
         </div>`;
       }).join("")}
-    </div></section>` : "");
-      document.getElementById("menu-main").innerHTML = html || `<div class="empty-menu"><strong>Nenhum item nesta categoria.</strong>Escolha outra categoria no cardápio.</div>`;
+    </div></section>` : "") || `<div class="empty-menu"><strong>Nenhum item nesta categoria.</strong>Escolha outra categoria no cardápio.</div>`;
     }
 
     function toggleComp(el) {
@@ -1153,7 +1157,9 @@
       updateCart();
     }
     function addItem(id) {
-      const item = MENU.find(i => i.id === id); if (!item) return;
+      let item = MENU.find(i => i.id === id);
+      if (!item) item = BEBIDAS.find(i => i.id === id);
+      if (!item) return;
       if (!cart[id]) cart[id] = { ...item, qty: 0 };
       cart[id].qty++;
       updateCart(); renderMenu();
@@ -1190,7 +1196,7 @@
         items.innerHTML = `<div class="cart-empty"><div class="empty-icon">🛒</div><p>Seu carrinho está vazio.<br>Adicione pizzas deliciosas!</p></div>`;
         footer.style.display = "none";
       } else {
-        const icon = p => p.categoria === "Bebidas" ? "🥤" : p.categoria === "Doces" ? "🍰" : "🍕";
+        const icon = p => p.categoria === "Doces" ? "🍰" : (p.categoria ? "🍕" : "🥤");
         items.innerHTML = Object.values(cart).map(i => `<div class="cart-item">
       <div style="font-size:28px">${icon(i)}</div>
       <div class="item-info"><div class="item-name">${i.nome}</div><div class="item-price">${fmtR(i.preco * i.qty)}</div>
@@ -1214,7 +1220,8 @@
     function openCheckout() {
       document.getElementById("checkout-modal").classList.add("open");
       const lines = Object.values(cart).map(i => {
-        const comps = selectedComps[i.id] ? Object.values(selectedComps[i.id]) : [];
+        const isPizza = !!MENU.find(p => p.id === i.id);
+        const comps = isPizza && selectedComps[i.id] ? Object.values(selectedComps[i.id]) : [];
         const compStr = comps.length ? " (" + comps.map(c => `${c.nome} +${fmtR(c.preco)}`).join(", ") + ")" : "";
         return `<div class="summary-item"><span>${i.qty}x ${i.nome}${compStr}</span><span>${fmtR(i.preco * i.qty + comps.reduce((s, c) => s + c.preco * i.qty, 0))}</span></div>`;
       }).join("");
@@ -1291,6 +1298,7 @@
       DB = loadLocalDB();
       CFG = DB.config || FALLBACK.config;
       MENU = DB.pizzas.filter(p => p.ativo);
+      BEBIDAS = (DB.bebidas || []).filter(b => b.ativo);
       activecat = [...new Set(MENU.map(p => p.categoria))][0] || "";
       updateConfigUI();
       renderCats();
@@ -1301,6 +1309,7 @@
         DB = remote;
         CFG = DB.config || FALLBACK.config;
         MENU = DB.pizzas.filter(p => p.ativo);
+        BEBIDAS = (DB.bebidas || []).filter(b => b.ativo);
         activecat = [...new Set(MENU.map(p => p.categoria))][0] || "";
         updateConfigUI();
         renderCats();
