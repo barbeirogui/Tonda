@@ -822,6 +822,7 @@
       <button class="nav-btn" data-tab="massa" onclick="showTab('massa')"><span class="ni">🍞</span>
         Massa</button>
       <button class="nav-btn" data-tab="vendas" onclick="showTab('vendas')"><span class="ni">🧾</span> Vendas</button>
+      <button class="nav-btn" data-tab="analise" onclick="showTab('analise')"><span class="ni">📈</span> Análise</button>
       <button class="nav-btn" data-tab="config" onclick="showTab('config')"><span class="ni">⚙️</span>
         Configurações</button>
     </nav>
@@ -980,6 +981,11 @@
       </div>
       <div class="page-header" style="margin-top:32px">
         <div style="font-size:15px;font-weight:700">Histórico de compras</div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <select id="filtro-insumo" onchange="renderEstoque()" style="padding:4px 8px;border:1px solid var(--border);border-radius:4px;font-size:12px">
+            <option value="">Todos os insumos</option>
+          </select>
+        </div>
       </div>
       <div class="table-wrap">
         <table>
@@ -990,6 +996,7 @@
               <th>Qtd</th>
               <th>Unidade</th>
               <th>Valor total</th>
+              <th>Preço unit.</th>
             </tr>
           </thead>
           <tbody id="compras-list"></tbody>
@@ -998,6 +1005,39 @@
     </div>
 
     <!-- CONFIG -->
+    <div class="tab-content" id="tab-analise">
+      <div class="page-header">
+        <div class="page-title">Análise de vendas <small>Faturamento, rank e CMV real vs teórico</small></div>
+      </div>
+      <div class="stat-grid" id="analise-stats"></div>
+      <div class="page-header" style="margin-bottom:12px;margin-top:24px">
+        <div style="font-size:15px;font-weight:700">Ranking de pizzas</div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Pizza</th><th>Qtd vendida</th><th>Faturamento</th><th>Custo total</th><th>Lucro bruto</th><th>CMV médio</th></tr></thead>
+          <tbody id="analise-rank"></tbody>
+        </table>
+      </div>
+      <div class="page-header" style="margin-bottom:12px;margin-top:24px">
+        <div style="font-size:15px;font-weight:700">CMV Real vs Teórico</div>
+      </div>
+      <div class="table-wrap">
+        <div class="cmv-table-row cmv-table-head">
+          <span>Período</span><span>CMV teórico</span><span>CMV real</span><span>Diferença</span><span>Status</span>
+        </div>
+        <div id="cmv-real-list"></div>
+      </div>
+      <div class="page-header" style="margin-bottom:12px;margin-top:24px">
+        <div style="font-size:15px;font-weight:700">Faturamento por período</div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Período</th><th>Pedidos</th><th>Faturamento</th><th>Ticket médio</th></tr></thead>
+          <tbody id="analise-periodos"></tbody>
+        </table>
+      </div>
+    </div>
     <div class="tab-content" id="tab-config">
       <div class="page-header">
         <div class="page-title">Configurações <small>Dados da pizzaria e WhatsApp</small></div>
@@ -1026,6 +1066,9 @@
         <button class="btn btn-primary" onclick="saveConfig()">Salvar configurações</button>
         <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:16px">
           <button class="btn btn-ghost" onclick="exportBackup()">Exportar backup</button>
+          <button class="btn btn-ghost" onclick="exportCSV('insumos')">Exportar insumos CSV</button>
+          <button class="btn btn-ghost" onclick="exportCSV('vendas')">Exportar vendas CSV</button>
+          <button class="btn btn-ghost" onclick="exportCSV('estoque')">Exportar estoque CSV</button>
           <button class="btn btn-ghost" onclick="document.getElementById('backup-file').click()">Importar
             backup</button>
           <input type="file" id="backup-file" accept=".json,application/json" style="display:none"
@@ -1145,6 +1188,9 @@
         <div class="field-row">
           <div class="field"><label>Preço de venda (R$) *</label><input type="number" id="pz-preco" step="0.50" min="0"
               placeholder="0,00" oninput="updateCmvPreview()"></div>
+          <div class="field"><label>URL da foto</label><input type="text" id="pz-foto" placeholder="https://..."></div>
+        </div>
+        <div class="field-row">
           <div class="field">
             <label>Status</label>
             <div class="toggle-wrap" style="margin-top:10px">
@@ -1152,6 +1198,10 @@
                   class="toggle-slider"></span></label>
               <span style="font-size:13px;color:var(--muted)">Ativo no cardápio</span>
             </div>
+          </div>
+          <div class="field"><label>Complementos (adicione extras)</label>
+            <div id="comp-container" style="display:flex;flex-direction:column;gap:4px"></div>
+            <button class="btn btn-ghost btn-sm" onclick="addComp()" style="margin-top:4px">+ Adicionar complemento</button>
           </div>
         </div>
 
@@ -1237,14 +1287,15 @@
         { id: "i20", nome: "Azeite de oliva", unidade: "g", custo: 0.08, grupo: "massa" },
       ],
       pizzas: [
-        { id: "p1", nome: "Margherita", categoria: "Tradicionais", preco: 52, ativo: true, ingredientes: [{ insumoId: "i1", quantidade: 1 }, { insumoId: "i2", quantidade: 0.25 }, { insumoId: "i12", quantidade: 0.12 }] },
-        { id: "p2", nome: "Calabresa", categoria: "Tradicionais", preco: 54, ativo: true, ingredientes: [{ insumoId: "i1", quantidade: 1 }, { insumoId: "i2", quantidade: 0.25 }, { insumoId: "i12", quantidade: 0.12 }, { insumoId: "i4", quantidade: 0.18 }] },
-        { id: "p3", nome: "Quatro Queijos", categoria: "Premium", preco: 64, ativo: true, ingredientes: [{ insumoId: "i1", quantidade: 1 }, { insumoId: "i2", quantidade: 0.20 }, { insumoId: "i6", quantidade: 0.10 }, { insumoId: "i9", quantidade: 0.05 }, { insumoId: "i10", quantidade: 0.05 }] },
-        { id: "p4", nome: "Frango c/ Catupiry", categoria: "Tradicionais", preco: 58, ativo: true, ingredientes: [{ insumoId: "i1", quantidade: 1 }, { insumoId: "i2", quantidade: 0.10 }, { insumoId: "i5", quantidade: 0.20 }, { insumoId: "i6", quantidade: 0.12 }] },
-        { id: "p5", nome: "Pepperoni", categoria: "Premium", preco: 72, ativo: true, ingredientes: [{ insumoId: "i1", quantidade: 1 }, { insumoId: "i2", quantidade: 0.20 }, { insumoId: "i12", quantidade: 0.10 }, { insumoId: "i7", quantidade: 0.15 }] },
+        { id: "p1", nome: "Margherita", categoria: "Tradicionais", preco: 52, ativo: true, foto: "", complementos: [], ingredientes: [{ insumoId: "i1", quantidade: 1 }, { insumoId: "i2", quantidade: 0.25 }, { insumoId: "i12", quantidade: 0.12 }] },
+        { id: "p2", nome: "Calabresa", categoria: "Tradicionais", preco: 54, ativo: true, foto: "", complementos: [], ingredientes: [{ insumoId: "i1", quantidade: 1 }, { insumoId: "i2", quantidade: 0.25 }, { insumoId: "i12", quantidade: 0.12 }, { insumoId: "i4", quantidade: 0.18 }] },
+        { id: "p3", nome: "Quatro Queijos", categoria: "Premium", preco: 64, ativo: true, foto: "", complementos: [], ingredientes: [{ insumoId: "i1", quantidade: 1 }, { insumoId: "i2", quantidade: 0.20 }, { insumoId: "i6", quantidade: 0.10 }, { insumoId: "i9", quantidade: 0.05 }, { insumoId: "i10", quantidade: 0.05 }] },
+        { id: "p4", nome: "Frango c/ Catupiry", categoria: "Tradicionais", preco: 58, ativo: true, foto: "", complementos: [], ingredientes: [{ insumoId: "i1", quantidade: 1 }, { insumoId: "i2", quantidade: 0.10 }, { insumoId: "i5", quantidade: 0.20 }, { insumoId: "i6", quantidade: 0.12 }] },
+        { id: "p5", nome: "Pepperoni", categoria: "Premium", preco: 72, ativo: true, foto: "", complementos: [{ nome: "Extra pepperoni", preco: 8 }], ingredientes: [{ insumoId: "i1", quantidade: 1 }, { insumoId: "i2", quantidade: 0.20 }, { insumoId: "i12", quantidade: 0.10 }, { insumoId: "i7", quantidade: 0.15 }] },
       ],
       estoque: [], // [{insumoId, qtd, data, valorTotal}]
       vendas: [], // [{pizzaId, qtd, data}]
+      consumo: [], // [{insumoId, qtd, data, pizzaNome}]
     };
 
     // ---- STORAGE ----
@@ -1314,6 +1365,7 @@
         pizzas,
         estoque,
         vendas: toArray(db.vendas) || [],
+        consumo: toArray(db.consumo) || [],
       };
     }
     function load() {
@@ -1475,9 +1527,10 @@
       if (id === "config") renderConfig();
       if (id === "estoque") renderEstoque();
       if (id === "vendas") renderVendas();
+      if (id === "analise") renderAnalise();
       if (id === "massa") renderMassa();
     }
-    function renderAll() { renderDashboard(); renderInsumos(); renderPizzas(); renderConfig(); renderMassa() }
+    function renderAll() { renderDashboard(); renderInsumos(); renderPizzas(); renderConfig(); renderMassa(); renderAnalise() }
     // ---- VENDAS ----
     function renderVendas() {
       document.getElementById('vendas-list').innerHTML = (DB.vendas || []).sort((a, b) => b.data.localeCompare(a.data)).map(v => {
@@ -1489,6 +1542,7 @@
       <td>${pz ? fmtR((pz.preco || 0) * v.qtd) : '-'}</td>
     </tr>`;
       }).join('') || `<tr><td colspan='4' style='text-align:center;color:var(--muted);padding:24px'>Nenhuma venda registrada.</td></tr>`;
+      renderAnalise();
     }
 
     function openVendaModal() {
@@ -1514,6 +1568,18 @@
       const pz = DB.pizzas.find(p => p.id === pizzaId);
       if (pz) {
         pz.vendas = (pz.vendas || 0) + qtd;
+      }
+      // Baixa automática de estoque
+      DB.consumo = DB.consumo || [];
+      if (pz && pz.ingredientes) {
+        pz.ingredientes.forEach(ing => {
+          DB.consumo.push({
+            insumoId: ing.insumoId,
+            qtd: ing.quantidade * qtd,
+            data: new Date(data).toISOString(),
+            pizzaNome: pz.nome
+          });
+        });
       }
       save(DB);
       renderVendas();
@@ -1679,7 +1745,35 @@
       URL.revokeObjectURL(url);
       toast("✅ Backup exportado!");
     }
-
+    function downloadCSV(filename, header, rows) {
+      const csv = [header.join(","), ...rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(","))].join("\n");
+      const bom = "\uFEFF";
+      const blob = new Blob([bom + csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      toast("✅ CSV exportado!");
+    }
+    function exportCSV(type) {
+      if (type === "insumos") {
+        downloadCSV("insumos.csv", ["Nome", "Unidade", "Custo", "Grupo"], DB.insumos.map(i => [i.nome, i.unidade, i.custo, i.grupo]));
+      } else if (type === "vendas") {
+        downloadCSV("vendas.csv", ["Data", "Pizza", "Qtd", "Valor"], (DB.vendas || []).map(v => {
+          const p = DB.pizzas.find(x => x.id === v.pizzaId);
+          return [new Date(v.data).toLocaleDateString(), p ? p.nome : "", v.qtd, p ? "R$" + (p.preco * v.qtd).toFixed(2).replace(".", ",") : ""];
+        }));
+      } else if (type === "estoque") {
+        downloadCSV("estoque.csv", ["Data", "Insumo", "Qtd", "Unidade", "Valor total", "Preço unit."], (DB.estoque || []).map(e => {
+          const ins = DB.insumos.find(i => i.id === e.insumoId);
+          return [new Date(e.data).toLocaleDateString(), ins ? ins.nome : "", e.qtd, ins ? ins.unidade : "", "R$" + e.valorTotal.toFixed(2).replace(".", ","), ins ? "R$" + (e.valorTotal / e.qtd).toFixed(2).replace(".", ",") : ""];
+        }));
+      }
+    }
     function handleBackupFile(event) {
       const file = event.target.files[0];
       if (!file) return;
@@ -1755,9 +1849,12 @@
       document.getElementById("pz-nome").value = "";
       document.getElementById("pz-cat").value = "Tradicionais";
       document.getElementById("pz-preco").value = "";
+      document.getElementById("pz-foto").value = "";
       document.getElementById("pz-ativo").checked = true;
       document.getElementById("ing-rows").innerHTML = "";
+      document.getElementById("comp-container").innerHTML = "";
       ingRowCount = 0;
+      compCount = 0;
       updateCmvPreview();
       openModal("modal-pizza");
     }
@@ -1768,10 +1865,14 @@
       document.getElementById("pz-nome").value = p.nome;
       document.getElementById("pz-cat").value = p.categoria;
       document.getElementById("pz-preco").value = p.preco;
+      document.getElementById("pz-foto").value = p.foto || "";
       document.getElementById("pz-ativo").checked = p.ativo;
       document.getElementById("ing-rows").innerHTML = "";
       ingRowCount = 0;
-      p.ingredientes.forEach(ing => addIngRow(ing));
+      (p.ingredientes || []).forEach(ing => addIngRow(ing));
+      document.getElementById("comp-container").innerHTML = "";
+      compCount = 0;
+      (p.complementos || []).forEach(c => addComp(c));
       updateCmvPreview();
       openModal("modal-pizza");
     }
@@ -1815,27 +1916,31 @@
       (DB.estoque || []).forEach(e => {
         saldo[e.insumoId] = (saldo[e.insumoId] || 0) + parseFloat(e.qtd);
       });
-      // Baixa por vendas (usando DB.vendas)
-      (DB.vendas || []).forEach(v => {
-        const pz = DB.pizzas.find(p => p.id === v.pizzaId);
-        if (!pz) return;
-        (pz.ingredientes || []).forEach(ing => {
-          saldo[ing.insumoId] = (saldo[ing.insumoId] || 0) - (v.qtd * ing.quantidade);
-        });
+      // Baixa por consumo registrado
+      (DB.consumo || []).forEach(c => {
+        saldo[c.insumoId] = (saldo[c.insumoId] || 0) - parseFloat(c.qtd);
       });
       // Render tabela de estoque
       document.getElementById('estoque-list').innerHTML = DB.insumos.map(ins => {
-        // Última compra
+        const sal = saldo[ins.id] || 0;
         const ult = (DB.estoque || []).filter(e => e.insumoId === ins.id).sort((a, b) => b.data.localeCompare(a.data))[0];
+        const cor = sal < 0 ? "var(--red)" : (sal < 1 ? "#D97706" : "inherit");
         return `<tr>
       <td><b>${ins.nome}</b></td>
-      <td>${(saldo[ins.id] || 0).toFixed(3)}</td>
+      <td style="color:${cor};font-weight:${sal < 0 ? "700" : "400"}">${sal.toFixed(3)}</td>
       <td>${ins.unidade}</td>
       <td>${ult ? new Date(ult.data).toLocaleDateString() : '-'}</td>
     </tr>`;
       }).join('') || `<tr><td colspan='4' style='text-align:center;color:var(--muted);padding:24px'>Nenhum insumo cadastrado.</td></tr>`;
-      // Render histórico de compras
-      document.getElementById('compras-list').innerHTML = (DB.estoque || []).sort((a, b) => b.data.localeCompare(a.data)).map(e => {
+      // Popula filtro de insumo
+      const filtroSel = document.getElementById('filtro-insumo');
+      const currentFilter = filtroSel.value;
+      filtroSel.innerHTML = '<option value="">Todos os insumos</option>' + DB.insumos.map(i => `<option value="${i.id}">${i.nome}</option>`).join('');
+      filtroSel.value = currentFilter;
+      // Render histórico de compras filtrado
+      let compras = (DB.estoque || []).sort((a, b) => b.data.localeCompare(a.data));
+      if (currentFilter) compras = compras.filter(e => e.insumoId === currentFilter);
+      document.getElementById('compras-list').innerHTML = compras.map(e => {
         const ins = DB.insumos.find(i => i.id === e.insumoId);
         return `<tr>
       <td>${new Date(e.data).toLocaleDateString()}</td>
@@ -1843,8 +1948,9 @@
       <td>${e.qtd}</td>
       <td>${ins ? ins.unidade : '-'}</td>
       <td>${fmtR(e.valorTotal)}</td>
+      <td style="font-size:12px;color:var(--muted)">${ins ? fmtR(e.valorTotal / e.qtd) + '/' + ins.unidade : '-'}</td>
     </tr>`;
-      }).join('') || `<tr><td colspan='5' style='text-align:center;color:var(--muted);padding:24px'>Nenhuma compra registrada.</td></tr>`;
+      }).join('') || `<tr><td colspan='6' style='text-align:center;color:var(--muted);padding:24px'>Nenhuma compra registrada.</td></tr>`;
     }
 
     function openCompraModal() {
@@ -2050,15 +2156,17 @@
       const nome = document.getElementById("pz-nome").value.trim();
       const cat = document.getElementById("pz-cat").value;
       const preco = parseNum(document.getElementById("pz-preco").value);
+      const foto = document.getElementById("pz-foto").value.trim();
       const ativo = document.getElementById("pz-ativo").checked;
       if (!nome || isNaN(preco) || preco <= 0) { toast("⚠️ Informe nome e preço."); return }
       const ingredientes = getIngRows();
+      const complementos = getComps();
       const editId = document.getElementById("pizza-edit-id").value;
       if (editId) {
         const p = DB.pizzas.find(x => x.id === editId);
-        if (p) { p.nome = nome; p.categoria = cat; p.preco = preco; p.ativo = ativo; p.ingredientes = ingredientes }
+        if (p) { p.nome = nome; p.categoria = cat; p.preco = preco; p.foto = foto; p.ativo = ativo; p.ingredientes = ingredientes; p.complementos = complementos }
       } else {
-        DB.pizzas.push({ id: uid(), nome, categoria: cat, preco, ativo, ingredientes });
+        DB.pizzas.push({ id: uid(), nome, categoria: cat, preco, foto, ativo, ingredientes, complementos });
       }
       if (save(DB)) {
         renderPizzas(); renderDashboard();
@@ -2071,7 +2179,138 @@
       save(DB); renderPizzas(); renderDashboard(); toast("Pizza removida.");
     }
 
-    // ---- MODAL HELPERS ----
+    // ---- COMPLEMENTOS ----
+    let compCount = 0;
+    function addComp(data) {
+      const id = compCount++;
+      const div = document.createElement("div");
+      div.id = "comp-row-" + id;
+      div.style.cssText = "display:flex;gap:4px;align-items:center";
+      div.innerHTML = `
+        <input type="text" placeholder="Nome" value="${data ? data.nome : ""}" style="flex:1;padding:4px 6px;border:1px solid var(--border);border-radius:4px;font-size:12px">
+        <input type="number" step="0.50" min="0" placeholder="R$" value="${data ? data.preco : ""}" style="width:70px;padding:4px 6px;border:1px solid var(--border);border-radius:4px;font-size:12px">
+        <button class="ing-del" onclick="this.parentElement.remove()">✕</button>
+      `;
+      document.getElementById("comp-container").appendChild(div);
+    }
+    function getComps() {
+      const arr = [];
+      document.querySelectorAll("#comp-container > div").forEach(row => {
+        const inp = row.querySelectorAll("input");
+        const nome = inp[0].value.trim();
+        const preco = parseFloat(inp[1].value) || 0;
+        if (nome && preco > 0) arr.push({ nome, preco });
+      });
+      return arr;
+    }
+
+    // ---- ANÁLISE DE VENDAS ----
+    function renderAnalise() {
+      const vendas = DB.vendas || [];
+      const pizzas = DB.pizzas;
+      // Stats gerais
+      const totalVendas = vendas.length;
+      const faturamento = vendas.reduce((s, v) => {
+        const p = pizzas.find(x => x.id === v.pizzaId);
+        return s + (p ? p.preco * v.qtd : 0);
+      }, 0);
+      const totalPizzas = vendas.reduce((s, v) => s + v.qtd, 0);
+      const ticket = totalVendas > 0 ? faturamento / totalVendas : 0;
+      document.getElementById("analise-stats").innerHTML = `
+        <div class="stat-card"><div class="stat-label">Total de pedidos</div><div class="stat-value">${totalVendas}</div></div>
+        <div class="stat-card"><div class="stat-label">Pizzas vendidas</div><div class="stat-value">${totalPizzas}</div></div>
+        <div class="stat-card"><div class="stat-label">Faturamento total</div><div class="stat-value" style="color:var(--green)">${fmtR(faturamento)}</div></div>
+        <div class="stat-card"><div class="stat-label">Ticket médio</div><div class="stat-value">${fmtR(ticket)}</div></div>
+      `;
+      // Ranking por pizza
+      const rank = {};
+      vendas.forEach(v => {
+        if (!rank[v.pizzaId]) rank[v.pizzaId] = { qtd: 0, fat: 0 };
+        const p = pizzas.find(x => x.id === v.pizzaId);
+        rank[v.pizzaId].qtd += v.qtd;
+        rank[v.pizzaId].fat += p ? p.preco * v.qtd : 0;
+      });
+      const ranked = Object.entries(rank).sort((a, b) => b[1].qtd - a[1].qtd);
+      document.getElementById("analise-rank").innerHTML = ranked.length ? ranked.map(([id, r], i) => {
+        const p = pizzas.find(x => x.id === id);
+        if (!p) return "";
+        const cmv = calcCmv(p);
+        const custoTotal = cmv.custo * r.qtd;
+        const lucro = r.fat - custoTotal;
+        return `<tr>
+          <td>${i + 1}</td>
+          <td><b>${p.nome}</b></td>
+          <td>${r.qtd}</td>
+          <td>${fmtR(r.fat)}</td>
+          <td>${fmtR(custoTotal)}</td>
+          <td style="color:var(--green)">${fmtR(lucro)}</td>
+          <td><span class="badge ${cmvClass(cmv.pct)}">${fmtP(cmv.pct)}</span></td>
+        </tr>`;
+      }).join("") : "<tr><td colspan='7' style='text-align:center;color:var(--muted);padding:24px'>Nenhuma venda registrada.</td></tr>";
+      // Faturamento por período
+      const periodos = {};
+      vendas.forEach(v => {
+        const mes = v.data.slice(0, 7);
+        if (!periodos[mes]) periodos[mes] = { pedidos: 0, fat: 0 };
+        periodos[mes].pedidos++;
+        const p = pizzas.find(x => x.id === v.pizzaId);
+        periodos[mes].fat += p ? p.preco * v.qtd : 0;
+      });
+      const sortedMeses = Object.entries(periodos).sort((a, b) => a[0].localeCompare(b[0]));
+      document.getElementById("analise-periodos").innerHTML = sortedMeses.length ? sortedMeses.map(([mes, d]) => {
+        const meses = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+        const [ano, m] = mes.split("-");
+        const label = `${meses[parseInt(m) - 1]}/${ano}`;
+        return `<tr>
+          <td>${label}</td>
+          <td>${d.pedidos}</td>
+          <td>${fmtR(d.fat)}</td>
+          <td>${fmtR(d.fat / d.pedidos)}</td>
+        </tr>`;
+      }).join("") : "<tr><td colspan='4' style='text-align:center;color:var(--muted);padding:24px'>Nenhuma venda registrada.</td></tr>";
+      // CMV real vs teórico
+      renderCmvReal();
+    }
+    function renderCmvReal() {
+      const vendas = DB.vendas || [];
+      const pizzas = DB.pizzas;
+      const consumo = DB.consumo || [];
+      const compras = DB.estoque || [];
+      // CMV teórico = custo das receitas * qtd vendida
+      const cmvTeorico = vendas.reduce((s, v) => {
+        const p = pizzas.find(x => x.id === v.pizzaId);
+        if (!p || !p.ingredientes) return s;
+        const custoPizza = p.ingredientes.reduce((s2, ing) => {
+          const ins = DB.insumos.find(i => i.id === ing.insumoId);
+          return s2 + (ins ? ins.custo * ing.quantidade : 0);
+        }, 0);
+        return s + custoPizza * v.qtd;
+      }, 0);
+      // CMV real = total compras - (saldo atual * custo médio)
+      const saldo = {};
+      DB.insumos.forEach(ins => saldo[ins.id] = 0);
+      compras.forEach(e => saldo[e.insumoId] = (saldo[e.insumoId] || 0) + parseFloat(e.qtd));
+      consumo.forEach(c => saldo[c.insumoId] = (saldo[c.insumoId] || 0) - parseFloat(c.qtd));
+      const valorEstoqueAtual = Object.entries(saldo).reduce((s, [id, qtd]) => {
+        const ins = DB.insumos.find(i => i.id === id);
+        return s + (ins && qtd > 0 ? ins.custo * qtd : 0);
+      }, 0);
+      const totalCompras = compras.reduce((s, e) => s + parseFloat(e.valorTotal), 0);
+      const cmvReal = totalCompras - valorEstoqueAtual;
+      const diff = cmvReal - cmvTeorico;
+      const diffPct = cmvTeorico > 0 ? (diff / cmvTeorico) * 100 : 0;
+      const status = diff <= 0 ? "✅ Ok" : (diffPct <= 10 ? "⚠️ Pequena diferença" : "🔴 Atenção");
+      const statusClass = diff <= 0 ? "badge-green" : (diffPct <= 10 ? "badge-amber" : "badge-red");
+      document.getElementById("cmv-real-list").innerHTML = `
+        <div class="cmv-table-row">
+          <span>Total</span>
+          <span style="font-weight:600">${fmtR(cmvTeorico)}</span>
+          <span style="font-weight:600">${fmtR(cmvReal)}</span>
+          <span style="color:${diff <= 0 ? "var(--green)" : "var(--red)"}">${diff >= 0 ? "+" : ""}${fmtR(diff)}</span>
+          <span><span class="badge ${statusClass}">${status}</span></span>
+        </div>
+      `;
+    }
     function openModal(id) { document.getElementById(id).classList.add("open") }
     function closeModal(id) { document.getElementById(id).classList.remove("open") }
     document.querySelectorAll(".modal-overlay").forEach(el => {

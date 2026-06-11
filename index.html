@@ -49,7 +49,8 @@ main{max-width:960px;margin:0 auto;padding:32px 20px 120px}
 .menu-grid>*{flex:1 1 280px;min-width:0}
 .card{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;transition:box-shadow .2s,transform .2s}
 .card:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
-.card-emoji{background:var(--amber-light);text-align:center;font-size:48px;padding:24px;line-height:1}
+.card-emoji{background:var(--amber-light);text-align:center;font-size:48px;padding:24px;line-height:1;min-height:96px}
+.card-body input[type=checkbox]{accent-color:var(--red)}
 .card-body{padding:16px}
 .card-name{font-family:var(--font-display);font-size:17px;font-weight:600;margin-bottom:4px}
 .card-desc{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:12px}
@@ -247,7 +248,7 @@ function enviarPedido() {
     comp: document.getElementById('inp-comp').value,
     obs: document.getElementById('inp-obs').value,
     pagamento: document.querySelector('input[name="pay"]:checked').value,
-    carrinho: Object.values(cart).map(i => ({ nome: i.nome, qtd: i.qty, preco: i.preco }))
+    carrinho: Object.values(cart).map(i => ({ nome: i.nome, qtd: i.qty, preco: i.preco, complementos: selectedComps[i.id] ? Object.values(selectedComps[i.id]) : [] }))
   };
   document.getElementById('btn-enviar-pedido').disabled = true;
   fetch(`${API_HOST}/api/pedidos`, {
@@ -305,6 +306,8 @@ function normalizePizza(pizza,index){
     categoria:String(item.categoria || "Tradicionais"),
     preco:parseMoney(item.preco),
     ativo:item.ativo !== false && item.ativo !== "false",
+    foto: String(item.foto || ""),
+    complementos: Array.isArray(item.complementos) ? item.complementos : [],
     desc:item.desc || item.descricao || "",
     ingredientes:toArray(item.ingredientes) || [],
     vendas:parseInt(item.vendas || 0,10) || 0,
@@ -359,6 +362,7 @@ let DB = FALLBACK;
 let CFG = DB.config;
 let MENU = [];
 let cart={};
+let selectedComps = {};
 let activecat="";
 
 function updateConfigUI(){
@@ -391,11 +395,13 @@ function renderMenu(){
       ${items.map(item=>{
         const qty=cart[item.id]?.qty||0;
         const icon=item.categoria==="Bebidas"?"🥤":item.categoria==="Doces"?"🍰":"🍕";
+        const imgHtml = item.foto ? `style="background:url('${item.foto}') center/cover no-repeat;font-size:0"` : "";
         return`<div class="card">
-          <div class="card-emoji">${icon}</div>
+          <div class="card-emoji" ${imgHtml}>${item.foto ? "" : icon}</div>
           <div class="card-body">
             <div class="card-name">${item.nome}</div>
             <div class="card-desc">${item.desc||""}</div>
+            ${item.complementos && item.complementos.length ? `<div style="margin:6px 0;font-size:12px">${item.complementos.map((c, j) => `<label style="display:flex;align-items:center;gap:4px;margin:2px 0;cursor:pointer"><input type="checkbox" data-pizza="${item.id}" data-comp-index="${j}" data-comp-nome="${c.nome}" data-comp-preco="${c.preco}" onchange="toggleComp(this)"><span>${c.nome} (+R$${c.preco.toFixed(2).replace(".",",")})</span></label>`).join("")}</div>` : ""}
             <div class="card-footer">
               <div class="card-price"><span>R$ </span>${item.preco.toFixed(2).replace(".",",")}</div>
               <button class="add-btn${qty>0?" in-cart":""}" onclick="addItem('${item.id}')">
@@ -410,6 +416,17 @@ function renderMenu(){
   document.getElementById("menu-main").innerHTML=html || `<div class="empty-menu"><strong>Nenhum item nesta categoria.</strong>Escolha outra categoria no cardápio.</div>`;
 }
 
+function toggleComp(el) {
+  const pizzaId = el.dataset.pizza;
+  const idx = el.dataset.compIndex;
+  if (!selectedComps[pizzaId]) selectedComps[pizzaId] = {};
+  if (el.checked) {
+    selectedComps[pizzaId][idx] = { nome: el.dataset.compNome, preco: parseFloat(el.dataset.compPreco) };
+  } else {
+    delete selectedComps[pizzaId][idx];
+  }
+  updateCart();
+}
 function addItem(id){
   const item=MENU.find(i=>i.id===id);if(!item) return;
   if(!cart[id]) cart[id]={...item,qty:0};
@@ -419,11 +436,19 @@ function addItem(id){
 function changeQty(id,d){
   if(!cart[id]) return;
   cart[id].qty+=d;
-  if(cart[id].qty<=0) delete cart[id];
+  if(cart[id].qty<=0){ delete cart[id]; delete selectedComps[id] }
   updateCart();renderMenu();
 }
 function cartCount(){return Object.values(cart).reduce((s,i)=>s+i.qty,0)}
-function cartSub(){return Object.values(cart).reduce((s,i)=>s+(i.preco*i.qty),0)}
+function compSub() {
+  let total = 0;
+  Object.entries(selectedComps).forEach(([pid, comps]) => {
+    const qty = cart[pid]?.qty || 0;
+    Object.values(comps).forEach(c => total += c.preco * qty);
+  });
+  return total;
+}
+function cartSub(){return Object.values(cart).reduce((s,i)=>s+(i.preco*i.qty),0) + compSub()}
 function cartTotal(){return cartSub()+(CFG.taxaEntrega ?? 0)}
 function fmtR(n){
   if(n===0)return"R$ 0,00";
@@ -443,7 +468,9 @@ function updateCart(){
     const icon=p=>p.categoria==="Bebidas"?"🥤":p.categoria==="Doces"?"🍰":"🍕";
     items.innerHTML=Object.values(cart).map(i=>`<div class="cart-item">
       <div style="font-size:28px">${icon(i)}</div>
-      <div class="item-info"><div class="item-name">${i.nome}</div><div class="item-price">${fmtR(i.preco*i.qty)}</div></div>
+      <div class="item-info"><div class="item-name">${i.nome}</div><div class="item-price">${fmtR(i.preco*i.qty)}</div>
+        ${selectedComps[i.id] && Object.values(selectedComps[i.id]).length ? `<div style="font-size:11px;color:var(--muted)">${Object.values(selectedComps[i.id]).map(c => `${c.nome} (+${fmtR(c.preco * i.qty)})`).join(", ")}</div>` : ""}
+      </div>
       <div class="item-qty">
         <button class="qty-btn" onclick="changeQty('${i.id}',-1)">-</button>
         <span class="qty-num">${i.qty}</span>
@@ -461,7 +488,11 @@ function toggleCart(){
 }
 function openCheckout(){
   document.getElementById("checkout-modal").classList.add("open");
-  const lines=Object.values(cart).map(i=>`<div class="summary-item"><span>${i.qty}x ${i.nome}</span><span>${fmtR(i.preco*i.qty)}</span></div>`).join("");
+  const lines=Object.values(cart).map(i=>{
+    const comps = selectedComps[i.id] ? Object.values(selectedComps[i.id]) : [];
+    const compStr = comps.length ? " (" + comps.map(c => `${c.nome} +${fmtR(c.preco)}`).join(", ") + ")" : "";
+    return `<div class="summary-item"><span>${i.qty}x ${i.nome}${compStr}</span><span>${fmtR(i.preco*i.qty + comps.reduce((s, c) => s + c.preco * i.qty, 0))}</span></div>`;
+  }).join("");
   const del=`<div class="summary-item"><span>Taxa de entrega</span><span>${fmtR(CFG.taxaEntrega ?? 0)}</span></div>`;
   document.getElementById("modal-items").innerHTML=lines+del;
   document.getElementById("modal-total").textContent=fmtR(cartTotal());
@@ -501,7 +532,11 @@ function sendToWhatsApp(){
   const nome=g("inp-nome"),tel=g("inp-tel"),rua=g("inp-rua"),num=g("inp-num"),bairro=g("inp-bairro"),comp=g("inp-comp"),obs=g("inp-obs");
   const pay=document.querySelector("input[name='pay']:checked").value;
   const end=[`${rua}, ${num}`,comp,bairro].filter(Boolean).join(" — ");
-  const itens=Object.values(cart).map(i=>`  • ${i.qty}x ${i.nome} — ${fmtR(i.preco*i.qty)}`).join("\n");
+  const itens=Object.values(cart).map(i=>{
+    const comps = selectedComps[i.id] ? Object.values(selectedComps[i.id]) : [];
+    const compStr = comps.length ? " (" + comps.map(c => `${c.nome} +${fmtR(c.preco)}`).join(", ") + ")" : "";
+    return `  • ${i.qty}x ${i.nome}${compStr} — ${fmtR(i.preco*i.qty + comps.reduce((s, c) => s + c.preco * i.qty, 0))}`;
+  }).join("\n");
   const msg=`NOVO PEDIDO - ${CFG.nome}\n\nCliente: ${nome}\nTelefone: ${tel}\nEndereço: ${end}\n\nItens:\n${itens}\n\nSubtotal: ${fmtR(cartSub())}\nEntrega: ${fmtR(CFG.taxaEntrega ?? 0)}\nTotal: ${fmtR(cartTotal())}\nPagamento: ${pay}${obs?`\nObs: ${obs}`:""}\nTempo estimado: ${CFG.tempoEstimado}`;
   const whatsapp=normalizeWhatsAppNumber(CFG.whatsapp);
   if(!whatsapp || whatsapp.length < 10){
@@ -514,7 +549,7 @@ function sendToWhatsApp(){
   document.getElementById("success").classList.add("show");
 }
 function resetAll(){
-  cart={};updateCart();renderMenu();
+  cart={};selectedComps={};updateCart();renderMenu();
   document.getElementById("success").classList.remove("show");
   document.getElementById("checkout-modal").classList.remove("open");
   ["inp-nome","inp-tel","inp-rua","inp-num","inp-bairro","inp-comp","inp-obs"].forEach(id=>document.getElementById(id).value="");
