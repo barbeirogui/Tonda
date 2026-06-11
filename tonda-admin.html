@@ -16,17 +16,13 @@
     }
 
     :root {
-      --red: #C0392B;
-      --red-dark: #96281B;
-      --red-light: #FAEAEA;
-      --green: #16A34A;
-      --green-light: #DCFCE7;
-      --amber: #D97706;
-      --amber-light: #FEF3C7;
-      --bg: #F7F3ED;
+      --cream: #F5EBDD;
+      --green-dark: #1F3A2F;
+      --green-olive: #5A6B45;
+      --terracotta: #B85C38;
+      --gold: #C9A86A;
+      --black: #1A1A1A;
       --white: #FFFFFF;
-      --sidebar: #1F1D1B;
-      --text: #1C1917;
       --muted: #78716C;
       --border: #E7E5E4;
       --radius: 8px;
@@ -40,8 +36,8 @@
 
     body {
       font-family: 'Outfit', Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text)
+      background: var(--cream);
+      color: var(--black)
     }
 
     button,
@@ -61,7 +57,7 @@
       align-items: center;
       justify-content: center;
       padding: 24px;
-      background: linear-gradient(135deg, #F7F3ED 0%, #FAEAEA 100%)
+      background: linear-gradient(135deg, var(--cream) 0%, #E8DDCC 100%)
     }
 
     .login-box {
@@ -79,7 +75,7 @@
       width: 58px;
       height: 58px;
       border-radius: 50%;
-      background: var(--red);
+      background: var(--terracotta);
       color: #fff;
       margin: 0 auto 16px;
       display: flex;
@@ -113,19 +109,19 @@
       text-align: center;
       font-size: 24px;
       font-weight: 700;
-      color: var(--text);
+      color: var(--black);
       background: #fff
     }
 
     .pin-digit:focus {
       outline: none;
-      border-color: var(--red);
-      box-shadow: 0 0 0 3px rgba(192, 57, 43, .12)
+      border-color: var(--terracotta);
+      box-shadow: 0 0 0 3px rgba(184, 92, 56, .12)
     }
 
     .pin-error {
       min-height: 20px;
-      color: var(--red);
+      color: var(--terracotta);
       font-size: 13px;
       margin-bottom: 12px
     }
@@ -133,7 +129,7 @@
     .login-btn {
       width: 100%;
       border: none;
-      background: var(--red);
+      background: var(--terracotta);
       color: #fff;
       border-radius: var(--radius);
       padding: 12px 18px;
@@ -141,7 +137,7 @@
     }
 
     .login-btn:hover {
-      background: var(--red-dark)
+      background: var(--green-dark)
     }
 
     .pin-hint {
@@ -157,7 +153,7 @@
       position: fixed;
       inset: 0 auto 0 0;
       width: 250px;
-      background: var(--sidebar);
+      background: var(--green-dark);
       color: #fff;
       display: flex;
       flex-direction: column;
@@ -178,7 +174,7 @@
       width: 38px;
       height: 38px;
       border-radius: 9px;
-      background: var(--red);
+      background: var(--terracotta);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -295,27 +291,27 @@
     }
 
     .btn-primary {
-      background: var(--red);
+      background: var(--terracotta);
       color: #fff
     }
 
     .btn-primary:hover {
-      background: var(--red-dark)
+      background: var(--green-dark)
     }
 
     .btn-ghost {
       background: var(--white);
-      color: var(--text);
+      color: var(--black);
       border: 1px solid var(--border)
     }
 
     .btn-ghost:hover {
-      background: var(--bg)
+      background: var(--cream)
     }
 
     .btn-danger {
-      background: var(--red-light);
-      color: var(--red)
+      background: var(--cream);
+      color: var(--terracotta)
     }
 
     .btn-danger:hover {
@@ -323,12 +319,12 @@
     }
 
     .btn-success {
-      background: var(--green-light);
-      color: var(--green)
+      background: var(--green-olive);
+      color: var(--white)
     }
 
     .btn-success:hover {
-      background: #bbf7d0
+      background: #2D4E3A
     }
 
     .btn-sm {
@@ -401,7 +397,7 @@
       color: var(--muted);
       text-transform: uppercase;
       letter-spacing: .04em;
-      background: var(--bg)
+      background: var(--cream)
     }
 
     td {
@@ -428,18 +424,18 @@
     }
 
     .badge-green {
-      background: var(--green-light);
-      color: var(--green)
+      background: var(--cream);
+      color: var(--green-olive)
     }
 
     .badge-amber {
-      background: var(--amber-light);
-      color: var(--amber)
+      background: var(--cream);
+      color: var(--gold)
     }
 
     .badge-red {
-      background: #FEE2E2;
-      color: #DC2626
+      background: #ECD5CC;
+      color: var(--terracotta)
     }
 
     .badge-gray {
@@ -540,8 +536,8 @@
     }
 
     .close-x:hover {
-      background: var(--bg);
-      color: var(--text)
+      background: var(--cream);
+      color: var(--black)
     }
 
     /* FORM */
@@ -568,7 +564,7 @@
       border-radius: 8px;
       font-size: 14px;
       font-family: inherit;
-      color: var(--text);
+      color: var(--black);
       background: var(--white);
       transition: border-color .2s
     }
@@ -577,7 +573,7 @@
     .field select:focus,
     .field textarea:focus {
       outline: none;
-      border-color: var(--red)
+      border-color: var(--terracotta)
     }
 
     .field-row {
@@ -648,7 +644,7 @@
     }
 
     .ing-head {
-      background: var(--bg);
+      background: var(--cream);
       font-size: 11px;
       font-weight: 600;
       color: var(--muted);
@@ -669,7 +665,7 @@
     .ing-row input:focus,
     .ing-row select:focus {
       outline: none;
-      border-color: var(--red)
+      border-color: var(--terracotta)
     }
 
     .ing-del {
@@ -687,12 +683,12 @@
     }
 
     .ing-del:hover {
-      background: var(--red-light);
-      color: var(--red)
+      background: var(--cream);
+      color: var(--terracotta)
     }
 
     .cmv-preview {
-      background: var(--bg);
+      background: var(--cream);
       border: 1px solid var(--border);
       border-radius: 8px;
       padding: 12px;
@@ -743,7 +739,7 @@
     }
 
     .cmv-table-head {
-      background: var(--bg);
+      background: var(--cream);
       font-size: 11px;
       font-weight: 600;
       color: var(--muted);
@@ -757,7 +753,7 @@
       position: fixed;
       bottom: 24px;
       right: 24px;
-      background: var(--sidebar);
+      background: var(--green-dark);
       color: #fff;
       padding: 12px 18px;
       border-radius: 10px;
@@ -819,7 +815,7 @@
     }
 
     .toggle input:checked+.toggle-slider {
-      background: var(--green)
+      background: var(--green-olive)
     }
 
     .toggle input:checked+.toggle-slider::before {
@@ -968,7 +964,7 @@
         <div class="ing-list" id="massa-rows"></div>
         <button class="btn btn-ghost btn-sm" onclick="addMassaRow()" style="margin-bottom:16px">+ Adicionar
           ingrediente</button>
-        <div style="background:var(--bg);border-radius:8px;padding:14px;margin-top:8px">
+        <div style="background:var(--cream);border-radius:8px;padding:14px;margin-top:8px">
           <div style="display:flex;justify-content:space-between;font-size:14px">
             <span style="font-weight:600">Peso total do lote</span>
             <span id="massa-peso-total" style="font-weight:700">0 g</span>
@@ -983,7 +979,7 @@
           </div>
           <div style="display:flex;justify-content:space-between;font-size:14px;margin-top:4px">
             <span style="font-weight:600">Custo por bola</span>
-            <span id="massa-custo" style="font-weight:700;color:var(--red);font-size:18px">R$ 0,00</span>
+            <span id="massa-custo" style="font-weight:700;color:var(--terracotta);font-size:18px">R$ 0,00</span>
           </div>
           <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-top:6px">
             <span>Preço atual da Massa artesanal</span>
@@ -1325,7 +1321,7 @@
               style="font-weight:700">— %</span></div>
           <div class="cmv-preview-row"><span>Margem bruta</span><span id="pv-margem">R$ 0,00</span></div>
           <div class="cmv-preview-row"
-            style="background:var(--green-light);border-radius:6px;padding:4px 0;margin-top:4px"><span
+            style="background:var(--cream);border-radius:6px;padding:4px 0;margin-top:4px"><span
               style="font-weight:700" id="pv-faixa-label">💡 Faixa ideal</span><span id="pv-sugerido"
               style="font-weight:700">R$ 0,00</span></div>
         </div>
@@ -1806,9 +1802,9 @@
       return "badge-red";
     }
     function cmvColor(pct) {
-      if (pct <= 30) return "#16A34A";
-      if (pct <= 42) return "#D97706";
-      return "#DC2626";
+      if (pct <= 30) return "#5A6B45";
+      if (pct <= 42) return "#C9A86A";
+      return "#B85C38";
     }
     function fmtR(n) {
       if (n === 0) return "R$ 0,00";
@@ -1846,7 +1842,7 @@
       <span style="font-weight:600">${p.nome}<br>${ingList}</span>
       <span>${fmtR(p.custo)}</span>
       <span>${fmtR(p.preco)}</span>
-      <span style="color:var(--green)">${fmtR(p.margem)}</span>
+      <span style="color:var(--green-olive)">${fmtR(p.margem)}</span>
       <span><div class="cmv-bar-wrap">
         <div class="cmv-bar-bg"><div class="cmv-bar-fill" style="width:${Math.min(p.pct, 100)}%;background:${cmvColor(p.pct)}"></div></div>
         <span class="cmv-pct" style="color:${cmvColor(p.pct)}">${fmtP(p.pct)}</span>
@@ -1867,7 +1863,7 @@
       let html = "";
       ["cobertura", "massa"].forEach(g => {
         if (!grupos[g].length) return;
-        html += `<tr style="background:var(--bg)"><td colspan="5" style="font-weight:700;font-size:13px;padding:8px 14px">${labels[g]}</td></tr>`;
+        html += `<tr style="background:var(--cream)"><td colspan="5" style="font-weight:700;font-size:13px;padding:8px 14px">${labels[g]}</td></tr>`;
         html += grupos[g].map(ins => {
           const usadoEm = DB.pizzas.filter(p => (p.ingredientes || []).some(i => i.insumoId === ins.id)).length;
           return `<tr>
@@ -1897,7 +1893,7 @@
       <td>${fmtR(custo)}</td>
       <td>${fmtR(p.preco)}</td>
       <td><span class="badge ${cmvClass(pct)}">${fmtP(pct)}</span></td>
-      <td style="color:var(--green);font-weight:600">${fmtR(margem)}</td>
+      <td style="color:var(--green-olive);font-weight:600">${fmtR(margem)}</td>
       <td>
         <div style="display:flex;gap:6px">
           <button class="btn btn-ghost btn-sm" onclick="editPizza('${p.id}')">✏️</button>
@@ -2139,7 +2135,7 @@
       document.getElementById('estoque-list').innerHTML = DB.insumos.map(ins => {
         const sal = saldo[ins.id] || 0;
         const ult = (DB.estoque || []).filter(e => e.insumoId === ins.id).sort((a, b) => b.data.localeCompare(a.data))[0];
-        const cor = sal < 0 ? "var(--red)" : (sal < 1 ? "#D97706" : "inherit");
+        const cor = sal < 0 ? "var(--terracotta)" : (sal < 1 ? "#C9A86A" : "inherit");
         return `<tr>
       <td><b>${ins.nome}</b></td>
       <td style="color:${cor};font-weight:${sal < 0 ? "700" : "400"}">${sal.toFixed(3)}</td>
@@ -2485,7 +2481,7 @@
       document.getElementById("analise-stats").innerHTML = `
         <div class="stat-card"><div class="stat-label">Total de pedidos</div><div class="stat-value">${totalVendas}</div></div>
         <div class="stat-card"><div class="stat-label">Pizzas vendidas</div><div class="stat-value">${totalPizzas}</div></div>
-        <div class="stat-card"><div class="stat-label">Faturamento total</div><div class="stat-value" style="color:var(--green)">${fmtR(faturamento)}</div></div>
+        <div class="stat-card"><div class="stat-label">Faturamento total</div><div class="stat-value" style="color:var(--green-olive)">${fmtR(faturamento)}</div></div>
         <div class="stat-card"><div class="stat-label">Ticket médio</div><div class="stat-value">${fmtR(ticket)}</div></div>
       `;
       // Ranking por pizza
@@ -2509,7 +2505,7 @@
           <td>${r.qtd}</td>
           <td>${fmtR(r.fat)}</td>
           <td>${fmtR(custoTotal)}</td>
-          <td style="color:var(--green)">${fmtR(lucro)}</td>
+          <td style="color:var(--green-olive)">${fmtR(lucro)}</td>
           <td><span class="badge ${cmvClass(cmv.pct)}">${fmtP(cmv.pct)}</span></td>
         </tr>`;
       }).join("") : "<tr><td colspan='7' style='text-align:center;color:var(--muted);padding:24px'>Nenhuma venda registrada.</td></tr>";
@@ -2572,7 +2568,7 @@
           <span>Total</span>
           <span style="font-weight:600">${fmtR(cmvTeorico)}</span>
           <span style="font-weight:600">${fmtR(cmvReal)}</span>
-          <span style="color:${diff <= 0 ? "var(--green)" : "var(--red)"}">${diff >= 0 ? "+" : ""}${fmtR(diff)}</span>
+          <span style="color:${diff <= 0 ? "var(--green-olive)" : "var(--terracotta)"}">${diff >= 0 ? "+" : ""}${fmtR(diff)}</span>
           <span><span class="badge ${statusClass}">${status}</span></span>
         </div>
       `;

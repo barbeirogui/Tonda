@@ -18,14 +18,13 @@
     }
 
     :root {
-      --red: #C0392B;
-      --red-dark: #96281B;
-      --red-light: #FAEAEA;
-      --amber: #E67E22;
-      --amber-light: #FDF3E3;
-      --cream: #FDF6EC;
+      --cream: #F5EBDD;
+      --green-dark: #1F3A2F;
+      --green-olive: #5A6B45;
+      --terracotta: #B85C38;
+      --gold: #C9A86A;
+      --black: #1A1A1A;
       --white: #FFFFFF;
-      --text: #1C1C1C;
       --muted: #6B6B6B;
       --border: #E8E0D5;
       --shadow: 0 2px 12px rgba(0, 0, 0, .08);
@@ -38,7 +37,7 @@
     body {
       font-family: var(--font-body);
       background: var(--cream);
-      color: var(--text);
+      color: var(--black);
       min-height: 100vh
     }
 
@@ -75,7 +74,7 @@
     .logo-icon {
       width: 36px;
       height: 36px;
-      background: var(--red);
+      background: var(--terracotta);
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -89,11 +88,11 @@
     }
 
     .logo-text span {
-      color: var(--red)
+      color: var(--terracotta)
     }
 
     .cart-btn {
-      background: var(--red);
+      background: var(--terracotta);
       color: #fff;
       border: none;
       border-radius: var(--radius-sm);
@@ -107,12 +106,12 @@
     }
 
     .cart-btn:hover {
-      background: var(--red-dark)
+      background: var(--green-dark)
     }
 
     .cart-badge {
       background: #fff;
-      color: var(--red);
+      color: var(--terracotta);
       border-radius: 50%;
       width: 20px;
       height: 20px;
@@ -124,7 +123,7 @@
     }
 
     .hero {
-      background: var(--red);
+      background: var(--terracotta);
       min-height: 210px;
       background-image: url('src/header-top.png');
       background-size: cover;
@@ -172,7 +171,7 @@
 
     .hero h1 em {
       font-style: italic;
-      color: #FFD59E
+      color: var(--gold)
     }
 
     .hero p {
@@ -233,8 +232,8 @@
     }
 
     .cat-btn.active {
-      color: var(--red);
-      border-bottom-color: var(--red);
+      color: var(--terracotta);
+      border-bottom-color: var(--terracotta);
       font-weight: 600
     }
 
@@ -278,7 +277,7 @@
     }
 
     .card-emoji {
-      background: var(--amber-light);
+      background: var(--cream);
       text-align: center;
       font-size: 48px;
       padding: 24px;
@@ -287,7 +286,7 @@
     }
 
     .card-body input[type=checkbox] {
-      accent-color: var(--red)
+      accent-color: var(--terracotta)
     }
 
     .card-body {
@@ -317,7 +316,7 @@
     .card-price {
       font-size: 18px;
       font-weight: 700;
-      color: var(--red)
+      color: var(--terracotta)
     }
 
     .card-price span {
@@ -327,7 +326,7 @@
     }
 
     .add-btn {
-      background: var(--red);
+      background: var(--terracotta);
       color: #fff;
       border: none;
       border-radius: var(--radius-sm);
@@ -341,11 +340,11 @@
     }
 
     .add-btn:hover {
-      background: var(--red-dark)
+      background: var(--green-dark)
     }
 
     .add-btn.in-cart {
-      background: var(--amber)
+      background: var(--gold)
     }
 
     .overlay {
@@ -511,7 +510,7 @@
 
     .checkout-btn {
       width: 100%;
-      background: var(--red);
+      background: var(--terracotta);
       color: #fff;
       border: none;
       border-radius: var(--radius-sm);
@@ -523,7 +522,7 @@
     }
 
     .checkout-btn:hover {
-      background: var(--red-dark)
+      background: var(--green-dark)
     }
 
     .modal-bg {
@@ -594,7 +593,7 @@
       border-radius: var(--radius-sm);
       font-family: var(--font-body);
       font-size: 14px;
-      color: var(--text);
+      color: var(--black);
       background: var(--white);
       transition: border-color .2s
     }
@@ -603,7 +602,7 @@
     .field select:focus,
     .field textarea:focus {
       outline: none;
-      border-color: var(--red)
+      border-color: var(--terracotta)
     }
 
     .field textarea {
@@ -654,9 +653,9 @@
     }
 
     .pay-option input:checked+label {
-      border-color: var(--red);
-      background: var(--red-light);
-      color: var(--red);
+      border-color: var(--terracotta);
+      background: var(--cream);
+      color: var(--terracotta);
       font-weight: 600
     }
 
@@ -717,14 +716,14 @@
 
     .required-msg {
       font-size: 12px;
-      color: #e74c3c;
+      color: var(--terracotta);
       margin-top: 4px;
       display: none
     }
 
     .field.error input,
     .field.error select {
-      border-color: #e74c3c
+      border-color: var(--terracotta)
     }
 
     .field.error .required-msg {
@@ -768,7 +767,7 @@
     }
 
     .back-btn {
-      background: var(--red);
+      background: var(--terracotta);
       color: #fff;
       border: none;
       border-radius: var(--radius-sm);
@@ -808,7 +807,7 @@
 
 <body>
   <a href="#menu-main" class="skip-link"
-    style="position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:999;background:#fff;color:#c0392b;padding:8px 16px;border-radius:8px;">Pular
+    style="position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:999;background:var(--white);color:var(--terracotta);padding:8px 16px;border-radius:8px;">Pular
     para o conteúdo</a>
   <header>
     <div class="header-inner">
