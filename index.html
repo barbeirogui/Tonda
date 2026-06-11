@@ -45,7 +45,8 @@ header{background:var(--white);border-bottom:1px solid var(--border);position:st
 .cat-btn.active{color:var(--red);border-bottom-color:var(--red);font-weight:600}
 main{max-width:960px;margin:0 auto;padding:32px 20px 120px}
 .section-title{font-family:var(--font-display);font-size:22px;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border)}
-.menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-bottom:40px}
+.menu-grid{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:40px}
+.menu-grid>*{flex:1 1 280px;min-width:0}
 .card{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;transition:box-shadow .2s,transform .2s}
 .card:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
 .card-emoji{background:var(--amber-light);text-align:center;font-size:48px;padding:24px;line-height:1}
@@ -94,8 +95,10 @@ main{max-width:960px;margin:0 auto;padding:32px 20px 120px}
 .field input,.field select,.field textarea{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:14px;color:var(--text);background:var(--white);transition:border-color .2s}
 .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--red)}
 .field textarea{resize:vertical;min-height:72px}
-.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.payment-options{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.field-row{display:flex;gap:12px}
+.field-row>*{flex:1;min-width:0}
+.payment-options{display:flex;gap:8px}
+.payment-options>*{flex:1;min-width:0}
 .pay-option{position:relative}
 .pay-option input{position:absolute;opacity:0;width:0;height:0}
 .pay-option label{display:block;padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:13px;cursor:pointer;transition:all .2s;text-align:center}

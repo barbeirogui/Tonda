@@ -338,10 +338,14 @@
 
     /* CARDS */
     .stat-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      display: flex;
+      flex-wrap: wrap;
       gap: 12px;
       margin-bottom: 28px
+    }
+    .stat-grid > * {
+      flex: 1 1 180px;
+      min-width: 0
     }
 
     .stat-card {
@@ -576,15 +580,25 @@
     }
 
     .field-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+      display: flex;
       gap: 12px
+    }
+    .field-row > * {
+      flex: 1;
+      min-width: 0
     }
 
     .field-row-3 {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
+      display: flex;
       gap: 10px
+    }
+    .field-row-3 > *:first-child {
+      flex: 2;
+      min-width: 0
+    }
+    .field-row-3 > * {
+      flex: 1;
+      min-width: 0
     }
 
     /* INGREDIENT LIST IN MODAL */
@@ -596,14 +610,17 @@
     }
 
     .ing-row {
-      display: grid;
-      grid-template-columns: 1fr 100px 90px 32px;
+      display: flex;
       gap: 8px;
       align-items: center;
       padding: 8px 10px;
       border-bottom: 1px solid var(--border);
       font-size: 13px
     }
+    .ing-row > select { flex: 1; min-width: 0 }
+    .ing-row > input[type="number"] { width: 100px; flex: none }
+    .ing-row > span { width: 90px; flex: none }
+    .ing-row > .ing-del { width: 32px; flex: none }
 
     .ing-row:last-child {
       border-bottom: none
@@ -678,14 +695,16 @@
 
     /* DASHBOARD CMV TABLE */
     .cmv-table-row {
-      display: grid;
-      grid-template-columns: 1fr 90px 90px 90px 130px;
+      display: flex;
       gap: 8px;
       align-items: center;
       padding: 11px 14px;
       border-bottom: 1px solid var(--border);
       font-size: 13px
     }
+    .cmv-table-row > *:nth-child(1) { flex: 1; min-width: 0 }
+    .cmv-table-row > *:nth-child(n+2) { flex: 0 0 90px; min-width: 0 }
+    .cmv-table-row > *:last-child { flex: 0 0 130px }
 
     .cmv-table-row:last-child {
       border-bottom: none
@@ -1291,9 +1310,11 @@
         }
         return p;
       });
+      // Remove campos legados que não existem mais no DEFAULT
+      const { massaInsumos: _, estoqueMassa: __, ...dbClean } = db;
       return {
         ...base,
-        ...db,
+        ...dbClean,
         config,
         insumos,
         pizzas,
