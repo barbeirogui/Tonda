@@ -1179,12 +1179,33 @@
       const toArray = value => Array.isArray(value)
         ? value
         : (value && typeof value === "object" ? Object.values(value) : null);
+      // Migração: converte insumos de kg para g
+      const insumos = toArray(db.insumos) || base.insumos;
+      const kgIds = {};
+      insumos.forEach(ins => {
+        if (ins.unidade === "kg") {
+          ins.unidade = "g";
+          ins.custo = ins.custo / 1000;
+          kgIds[ins.id] = true;
+        }
+      });
+      const pizzas = (toArray(db.pizzas) || base.pizzas).map(p => {
+        if (p.ingredientes) {
+          p.ingredientes = p.ingredientes.map(ing => {
+            if (kgIds[ing.insumoId] && ing.quantidade < 1) {
+              ing.quantidade = ing.quantidade * 1000;
+            }
+            return ing;
+          });
+        }
+        return p;
+      });
       return {
         ...base,
         ...db,
         config: { ...base.config, ...(db.config || {}) },
-        insumos: toArray(db.insumos) || base.insumos,
-        pizzas: toArray(db.pizzas) || base.pizzas,
+        insumos,
+        pizzas,
         estoque: toArray(db.estoque) || [],
         vendas: toArray(db.vendas) || [],
       };
@@ -1653,7 +1674,7 @@
         const ins = DB.insumos.find(i => i.id === sel.value);
         if (ins) {
           unSpan.textContent = ins.unidade;
-          precoSpan.textContent = `R$ ${ins.custo.toFixed(4).replace('.', ',')}/${ins.unidade}`;
+          precoSpan.textContent = `R$ ${ins.custo.toFixed(2).replace('.', ',')}/${ins.unidade}`;
         } else {
           unSpan.textContent = '';
           precoSpan.textContent = '';
