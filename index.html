@@ -396,6 +396,7 @@ function renderMenu(){
           <div class="card-body">
             <div class="card-name">${item.nome}</div>
             <div class="card-desc">${item.desc||""}</div>
+            ${item.ingredientes && item.ingredientes.length ? `<div style="margin:4px 0 8px;font-size:12px;color:var(--muted);line-height:1.4">${item.ingredientes.map(ing => { const ins = DB.insumos.find(i => i.id === ing.insumoId); return ins ? ins.nome : ''; }).filter(Boolean).join(', ')}</div>` : ''}
             ${item.complementos && item.complementos.length ? `<div style="margin:6px 0;font-size:12px">${item.complementos.map((c, j) => `<label style="display:flex;align-items:center;gap:4px;margin:2px 0;cursor:pointer"><input type="checkbox" data-pizza="${item.id}" data-comp-index="${j}" data-comp-nome="${c.nome}" data-comp-preco="${c.preco}" onchange="toggleComp(this)"><span>${c.nome} (+R$${c.preco.toFixed(2).replace(".",",")})</span></label>`).join("")}</div>` : ""}
             <div class="card-footer">
               <div class="card-price"><span>R$ </span>${item.preco.toFixed(2).replace(".",",")}</div>
