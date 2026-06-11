@@ -983,7 +983,9 @@
         { id: "p4", nome: "Frango c/ Catupiry", categoria: "Tradicionais", preco: 58, ativo: true, ingredientes: [] },
         { id: "p5", nome: "Pepperoni", categoria: "Premium", preco: 72, ativo: true, ingredientes: [] },
         { id: "p6", nome: "Coca-Cola 2L", categoria: "Bebidas", preco: 12, ativo: true, ingredientes: [] },
-        { id: "p7", nome: "Água Mineral", categoria: "Bebidas", preco: 5, ativo: true, ingredientes: [] },
+        { id: "p7", nome: "Água Mineral 500ml", categoria: "Bebidas", preco: 5, ativo: true, ingredientes: [] },
+        { id: "p8", nome: "Guaraná Antarctica 2L", categoria: "Bebidas", preco: 10, ativo: true, ingredientes: [] },
+        { id: "p9", nome: "Heineken Long Neck", categoria: "Bebidas", preco: 9, ativo: true, ingredientes: [] },
       ]
     };
 
@@ -1078,16 +1080,18 @@
       return [...new Set(MENU.map(p => p.categoria).filter(Boolean))];
     }
     function renderCats() {
-      const cats = getCategories();
-      document.getElementById("cat-tabs").innerHTML = cats.map(c => `<button class="cat-btn${c === activecat ? " active" : ""}" onclick="setcat('${c}')">${catIcon(c)} ${c}</button>`).join("");
+      const cats = getCategories().filter(c => c !== "Bebidas");
+      document.getElementById("cat-tabs").innerHTML = cats.map(c => `<button class="cat-btn${c === activecat ? " active" : ""}" onclick="setcat('${c}')">${catIcon(c)} ${c}</button>`).join("") + `<button class="cat-btn${activecat === "Bebidas" ? " active" : ""}" onclick="setcat('Bebidas')">🥤 Bebidas</button>`;
     }
     function setcat(c) { activecat = c; renderCats(); renderMenu() }
     function renderMenu() {
-      const cats = activecat ? [activecat] : getCategories();
+      const cats = activecat ? [activecat] : getCategories().filter(c => c !== "Bebidas");
+      const showBebidas = activecat === "" || activecat === "Bebidas";
       if (!MENU.length) {
         document.getElementById("menu-main").innerHTML = `<div class="empty-menu"><strong>Nenhuma pizza ativa no cardápio.</strong>Cadastre ou ative pizzas no painel administrativo.</div>`;
         return;
       }
+      const bebidas = MENU.filter(p => p.categoria === "Bebidas");
       const html = cats.map(cat => {
         const items = MENU.filter(p => p.categoria === cat);
         if (!items.length) return "";
@@ -1095,7 +1099,7 @@
     <div class="menu-grid">
       ${items.map(item => {
           const qty = cart[item.id]?.qty || 0;
-          const icon = item.categoria === "Bebidas" ? "🥤" : item.categoria === "Doces" ? "🍰" : "🍕";
+          const icon = "🍕";
           const imgHtml = item.foto ? `style="background:url('${item.foto}') center/cover no-repeat;font-size:0"` : "";
           return `<div class="card">
           <div class="card-emoji" ${imgHtml}>${item.foto ? "" : icon}</div>
@@ -1114,7 +1118,26 @@
         </div>`;
         }).join("")}
     </div></section>`;
-      }).join("");
+      }).join("") + (bebidas.length && !showBebidas ? `
+    <section><h2 class="section-title" style="margin-top:32px">🥤 Bebidas</h2>
+    <div class="menu-grid" style="opacity:.75">
+      ${bebidas.map(item => {
+        const qty = cart[item.id]?.qty || 0;
+        return `<div class="card">
+          <div class="card-emoji">🥤</div>
+          <div class="card-body">
+            <div class="card-name">${item.nome}</div>
+            <div class="card-desc">${item.desc || ""}</div>
+            <div class="card-footer">
+              <div class="card-price"><span>R$ </span>${item.preco.toFixed(2).replace(".", ",")}</div>
+              <button class="add-btn${qty > 0 ? " in-cart" : ""}" onclick="addItem('${item.id}')">
+                ${qty > 0 ? `<span style="font-size:13px;font-weight:700">${qty}</span>` : `+`}
+              </button>
+            </div>
+          </div>
+        </div>`;
+      }).join("")}
+    </div></section>` : "");
       document.getElementById("menu-main").innerHTML = html || `<div class="empty-menu"><strong>Nenhum item nesta categoria.</strong>Escolha outra categoria no cardápio.</div>`;
     }
 
