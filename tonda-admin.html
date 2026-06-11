@@ -1218,7 +1218,7 @@
       insumos: [
         { id: "i1", nome: "Massa artesanal", unidade: "un", custo: 3.50, grupo: "massa" },
         { id: "i2", nome: "Mussarela Bacio", unidade: "g", custo: 0.04183, grupo: "cobertura" },
-        { id: "i3", nome: "Molho de tomate", unidade: "g", custo: 0.008, grupo: "cobertura" },
+
         { id: "i4", nome: "Linguiça Calabresa Reta Prieto", unidade: "g", custo: 0.01804, grupo: "cobertura" },
         { id: "i5", nome: "Frango desfiado", unidade: "g", custo: 0.020, grupo: "cobertura" },
         { id: "i6", nome: "Requeijão Catupiry", unidade: "g", custo: 0.03895, grupo: "cobertura" },
@@ -1238,11 +1238,11 @@
         { id: "i20", nome: "Azeite de oliva", unidade: "g", custo: 0.08, grupo: "massa" },
       ],
       pizzas: [
-        { id: "p1", nome: "Margherita", categoria: "Tradicionais", preco: 52, ativo: true, ingredientes: [{ insumoId: "i1", quantidade: 1 }, { insumoId: "i2", quantidade: 250 }, { insumoId: "i3", quantidade: 120 }] },
-        { id: "p2", nome: "Calabresa", categoria: "Tradicionais", preco: 54, ativo: true, ingredientes: [{ insumoId: "i1", quantidade: 1 }, { insumoId: "i2", quantidade: 250 }, { insumoId: "i3", quantidade: 120 }, { insumoId: "i4", quantidade: 180 }] },
+        { id: "p1", nome: "Margherita", categoria: "Tradicionais", preco: 52, ativo: true, ingredientes: [{ insumoId: "i1", quantidade: 1 }, { insumoId: "i2", quantidade: 250 }, { insumoId: "i12", quantidade: 120 }] },
+        { id: "p2", nome: "Calabresa", categoria: "Tradicionais", preco: 54, ativo: true, ingredientes: [{ insumoId: "i1", quantidade: 1 }, { insumoId: "i2", quantidade: 250 }, { insumoId: "i12", quantidade: 120 }, { insumoId: "i4", quantidade: 180 }] },
         { id: "p3", nome: "Quatro Queijos", categoria: "Premium", preco: 64, ativo: true, ingredientes: [{ insumoId: "i1", quantidade: 1 }, { insumoId: "i2", quantidade: 200 }, { insumoId: "i6", quantidade: 100 }, { insumoId: "i9", quantidade: 50 }, { insumoId: "i10", quantidade: 50 }] },
         { id: "p4", nome: "Frango c/ Catupiry", categoria: "Tradicionais", preco: 58, ativo: true, ingredientes: [{ insumoId: "i1", quantidade: 1 }, { insumoId: "i2", quantidade: 100 }, { insumoId: "i5", quantidade: 200 }, { insumoId: "i6", quantidade: 120 }] },
-        { id: "p5", nome: "Pepperoni", categoria: "Premium", preco: 72, ativo: true, ingredientes: [{ insumoId: "i1", quantidade: 1 }, { insumoId: "i2", quantidade: 200 }, { insumoId: "i3", quantidade: 100 }, { insumoId: "i7", quantidade: 150 }] },
+        { id: "p5", nome: "Pepperoni", categoria: "Premium", preco: 72, ativo: true, ingredientes: [{ insumoId: "i1", quantidade: 1 }, { insumoId: "i2", quantidade: 200 }, { insumoId: "i12", quantidade: 100 }, { insumoId: "i7", quantidade: 150 }] },
       ],
       estoque: [], // [{insumoId, qtd, data, valorTotal}]
       vendas: [], // [{pizzaId, qtd, data}]
@@ -1274,6 +1274,16 @@
         }
       });
       let estoque = toArray(db.estoque) || [];
+      // Migra i3 (Molho de tomate) → i12 (Tomate Pelado)
+      const pizzas = (toArray(db.pizzas) || base.pizzas).map(p => {
+        if (p.ingredientes) {
+          p.ingredientes = p.ingredientes.map(ing => ({
+            ...ing,
+            insumoId: ing.insumoId === "i3" ? "i12" : ing.insumoId
+          }));
+        }
+        return p;
+      });
       // Migra massaRecipe IDs de mi→i
       let config = { ...base.config, ...(db.config || {}) };
       if (config.massaRecipe) {
@@ -1282,7 +1292,6 @@
           return m[r.insumoId] ? { ...r, insumoId: m[r.insumoId] } : r;
         });
       }
-      const pizzas = toArray(db.pizzas) || base.pizzas;
       // Remove campos legados que não existem mais no DEFAULT
       const { massaInsumos: _, estoqueMassa: __, ...dbClean } = db;
       return {
