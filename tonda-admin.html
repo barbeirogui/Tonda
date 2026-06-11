@@ -952,8 +952,10 @@
               value="0.00"></div>
           <div class="field"><label>Tempo estimado</label><input type="text" id="cfg-tempo" value="30-40 minutos"></div>
         </div>
-        <div class="field"><label>PIN de acesso (4 dígitos)</label><input type="password" id="cfg-pin" maxlength="4"
-            placeholder="1103"></div>
+        <div class="field-row">
+          <div class="field"><label>CMV ideal (%)</label><input type="number" id="cfg-cmv" step="0.5" min="10" max="60" value="30"></div>
+          <div class="field"><label>PIN de acesso (4 dígitos)</label><input type="password" id="cfg-pin" maxlength="4" placeholder="1103"></div>
+        </div>
         <button class="btn btn-primary" onclick="saveConfig()">Salvar configurações</button>
         <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:16px">
           <button class="btn btn-ghost" onclick="exportBackup()">Exportar backup</button>
@@ -1064,7 +1066,7 @@
             <label>Categoria *</label>
             <select id="pz-cat">
               <option>Tradicionais</option>
-              <option>Especiais</option>
+              <option>Premium</option>
               <option>Veganas</option>
               <option>Doces</option>
               <option>Bebidas</option>
@@ -1102,6 +1104,7 @@
           <div class="cmv-preview-row" style="color:var(--muted)"><span>CMV (Custo / Venda)</span><span id="pv-cmv"
               style="font-weight:700">— %</span></div>
           <div class="cmv-preview-row"><span>Margem bruta</span><span id="pv-margem">R$ 0,00</span></div>
+          <div class="cmv-preview-row" style="background:var(--green-light);border-radius:6px;padding:4px 0;margin-top:4px"><span style="font-weight:700" id="pv-faixa-label">💡 Faixa ideal</span><span id="pv-sugerido" style="font-weight:700">R$ 0,00</span></div>
         </div>
       </div>
       <div class="modal-foot">
@@ -1139,30 +1142,30 @@
 
     // ---- DEFAULT DATA ----
     const DEFAULT = {
-      config: { nome: "Tonda Pizzaria Artesanal", whatsapp: "5511983746277", taxaEntrega: 0, tempoEstimado: "30-40 minutos", pin: PIN },
+      config: { nome: "Tonda Pizzaria Artesanal", whatsapp: "5511983746277", taxaEntrega: 0, tempoEstimado: "30-40 minutos", pin: PIN, cmvIdeal: 30 },
       insumos: [
         { id: "i1", nome: "Massa artesanal", unidade: "un", custo: 3.50 },
-        { id: "i2", nome: "Mussarela Bacio", unidade: "kg", custo: 41.83 },
-        { id: "i3", nome: "Molho de tomate", unidade: "kg", custo: 8.00 },
-        { id: "i4", nome: "Linguiça Calabresa Reta Prieto", unidade: "kg", custo: 18.04 },
-        { id: "i5", nome: "Frango desfiado", unidade: "kg", custo: 20.00 },
-        { id: "i6", nome: "Requeijão Catupiry", unidade: "kg", custo: 38.95 },
-        { id: "i7", nome: "Pepperoni Fatiado Ceratti", unidade: "kg", custo: 61.31 },
-        { id: "i8", nome: "Presunto", unidade: "kg", custo: 24.00 },
-        { id: "i9", nome: "Parmesão 6 Meses Fracionado Scala", unidade: "kg", custo: 89.88 },
-        { id: "i10", nome: "Gorgonzola", unidade: "kg", custo: 52.00 },
-        { id: "i11", nome: "Queijo Pecorino Cunha di Salerno", unidade: "kg", custo: 304.10 },
-        { id: "i12", nome: "Tomate Pelado Italiano San Marzano", unidade: "kg", custo: 12.74 },
-        { id: "i13", nome: "Mussarela de Búfala Cereja Yema", unidade: "kg", custo: 62.03 },
+        { id: "i2", nome: "Mussarela Bacio", unidade: "g", custo: 0.04183 },
+        { id: "i3", nome: "Molho de tomate", unidade: "g", custo: 0.008 },
+        { id: "i4", nome: "Linguiça Calabresa Reta Prieto", unidade: "g", custo: 0.01804 },
+        { id: "i5", nome: "Frango desfiado", unidade: "g", custo: 0.020 },
+        { id: "i6", nome: "Requeijão Catupiry", unidade: "g", custo: 0.03895 },
+        { id: "i7", nome: "Pepperoni Fatiado Ceratti", unidade: "g", custo: 0.06131 },
+        { id: "i8", nome: "Presunto", unidade: "g", custo: 0.024 },
+        { id: "i9", nome: "Parmesão 6 Meses Fracionado Scala", unidade: "g", custo: 0.08988 },
+        { id: "i10", nome: "Gorgonzola", unidade: "g", custo: 0.052 },
+        { id: "i11", nome: "Queijo Pecorino Cunha di Salerno", unidade: "g", custo: 0.30410 },
+        { id: "i12", nome: "Tomate Pelado Italiano San Marzano", unidade: "g", custo: 0.01274 },
+        { id: "i13", nome: "Mussarela de Búfala Cereja Yema", unidade: "g", custo: 0.06203 },
         { id: "i14", nome: "Caixa Oitavada Comum 35cm", unidade: "un", custo: 1.74 },
         { id: "i15", nome: "Água Mineral Buona Vita 6x1,5L", unidade: "cx", custo: 15.96 },
       ],
       pizzas: [
-        { id: "p1", nome: "Margherita", categoria: "Tradicionais", preco: 52, ativo: true, ingredientes: [{ insumoId: "i1", quantidade: 1 }, { insumoId: "i2", quantidade: 0.25 }, { insumoId: "i3", quantidade: 0.12 }] },
-        { id: "p2", nome: "Calabresa", categoria: "Tradicionais", preco: 54, ativo: true, ingredientes: [{ insumoId: "i1", quantidade: 1 }, { insumoId: "i2", quantidade: 0.25 }, { insumoId: "i3", quantidade: 0.12 }, { insumoId: "i4", quantidade: 0.18 }] },
-        { id: "p3", nome: "Quatro Queijos", categoria: "Especiais", preco: 64, ativo: true, ingredientes: [{ insumoId: "i1", quantidade: 1 }, { insumoId: "i2", quantidade: 0.20 }, { insumoId: "i6", quantidade: 0.10 }, { insumoId: "i9", quantidade: 0.05 }, { insumoId: "i10", quantidade: 0.05 }] },
-        { id: "p4", nome: "Frango c/ Catupiry", categoria: "Tradicionais", preco: 58, ativo: true, ingredientes: [{ insumoId: "i1", quantidade: 1 }, { insumoId: "i2", quantidade: 0.10 }, { insumoId: "i5", quantidade: 0.20 }, { insumoId: "i6", quantidade: 0.12 }] },
-        { id: "p5", nome: "Pepperoni", categoria: "Especiais", preco: 72, ativo: true, ingredientes: [{ insumoId: "i1", quantidade: 1 }, { insumoId: "i2", quantidade: 0.20 }, { insumoId: "i3", quantidade: 0.10 }, { insumoId: "i7", quantidade: 0.15 }] },
+        { id: "p1", nome: "Margherita", categoria: "Tradicionais", preco: 52, ativo: true, ingredientes: [{ insumoId: "i1", quantidade: 1 }, { insumoId: "i2", quantidade: 250 }, { insumoId: "i3", quantidade: 120 }] },
+        { id: "p2", nome: "Calabresa", categoria: "Tradicionais", preco: 54, ativo: true, ingredientes: [{ insumoId: "i1", quantidade: 1 }, { insumoId: "i2", quantidade: 250 }, { insumoId: "i3", quantidade: 120 }, { insumoId: "i4", quantidade: 180 }] },
+        { id: "p3", nome: "Quatro Queijos", categoria: "Premium", preco: 64, ativo: true, ingredientes: [{ insumoId: "i1", quantidade: 1 }, { insumoId: "i2", quantidade: 200 }, { insumoId: "i6", quantidade: 100 }, { insumoId: "i9", quantidade: 50 }, { insumoId: "i10", quantidade: 50 }] },
+        { id: "p4", nome: "Frango c/ Catupiry", categoria: "Tradicionais", preco: 58, ativo: true, ingredientes: [{ insumoId: "i1", quantidade: 1 }, { insumoId: "i2", quantidade: 100 }, { insumoId: "i5", quantidade: 200 }, { insumoId: "i6", quantidade: 120 }] },
+        { id: "p5", nome: "Pepperoni", categoria: "Premium", preco: 72, ativo: true, ingredientes: [{ insumoId: "i1", quantidade: 1 }, { insumoId: "i2", quantidade: 200 }, { insumoId: "i3", quantidade: 100 }, { insumoId: "i7", quantidade: 150 }] },
       ],
       estoque: [], // [{insumoId, qtd, data, valorTotal}]
       vendas: [], // [{pizzaId, qtd, data}]
@@ -1499,12 +1502,14 @@
       document.getElementById("cfg-wp").value = cfg.whatsapp || "";
       document.getElementById("cfg-taxa").value = cfg.taxaEntrega || 0;
       document.getElementById("cfg-tempo").value = cfg.tempoEstimado || "30-40 minutos";
+      document.getElementById("cfg-cmv").value = cfg.cmvIdeal || 30;
     }
     function saveConfig() {
       DB.config.nome = document.getElementById("cfg-nome").value.trim();
       DB.config.whatsapp = document.getElementById("cfg-wp").value.trim();
       DB.config.taxaEntrega = parseNum(document.getElementById("cfg-taxa").value) || 0;
       DB.config.tempoEstimado = document.getElementById("cfg-tempo").value.trim();
+      DB.config.cmvIdeal = parseNum(document.getElementById("cfg-cmv").value) || 30;
       const newPin = document.getElementById("cfg-pin").value.trim();
       if (newPin.length === 4 && /^[0-9]{4}$/.test(newPin)) DB.config.pin = newPin;
       if (save(DB)) toast("✅ Configurações salvas!");
@@ -1648,7 +1653,7 @@
         const ins = DB.insumos.find(i => i.id === sel.value);
         if (ins) {
           unSpan.textContent = ins.unidade;
-          precoSpan.textContent = `R$ ${ins.custo.toFixed(2).replace('.', ',')}/${ins.unidade}`;
+          precoSpan.textContent = `R$ ${ins.custo.toFixed(4).replace('.', ',')}/${ins.unidade}`;
         } else {
           unSpan.textContent = '';
           precoSpan.textContent = '';
@@ -1758,9 +1763,17 @@
       }, 0);
       const pct = preco > 0 ? (custo / preco) * 100 : 0;
       const margem = preco - custo;
+      const cat = document.getElementById("pz-cat").value;
+      const isPremium = cat === "Premium";
+      const cmvMin = isPremium ? 0.28 : 0.25;
+      const cmvMax = 0.32;
+      const precoMin = custo > 0 ? custo / cmvMax : 0;
+      const precoMax = custo > 0 ? custo / cmvMin : 0;
+      document.getElementById("pv-faixa-label").textContent = `💡 Faixa ideal (${(cmvMin*100).toFixed(0)}%-${(cmvMax*100).toFixed(0)}%)`;
       document.getElementById("pv-custo").textContent = fmtR(custo);
       document.getElementById("pv-preco").textContent = fmtR(preco);
       document.getElementById("pv-margem").textContent = fmtR(margem);
+      document.getElementById("pv-sugerido").textContent = custo > 0 ? `${fmtR(precoMin)} — ${fmtR(precoMax)}` : "—";
       const cmvEl = document.getElementById("pv-cmv");
       cmvEl.textContent = preco > 0 ? fmtP(pct) : "— %";
       cmvEl.style.color = preco > 0 ? cmvColor(pct) : "var(--muted)";

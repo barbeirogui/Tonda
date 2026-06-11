@@ -274,9 +274,9 @@ const FALLBACK={
   pizzas:[
     {id:"p1",nome:"Margherita",categoria:"Tradicionais",preco:52,ativo:true,ingredientes:[]},
     {id:"p2",nome:"Calabresa",categoria:"Tradicionais",preco:54,ativo:true,ingredientes:[]},
-    {id:"p3",nome:"Quatro Queijos",categoria:"Especiais",preco:64,ativo:true,ingredientes:[]},
+    {id:"p3",nome:"Quatro Queijos",categoria:"Premium",preco:64,ativo:true,ingredientes:[]},
     {id:"p4",nome:"Frango c/ Catupiry",categoria:"Tradicionais",preco:58,ativo:true,ingredientes:[]},
-    {id:"p5",nome:"Pepperoni",categoria:"Especiais",preco:72,ativo:true,ingredientes:[]},
+    {id:"p5",nome:"Pepperoni",categoria:"Premium",preco:72,ativo:true,ingredientes:[]},
     {id:"p6",nome:"Coca-Cola 2L",categoria:"Bebidas",preco:12,ativo:true,ingredientes:[]},
     {id:"p7",nome:"Água Mineral",categoria:"Bebidas",preco:5,ativo:true,ingredientes:[]},
   ]
@@ -365,7 +365,7 @@ function updateConfigUI(){
   document.getElementById("cart-taxa-label").textContent=`R$${(CFG.taxaEntrega ?? 0).toFixed(2).replace(".",",")}`;
 }
 
-function catIcon(c){return c==="Bebidas"?"🥤":c==="Doces"?"🍰":c==="Especiais"?"⭐":"🍕"}
+function catIcon(c){return c==="Bebidas"?"🥤":c==="Doces"?"🍰":c==="Premium"?"⭐":"🍕"}
 function getCategories(){
   return [...new Set(MENU.map(p=>p.categoria).filter(Boolean))];
 }
