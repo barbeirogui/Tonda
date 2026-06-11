@@ -1598,7 +1598,7 @@
         <td>
           <div style="display:flex;gap:6px">
             <button class="btn btn-ghost btn-sm" onclick="editInsumo('${ins.id}')">✏️</button>
-            <button class="btn btn-danger btn-sm" onclick="delInsumo('${ins.id}')">🗑</button>
+            <button class="btn btn-danger btn-sm" onclick="delInsumo('${ins.id}')">✕</button>
           </div>
         </td>
       </tr>`;
@@ -1621,7 +1621,7 @@
       <td>
         <div style="display:flex;gap:6px">
           <button class="btn btn-ghost btn-sm" onclick="editPizza('${p.id}')">✏️</button>
-          <button class="btn btn-danger btn-sm" onclick="delPizza('${p.id}')">🗑</button>
+          <button class="btn btn-danger btn-sm" onclick="delPizza('${p.id}')">✕</button>
         </div>
       </td>
     </tr>`;
@@ -1734,7 +1734,7 @@
       if (!confirm("Remover este insumo?")) return;
       DB.insumos = DB.insumos.filter(i => i.id !== id);
       DB.pizzas.forEach(p => { p.ingredientes = p.ingredientes.filter(i => i.insumoId !== id) });
-      save(DB); renderInsumos(); renderDashboard(); toast("🗑 Insumo removido.");
+      save(DB); renderInsumos(); renderDashboard(); toast("Insumo removido.");
     }
 
     // ---- PIZZA MODAL ----
@@ -2058,7 +2058,7 @@
     function delPizza(id) {
       if (!confirm("Remover esta pizza?")) return;
       DB.pizzas = DB.pizzas.filter(p => p.id !== id);
-      save(DB); renderPizzas(); renderDashboard(); toast("🗑 Pizza removida.");
+      save(DB); renderPizzas(); renderDashboard(); toast("Pizza removida.");
     }
 
     // ---- MODAL HELPERS ----
