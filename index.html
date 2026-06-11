@@ -234,12 +234,8 @@ function validarCamposPedido() {
   return ok;
 }
 
-function enviarPedido() {
-  if (!validarCamposPedido()) {
-    alert('Por favor, preencha todos os campos obrigatórios.');
-    return;
-  }
-  const pedido = {
+function buildPedido() {
+  return {
     nome: document.getElementById('inp-nome').value,
     tel: document.getElementById('inp-tel').value,
     rua: document.getElementById('inp-rua').value,
@@ -248,27 +244,26 @@ function enviarPedido() {
     comp: document.getElementById('inp-comp').value,
     obs: document.getElementById('inp-obs').value,
     pagamento: document.querySelector('input[name="pay"]:checked').value,
-    carrinho: Object.values(cart).map(i => ({ nome: i.nome, qtd: i.qty, preco: i.preco, complementos: selectedComps[i.id] ? Object.values(selectedComps[i.id]) : [] }))
+    total: cartTotal(),
+    carrinho: Object.values(cart).map(i => ({
+      nome: i.nome,
+      qtd: i.qty,
+      preco: i.preco,
+      complementos: selectedComps[i.id] ? Object.values(selectedComps[i.id]) : []
+    }))
   };
-  document.getElementById('btn-enviar-pedido').disabled = true;
-  fetch(`${API_HOST}/api/pedidos`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(pedido)
-  })
-    .then(r => r.json())
-    .then(resp => {
-      if (resp.status === 'ok') {
-        document.getElementById('success').classList.add('show');
-        closeCheckout();
-      } else {
-        alert('Erro ao enviar pedido. Tente novamente.');
-      }
-    })
-    .catch(() => alert('Erro ao enviar pedido.'))
-    .finally(() => {
-      document.getElementById('btn-enviar-pedido').disabled = false;
+}
+
+async function enviarPedidoAoServer(pedido) {
+  try {
+    await fetch(`${API_HOST}/api/pedidos`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(pedido)
     });
+  } catch (e) {
+    console.warn('Erro ao enviar pedido ao servidor:', e);
+  }
 }
 const API_HOST = "";
 const STORE_KEY="tonda_pizzaria";
@@ -544,6 +539,7 @@ function sendToWhatsApp(){
     return;
   }
   recordCheckoutVenda();
+  enviarPedidoAoServer(buildPedido());
   window.open(`https://wa.me/${whatsapp}?text=${encodeURIComponent(msg)}`,"_blank");
   closeCheckout();
   document.getElementById("success").classList.add("show");
