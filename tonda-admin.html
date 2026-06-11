@@ -343,7 +343,8 @@
       gap: 12px;
       margin-bottom: 28px
     }
-    .stat-grid > * {
+
+    .stat-grid>* {
       flex: 1 1 180px;
       min-width: 0
     }
@@ -583,7 +584,8 @@
       display: flex;
       gap: 12px
     }
-    .field-row > * {
+
+    .field-row>* {
       flex: 1;
       min-width: 0
     }
@@ -592,11 +594,13 @@
       display: flex;
       gap: 10px
     }
-    .field-row-3 > *:first-child {
+
+    .field-row-3>*:first-child {
       flex: 2;
       min-width: 0
     }
-    .field-row-3 > * {
+
+    .field-row-3>* {
       flex: 1;
       min-width: 0
     }
@@ -617,10 +621,27 @@
       border-bottom: 1px solid var(--border);
       font-size: 13px
     }
-    .ing-row > select { flex: 1; min-width: 0 }
-    .ing-row > input[type="number"] { width: 100px; flex: none }
-    .ing-row > span:nth-last-child(2) { width: 90px; flex: none; text-align: right }
-    .ing-row > .ing-del { width: 32px; flex: none }
+
+    .ing-row>select {
+      flex: 1;
+      min-width: 0
+    }
+
+    .ing-row>input[type="number"] {
+      width: 100px;
+      flex: none
+    }
+
+    .ing-row>span:nth-last-child(2) {
+      width: 90px;
+      flex: none;
+      text-align: right
+    }
+
+    .ing-row>.ing-del {
+      width: 32px;
+      flex: none
+    }
 
     .ing-row:last-child {
       border-bottom: none
@@ -702,9 +723,20 @@
       border-bottom: 1px solid var(--border);
       font-size: 13px
     }
-    .cmv-table-row > *:nth-child(1) { flex: 1; min-width: 0 }
-    .cmv-table-row > *:nth-child(n+2) { flex: 0 0 90px; min-width: 0 }
-    .cmv-table-row > *:last-child { flex: 0 0 130px }
+
+    .cmv-table-row>*:nth-child(1) {
+      flex: 1;
+      min-width: 0
+    }
+
+    .cmv-table-row>*:nth-child(n+2) {
+      flex: 0 0 90px;
+      min-width: 0
+    }
+
+    .cmv-table-row>*:last-child {
+      flex: 0 0 130px
+    }
 
     .cmv-table-row:last-child {
       border-bottom: none
@@ -824,8 +856,10 @@
       <button class="nav-btn" data-tab="massa" onclick="showTab('massa')"><span class="ni">🍞</span>
         Massa</button>
       <button class="nav-btn" data-tab="vendas" onclick="showTab('vendas')"><span class="ni">🧾</span> Vendas</button>
-      <button class="nav-btn" data-tab="pedidos" onclick="showTab('pedidos')"><span class="ni">📋</span> Pedidos</button>
-      <button class="nav-btn" data-tab="analise" onclick="showTab('analise')"><span class="ni">📈</span> Análise</button>
+      <button class="nav-btn" data-tab="pedidos" onclick="showTab('pedidos')"><span class="ni">📋</span>
+        Pedidos</button>
+      <button class="nav-btn" data-tab="analise" onclick="showTab('analise')"><span class="ni">📈</span>
+        Análise</button>
       <button class="nav-btn" data-tab="config" onclick="showTab('config')"><span class="ni">⚙️</span>
         Configurações</button>
     </nav>
@@ -1004,7 +1038,8 @@
       <div class="page-header" style="margin-top:32px">
         <div style="font-size:15px;font-weight:700">Histórico de compras</div>
         <div style="display:flex;gap:8px;align-items:center">
-          <select id="filtro-insumo" onchange="renderEstoque()" style="padding:4px 8px;border:1px solid var(--border);border-radius:4px;font-size:12px">
+          <select id="filtro-insumo" onchange="renderEstoque()"
+            style="padding:4px 8px;border:1px solid var(--border);border-radius:4px;font-size:12px">
             <option value="">Todos os insumos</option>
           </select>
         </div>
@@ -1037,7 +1072,17 @@
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>#</th><th>Pizza</th><th>Qtd vendida</th><th>Faturamento</th><th>Custo total</th><th>Lucro bruto</th><th>CMV médio</th></tr></thead>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Pizza</th>
+              <th>Qtd vendida</th>
+              <th>Faturamento</th>
+              <th>Custo total</th>
+              <th>Lucro bruto</th>
+              <th>CMV médio</th>
+            </tr>
+          </thead>
           <tbody id="analise-rank"></tbody>
         </table>
       </div>
@@ -1055,7 +1100,14 @@
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Período</th><th>Pedidos</th><th>Faturamento</th><th>Ticket médio</th></tr></thead>
+          <thead>
+            <tr>
+              <th>Período</th>
+              <th>Pedidos</th>
+              <th>Faturamento</th>
+              <th>Ticket médio</th>
+            </tr>
+          </thead>
           <tbody id="analise-periodos"></tbody>
         </table>
       </div>
@@ -1249,7 +1301,8 @@
           </div>
           <div class="field"><label>Complementos (adicione extras)</label>
             <div id="comp-container" style="display:flex;flex-direction:column;gap:4px"></div>
-            <button class="btn btn-ghost btn-sm" onclick="addComp()" style="margin-top:4px">+ Adicionar complemento</button>
+            <button class="btn btn-ghost btn-sm" onclick="addComp()" style="margin-top:4px">+ Adicionar
+              complemento</button>
           </div>
         </div>
 
@@ -1292,10 +1345,14 @@
       </div>
       <div class="modal-body">
         <input type="hidden" id="beb-edit-id">
-        <div class="field"><label>Nome da bebida *</label><input type="text" id="beb-nome" placeholder="Ex: Coca-Cola 2L"></div>
+        <div class="field"><label>Nome da bebida *</label><input type="text" id="beb-nome"
+            placeholder="Ex: Coca-Cola 2L"></div>
         <div class="field-row">
-          <div class="field"><label>Preço de venda (R$) *</label><input type="number" id="beb-preco" step="0.50" min="0" placeholder="0,00"></div>
-          <div class="field"><label style="opacity:0">Ativo</label><label style="display:flex;align-items:center;gap:6px;margin-top:4px"><input type="checkbox" id="beb-ativo" checked> Ativo no cardápio</label></div>
+          <div class="field"><label>Preço de venda (R$) *</label><input type="number" id="beb-preco" step="0.50" min="0"
+              placeholder="0,00"></div>
+          <div class="field"><label style="opacity:0">Ativo</label><label
+              style="display:flex;align-items:center;gap:6px;margin-top:4px"><input type="checkbox" id="beb-ativo"
+                checked> Ativo no cardápio</label></div>
         </div>
       </div>
       <div class="modal-foot">
@@ -1334,7 +1391,7 @@
 
     // ---- DEFAULT DATA ----
     const DEFAULT = {
-      config: { nome: "Tonda Pizzaria Artesanal", whatsapp: "5511983746277", taxaEntrega: 0, tempoEstimado: "30-40 minutos", pin: PIN, cmvIdeal: 30, massaRecipe: [{insumoId:"i16",qtd:1},{insumoId:"i17",qtd:650},{insumoId:"i18",qtd:1},{insumoId:"i19",qtd:24},{insumoId:"i20",qtd:13}], massaPesoPaneto: 270 },
+      config: { nome: "Tonda Pizzaria Artesanal", whatsapp: "5511983746277", taxaEntrega: 0, tempoEstimado: "30-40 minutos", pin: PIN, cmvIdeal: 30, massaRecipe: [{ insumoId: "i16", qtd: 1 }, { insumoId: "i17", qtd: 650 }, { insumoId: "i18", qtd: 1 }, { insumoId: "i19", qtd: 24 }, { insumoId: "i20", qtd: 13 }], massaPesoPaneto: 270 },
       insumos: [
         { id: "i1", nome: "Massa artesanal", unidade: "un", custo: 1.13, grupo: "massa" },
         { id: "i2", nome: "Mussarela Bacio", unidade: "kg", custo: 41.83, grupo: "cobertura" },
@@ -1394,7 +1451,7 @@
         }
       });
       // Migra g → kg nos insumos salvos (dados legados)
-      const gToKg = ["i2","i4","i5","i6","i7","i8","i9","i10","i11","i12","i13"];
+      const gToKg = ["i2", "i4", "i5", "i6", "i7", "i8", "i9", "i10", "i11", "i12", "i13"];
       insumos.forEach(ins => {
         if (gToKg.includes(ins.id) && ins.unidade === "g") {
           ins.unidade = "kg";
@@ -1404,7 +1461,7 @@
       // Garante grupo nos insumos existentes; garante custo mínimo (massa i1 nunca zero)
       insumos.forEach(ins => {
         if (!ins.grupo) {
-          ins.grupo = ["i16","i17","i18","i19","i20"].includes(ins.id) ? "massa" : (ins.id === "i1" ? "massa" : "cobertura");
+          ins.grupo = ["i16", "i17", "i18", "i19", "i20"].includes(ins.id) ? "massa" : (ins.id === "i1" ? "massa" : "cobertura");
         }
         if (ins.id === "i1" && (!ins.custo || ins.custo < 0.01)) {
           ins.custo = base.insumos.find(bi => bi.id === "i1")?.custo ?? 3.50;
@@ -1434,16 +1491,16 @@
         });
       }
       // Força insumos da massa (i16-i20) a usar valores do DEFAULT (nunca devem vir do KV)
-      base.insumos.filter(i => ["i16","i17","i18","i19","i20"].includes(i.id)).forEach(bi => {
+      base.insumos.filter(i => ["i16", "i17", "i18", "i19", "i20"].includes(i.id)).forEach(bi => {
         const idx = insumos.findIndex(x => x.id === bi.id);
         if (idx >= 0) insumos[idx] = { ...bi };
       });
       // Migra massaRecipe IDs de mi→i e converte qtd de g → unidade nativa
       let config = { ...base.config, ...(db.config || {}) };
       if (config.massaRecipe) {
-        const nativeUnit = { i16:"kg", i17:"g", i18:"g", i19:"g", i20:"g" };
+        const nativeUnit = { i16: "kg", i17: "g", i18: "g", i19: "g", i20: "g" };
         config.massaRecipe = config.massaRecipe.map(r => {
-          const m = { mi1:"i16", mi2:"i17", mi3:"i18", mi4:"i19", mi5:"i20" };
+          const m = { mi1: "i16", mi2: "i17", mi3: "i18", mi4: "i19", mi5: "i20" };
           const newId = m[r.insumoId] || r.insumoId;
           let qtd = r.qtd;
           // Se veio do formato antigo (mi1-mi5 com qtd em gramas), converte
@@ -2058,11 +2115,11 @@
         const hint = ins.unidade === "kg" && qty > 0 ? ` ≈ ${qty * 1000}g` : '';
         unSpan.textContent = ins.unidade + hint;
       }
-      row.querySelector('input[type="number"]').addEventListener('input', function() {
+      row.querySelector('input[type="number"]').addEventListener('input', function () {
         updateUnitSpan();
         updateCmvPreview();
       });
-      sel.addEventListener('change', function() { updateInfo(); updateUnitSpan(); updateCmvPreview() });
+      sel.addEventListener('change', function () { updateInfo(); updateUnitSpan(); updateCmvPreview() });
       updateInfo();
       updateCmvPreview();
     }
@@ -2467,7 +2524,7 @@
       });
       const sortedMeses = Object.entries(periodos).sort((a, b) => a[0].localeCompare(b[0]));
       document.getElementById("analise-periodos").innerHTML = sortedMeses.length ? sortedMeses.map(([mes, d]) => {
-        const meses = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+        const meses = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
         const [ano, m] = mes.split("-");
         const label = `${meses[parseInt(m) - 1]}/${ano}`;
         return `<tr>
