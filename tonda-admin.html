@@ -848,14 +848,264 @@
       transform: translateX(16px)
     }
 
-    @media(max-width:768px) {
+    /* Mobile menu button */
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 28px;
+      color: var(--black);
+      cursor: pointer;
+      padding: 4px;
+      line-height: 1;
+      z-index: 25
+    }
+
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      z-index: 19
+    }
+
+    @media(max-width:900px) {
+      .menu-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center
+      }
+
       aside {
-        display: none
+        transform: translateX(-100%);
+        transition: transform .3s;
+        z-index: 30
+      }
+
+      aside.open {
+        transform: translateX(0)
+      }
+
+      #sidebar-close {
+        display: flex !important
+      }
+
+      .sidebar-overlay.open {
+        display: block
+      }
+
+      .main {
+        margin-left: 0;
+        padding: 16px 12px
+      }
+
+      .page-header {
+        flex-wrap: wrap
+      }
+
+      .page-title {
+        font-size: 18px;
+        width: 100%
+      }
+
+      .table-wrap {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin-bottom: 16px
+      }
+
+      table {
+        min-width: 700px
+      }
+
+      .stat-grid>* {
+        flex: 1 1 100%
+      }
+
+      .modal {
+        max-width: 100% !important;
+        margin: 0;
+        border-radius: 12px 12px 0 0;
+        margin-top: auto
+      }
+
+      .modal-overlay {
+        align-items: flex-end;
+        padding: 0
+      }
+
+      .modal-body {
+        padding: 16px
+      }
+
+      .modal-head {
+        padding: 16px
+      }
+
+      .modal-foot {
+        padding: 12px 16px;
+        flex-wrap: wrap
       }
 
       .field-row,
       .field-row-3 {
-        grid-template-columns: 1fr
+        flex-direction: column
+      }
+
+      .ing-row {
+        flex-wrap: wrap;
+        gap: 6px
+      }
+
+      .ing-row>select {
+        flex: 1 1 100%;
+        min-width: 0
+      }
+
+      .ing-row>input[type="number"] {
+        width: 80px
+      }
+
+      .ing-row>span:nth-last-child(2) {
+        width: auto;
+        flex: 1;
+        text-align: left
+      }
+
+      .cmv-table-row {
+        flex-wrap: wrap;
+        gap: 4px 8px;
+        padding: 10px 12px
+      }
+
+      .cmv-table-row>*:nth-child(1) {
+        flex: 1 1 100%;
+        margin-bottom: 4px
+      }
+
+      .cmv-table-row>*:nth-child(n+2) {
+        flex: 0 0 auto;
+        min-width: 70px
+      }
+
+      .cmv-table-row>*:last-child {
+        flex: 0 0 auto
+      }
+
+      .cmv-bar-bg {
+        max-width: 60px
+      }
+
+      #massa-peso-paneto {
+        max-width: 100% !important
+      }
+
+      .login-box {
+        padding: 24px 20px
+      }
+
+      .config-section {
+        max-width: 100% !important;
+        padding: 16px !important
+      }
+
+      .field-row-3 {
+        flex-direction: column
+      }
+
+      .field-row-3>*:first-child {
+        flex: 1
+      }
+
+      .toast {
+        bottom: 16px;
+        right: 16px;
+        left: 16px;
+        text-align: center;
+        justify-content: center
+      }
+
+      .ing-head {
+        display: none
+      }
+
+      #massa-peso-paneto {
+        max-width: 100% !important
+      }
+
+      div[style*="max-width:520px"],
+      div[style*="max-width:90%"] {
+        max-width: 100% !important
+      }
+
+      .cmv-table-head {
+        display: none
+      }
+
+      .cmv-table-row {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        margin-bottom: 8px;
+        background: var(--white)
+      }
+
+      .cmv-table-row:not(.cmv-table-head) {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        margin-bottom: 8px;
+        background: var(--white)
+      }
+
+      td, th {
+        padding: 8px 10px;
+        font-size: 12px
+      }
+    }
+
+    @media(max-width:600px) {
+      .main {
+        padding: 12px 8px
+      }
+
+      .stat-card {
+        padding: 12px
+      }
+
+      .stat-value {
+        font-size: 22px
+      }
+
+      .page-title {
+        font-size: 16px
+      }
+
+      .btn {
+        padding: 7px 12px;
+        font-size: 12px
+      }
+
+      td, th {
+        padding: 6px 8px;
+        font-size: 11px
+      }
+
+      .badge {
+        font-size: 10px;
+        padding: 2px 6px
+      }
+
+      .modal-head h3 {
+        font-size: 15px
+      }
+
+      .cmv-preview {
+        font-size: 12px;
+        padding: 10px
+      }
+
+      .field input, .field select, .field textarea {
+        padding: 8px 10px;
+        font-size: 13px
       }
     }
   </style>
@@ -863,7 +1113,16 @@
 
 <body>
 
-  <aside>
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+  <button class="menu-toggle" id="menu-toggle" onclick="toggleSidebar()" aria-label="Abrir menu">☰</button>
+  <aside id="sidebar">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 8px 22px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:14px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="icon" style="width:38px;height:38px;border-radius:9px;background:var(--terracotta);display:flex;align-items:center;justify-content:center;font-size:20px">🍕</div>
+        <div><span style="display:block;font-weight:700">Tonda</span><small style="display:block;color:rgba(255,255,255,.6);font-size:12px;margin-top:1px">Admin</small></div>
+      </div>
+      <button onclick="toggleSidebar()" class="close-x" style="background:none;border:none;color:#fff;font-size:22px;cursor:pointer;display:none;width:32px;height:32px;align-items:center;justify-content:center;border-radius:6px" id="sidebar-close">✕</button>
+    </div>
     <nav>
       <button class="nav-btn active" data-tab="dashboard" onclick="showTab('dashboard')"><span class="ni">📊</span>
         Dashboard</button>
@@ -905,6 +1164,15 @@
           <span>Pizza</span><span>Custo</span><span>Preço</span><span>Lucro</span><span>CMV</span>
         </div>
         <div id="dash-cmv-list"></div>
+      </div>
+      <div class="page-header" style="margin-bottom:12px;margin-top:28px">
+        <div style="font-size:15px;font-weight:700">Ranking de pizzas mais vendidas 🏆</div>
+      </div>
+      <div class="table-wrap">
+        <div class="cmv-table-row cmv-table-head">
+          <span>Pizza</span><span>Qtd</span><span>Receita</span>
+        </div>
+        <div id="dash-ranking"></div>
       </div>
     </div>
 
@@ -1019,8 +1287,7 @@
     <!-- VENDAS -->
     <div class="tab-content" id="tab-vendas">
       <div class="page-header">
-        <div class="page-title">Vendas <small>Registro de vendas e baixa de estoque</small></div>
-        <button class="btn btn-primary" onclick="openVendaModal()">+ Registrar venda</button>
+        <div class="page-title">Vendas <small>Todas as vendas (pedidos online + registros manuais)</small></div>
       </div>
       <div class="table-wrap">
         <table>
@@ -1313,7 +1580,13 @@
         <div class="field-row">
           <div class="field"><label>Preço de venda (R$) *</label><input type="number" id="pz-preco" step="0.50" min="0"
               placeholder="0,00" oninput="updateCmvPreview()"></div>
-          <div class="field"><label>URL da foto</label><input type="text" id="pz-foto" placeholder="https://..."></div>
+          <div class="field"><label>Foto da pizza</label>
+            <div style="display:flex;gap:4px;flex-wrap:wrap">
+              <input type="text" id="pz-foto" placeholder="https://... ou upload" style="flex:1;min-width:120px" oninput="showFotoPreview('pz-foto','pz-foto-preview')">
+              <input type="file" id="pz-foto-file" accept="image/*" style="width:100px;font-size:12px" onchange="handleFotoUpload('pz-foto','pz-foto-preview')">
+            </div>
+            <div id="pz-foto-preview" style="margin-top:4px;max-width:100px;display:none"></div>
+          </div>
         </div>
         <div class="field-row">
           <div class="field">
@@ -1375,10 +1648,16 @@
         <div class="field-row">
           <div class="field"><label>Preço de venda (R$) *</label><input type="number" id="beb-preco" step="0.50" min="0"
               placeholder="0,00"></div>
-          <div class="field"><label style="opacity:0">Ativo</label><label
-              style="display:flex;align-items:center;gap:6px;margin-top:4px"><input type="checkbox" id="beb-ativo"
-                checked> Ativo no cardápio</label></div>
+          <div class="field"><label>Foto da bebida</label>
+            <div style="display:flex;gap:4px;flex-wrap:wrap">
+              <input type="text" id="beb-foto" placeholder="https://... ou upload" style="flex:1;min-width:120px" oninput="showFotoPreview('beb-foto','beb-foto-preview')">
+              <input type="file" id="beb-foto-file" accept="image/*" style="width:100px;font-size:12px" onchange="handleFotoUpload('beb-foto','beb-foto-preview')">
+            </div>
+            <div id="beb-foto-preview" style="margin-top:4px;max-width:100px;display:none"></div>
+          </div>
         </div>
+        <div class="field"><label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="beb-ativo"
+                checked> Ativo no cardápio</label></div>
       </div>
       <div class="modal-foot">
         <button class="btn btn-ghost" onclick="closeModal('modal-bebida')">Cancelar</button>
@@ -1495,7 +1774,8 @@
       let estoque = toArray(db.estoque) || [];
       // Migra i3 (Molho de tomate) → i12 (Tomate Pelado)
       // Migra insumos de g → kg (divide qtd por 1000)
-      const pizzas = (toArray(db.pizzas) || base.pizzas).map(p => {
+      const rawPizzas = toArray(db.pizzas);
+      const pizzas = (rawPizzas && rawPizzas.length ? rawPizzas : base.pizzas).map(p => {
         if (p.ingredientes) {
           p.ingredientes = p.ingredientes.map(ing => {
             let id = ing.insumoId === "i3" ? "i12" : ing.insumoId;
@@ -1605,12 +1885,12 @@
         if (data && typeof data === "object" && Object.keys(data).length > 0) {
           DB = normalizeDb(data);
           localStorage.setItem(STORE_KEY, JSON.stringify(DB));
-          if (document.getElementById('app').style.display !== 'none') renderAll();
+          renderAll();
           toast('✅ Dados do servidor carregados.');
           return true;
         }
         console.warn('Servidor retornou dados vazios; mantendo dados locais.');
-        if (document.getElementById('app').style.display !== 'none') renderAll();
+        renderAll();
         return false;
       } catch (e) {
         console.warn("Não foi possível carregar dados do servidor:", e);
@@ -1642,6 +1922,8 @@
 
     // Corrige listeners e foco inicial após DOM pronto
     window.addEventListener('DOMContentLoaded', function () {
+      // Mobile sidebar: fecha ao clicar no overlay
+      document.getElementById('sidebar-overlay')?.addEventListener('click', toggleSidebar);
       const pinInputs = document.querySelectorAll('.pin-digit');
       pinInputs.forEach((el, i) => {
         // Remove listeners antigos para evitar duplicidade
@@ -1703,8 +1985,17 @@
       }
     }
 
+    // ---- MOBILE SIDEBAR ----
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.getElementById('sidebar-overlay').classList.toggle('open');
+    }
+
     // ---- TABS ----
     function showTab(id) {
+      // Fecha sidebar no mobile
+      document.getElementById('sidebar')?.classList.remove('open');
+      document.getElementById('sidebar-overlay')?.classList.remove('open');
       document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
       document.querySelectorAll(".nav-btn").forEach(el => el.classList.remove("active"));
       document.getElementById("tab-" + id).classList.add("active");
@@ -1898,6 +2189,30 @@
         toast('⚠️ Erro ao excluir pedido.');
       }
     }
+    // Sincroniza pedidos FINALIZADOS (status = Entregue) com o DB.vendas para análise
+    function syncPedidosToVendas(pedidos) {
+      if (!pedidos || !pedidos.length) return;
+      DB.vendas = DB.vendas || [];
+      const trackingExistentes = new Set(DB.vendas.filter(v => v.trackingId).map(v => v.trackingId));
+      let novos = 0;
+      pedidos.forEach(p => {
+        if (!p.trackingId || p.status !== "Entregue" || trackingExistentes.has(p.trackingId)) return;
+        const data = p.data || new Date().toISOString();
+        (p.carrinho || []).forEach(item => {
+          const pizzaId = item.id && DB.pizzas.some(x => x.id === item.id)
+            ? item.id
+            : DB.pizzas.find(x => x.nome.toLowerCase() === (item.nome || '').toLowerCase())?.id;
+          if (pizzaId) {
+            DB.vendas.push({ pizzaId, qtd: item.qtd || 1, data, trackingId: p.trackingId });
+            novos++;
+          }
+        });
+      });
+      if (novos > 0) {
+        save(DB);
+      }
+    }
+
     async function loadPedidosFromServer() {
       try {
         const resp = await fetch(`${API_HOST}/api/admin/pedidos`, {
@@ -1927,7 +2242,11 @@
           }).catch(e => console.warn('Erro ao salvar migração:', e));
         }
         cachedPedidos = pedidos;
+        syncPedidosToVendas(pedidos);
         renderPedidos();
+        if (document.getElementById('tab-dashboard').classList.contains('active')) renderDashboard();
+        if (document.getElementById('tab-analise').classList.contains('active')) renderAnalise();
+        if (document.getElementById('tab-vendas').classList.contains('active')) renderVendas();
         toast('✅ Pedidos carregados do servidor.');
       } catch (e) {
         console.warn('Não foi possível carregar pedidos:', e);
@@ -1962,6 +2281,29 @@
     function fmtP(n) { return n.toFixed(1).replace(".", ",") + "%" }
     function uid() { return "x" + Math.random().toString(36).slice(2, 9) }
 
+    // ---- FOTO UPLOAD ----
+    function handleFotoUpload(inputId, previewId) {
+      const file = document.getElementById(inputId.replace('-foto', '-foto-file')).files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        document.getElementById(inputId).value = e.target.result;
+        showFotoPreview(inputId, previewId);
+      };
+      reader.readAsDataURL(file);
+    }
+    function showFotoPreview(inputId, previewId) {
+      const url = document.getElementById(inputId).value;
+      const el = document.getElementById(previewId);
+      if (url && (url.startsWith('http') || url.startsWith('data:image'))) {
+        el.innerHTML = `<img src="${url}" style="width:100%;border-radius:4px;border:1px solid var(--border)">`;
+        el.style.display = 'block';
+      } else {
+        el.style.display = 'none';
+        el.innerHTML = '';
+      }
+    }
+
     // ---- DASHBOARD ----
     function renderDashboard() {
       const pizzas = DB.pizzas.filter(p => p.ativo);
@@ -1971,14 +2313,25 @@
       const worst = cmvs.length ? cmvs.reduce((a, b) => a.pct > b.pct ? a : b) : null;
       const totalCats = [...new Set(DB.pizzas.map(p => p.categoria).filter(c => c !== "Bebidas"))].length;
       const bebAtivas = (DB.bebidas || []).filter(b => b.ativo).length;
+      // ---- Dados de vendas ----
+      const vendas = DB.vendas || [];
+      const totalVendas = vendas.length;
+      const faturamento = vendas.reduce((s, v) => {
+        const p = DB.pizzas.find(x => x.id === v.pizzaId);
+        return s + (p ? p.preco * v.qtd : 0);
+      }, 0);
+      const totalPizzasVendidas = vendas.reduce((s, v) => s + v.qtd, 0);
+      const ticket = totalVendas > 0 ? faturamento / totalVendas : 0;
+      const pedidosPendentes = cachedPedidos.filter(p => p.status !== "Entregue" && p.status !== "Cancelado").length;
       document.getElementById("dash-stats").innerHTML = `
     <div class="stat-card"><div class="stat-label">Pizzas no cardápio</div><div class="stat-value">${DB.pizzas.filter(p => p.ativo).length}</div><div class="stat-sub">${DB.pizzas.length} cadastradas</div></div>
     <div class="stat-card"><div class="stat-label">Bebidas no cardápio</div><div class="stat-value">${bebAtivas}</div><div class="stat-sub">${(DB.bebidas || []).length} cadastradas</div></div>
+    <div class="stat-card"><div class="stat-label">Pedidos pendentes</div><div class="stat-value" style="color:${pedidosPendentes > 0 ? 'var(--terracotta)' : 'var(--green-olive)'}">${pedidosPendentes}</div><div class="stat-sub">${cachedPedidos.length} total recebidos</div></div>
+    <div class="stat-card"><div class="stat-label">Faturamento total</div><div class="stat-value" style="color:var(--green-olive)">${fmtR(faturamento)}</div><div class="stat-sub">${totalPizzasVendidas} pizzas vendidas</div></div>
+    <div class="stat-card"><div class="stat-label">Ticket médio</div><div class="stat-value">${fmtR(ticket)}</div><div class="stat-sub">${totalVendas} pedidos</div></div>
     <div class="stat-card"><div class="stat-label">CMV médio</div><div class="stat-value" style="color:${cmvColor(avgCmv)}">${fmtP(avgCmv)}</div><div class="stat-sub">Meta ideal: ≤ 35%</div></div>
-    <div class="stat-card"><div class="stat-label">Menor CMV 🏆</div><div class="stat-value" style="font-size:16px;margin-top:4px">${best ? best.nome : "—"}</div><div class="stat-sub">${best ? fmtP(best.pct) : "—"}</div></div>
-    <div class="stat-card"><div class="stat-label">Maior CMV ⚠️</div><div class="stat-value" style="font-size:16px;margin-top:4px">${worst ? worst.nome : "—"}</div><div class="stat-sub">${worst ? fmtP(worst.pct) : "—"}</div></div>
-    <div class="stat-card"><div class="stat-label">Insumos</div><div class="stat-value">${DB.insumos.length}</div><div class="stat-sub">${totalCats} categorias</div></div>
   `;
+      // ---- CMV por pizza ----
       const sorted = [...cmvs].sort((a, b) => a.pct - b.pct);
       document.getElementById("dash-cmv-list").innerHTML = sorted.map(p => {
         let ingList = p.ingredientes.map(ing => {
@@ -1986,7 +2339,7 @@
           return ins ? `<div style='font-size:12px;color:var(--muted)'>${ins.nome}: <b>${ing.quantidade}</b> ${ins.unidade} <span style='color:#888'>(${fmtR(ins.custo)} / ${ins.unidade})</span></div>` : '';
         }).join("");
         return `<div class="cmv-table-row">
-      <span style="font-weight:600">${p.nome}<br>${ingList}</span>
+      <span style="font-weight:600">${p.foto ? `<img src="${p.foto}" style="width:24px;height:24px;border-radius:4px;object-fit:cover;vertical-align:middle;margin-right:6px">` : ''}${p.nome}<br>${ingList}</span>
       <span>${fmtR(p.custo)}</span>
       <span>${fmtR(p.preco)}</span>
       <span style="color:var(--green-olive)">${fmtR(p.margem)}</span>
@@ -1997,6 +2350,29 @@
       </div></span>
     </div>`;
       }).join("") || "<div style='padding:20px;text-align:center;color:var(--muted);font-size:13px'>Nenhuma pizza com ingredientes cadastrados.</div>";
+      // ---- Ranking de pizzas mais vendidas ----
+      const rank = {};
+      vendas.forEach(v => {
+        if (!rank[v.pizzaId]) rank[v.pizzaId] = 0;
+        rank[v.pizzaId] += v.qtd;
+      });
+      const topPizzas = Object.entries(rank)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5);
+      const rankHtml = document.getElementById('dash-ranking');
+      if (rankHtml) {
+        rankHtml.innerHTML = topPizzas.length ? topPizzas.map(([id, qtd], i) => {
+          const p = DB.pizzas.find(x => x.id === id);
+          if (!p) return '';
+          const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i + 1}º`;
+          const receita = qtd * p.preco;
+          return `<div class="cmv-table-row">
+            <span style="font-weight:600">${medal} ${p.nome}</span>
+            <span>${qtd} vendidas</span>
+            <span>${fmtR(receita)}</span>
+          </div>`;
+        }).join('') : '<div style="padding:16px;text-align:center;color:var(--muted);font-size:13px">Nenhuma venda registrada ainda.</div>';
+      }
     }
 
     // ---- INSUMOS ----
@@ -2035,7 +2411,13 @@
       const rows = DB.pizzas.map(p => {
         const { custo, pct, margem } = calcCmv(p);
         return `<tr>
-      <td><strong>${p.nome}</strong>${!p.ativo ? "<span class='badge badge-gray' style='margin-left:6px'>Inativo</span>" : ""}</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px">
+          ${p.foto ? `<img src="${p.foto}" style="width:32px;height:32px;border-radius:4px;object-fit:cover;border:1px solid var(--border)">` : '<span style="font-size:20px">🍕</span>'}
+          <strong>${p.nome}</strong>
+        </div>
+        ${!p.ativo ? "<span class='badge badge-gray' style='margin-left:6px'>Inativo</span>" : ""}
+      </td>
       <td><span class="badge badge-gray">${p.categoria}</span></td>
       <td>${fmtR(custo)}</td>
       <td>${fmtR(p.preco)}</td>
@@ -2203,9 +2585,12 @@
       document.getElementById("pz-cat").value = "Tradicionais";
       document.getElementById("pz-preco").value = "";
       document.getElementById("pz-foto").value = "";
+      document.getElementById("pz-foto-file").value = "";
       document.getElementById("pz-ativo").checked = true;
       document.getElementById("ing-rows").innerHTML = "";
       document.getElementById("comp-container").innerHTML = "";
+      document.getElementById("pz-foto-preview").style.display = 'none';
+      document.getElementById("pz-foto-preview").innerHTML = '';
       ingRowCount = 0;
       compCount = 0;
       updateCmvPreview();
@@ -2219,6 +2604,7 @@
       document.getElementById("pz-cat").value = p.categoria;
       document.getElementById("pz-preco").value = p.preco;
       document.getElementById("pz-foto").value = p.foto || "";
+      document.getElementById("pz-foto-file").value = "";
       document.getElementById("pz-ativo").checked = p.ativo;
       document.getElementById("ing-rows").innerHTML = "";
       ingRowCount = 0;
@@ -2226,6 +2612,7 @@
       document.getElementById("comp-container").innerHTML = "";
       compCount = 0;
       (p.complementos || []).forEach(c => addComp(c));
+      showFotoPreview('pz-foto', 'pz-foto-preview');
       updateCmvPreview();
       openModal("modal-pizza");
     }
@@ -2547,7 +2934,13 @@
     function renderBebidas() {
       document.getElementById("bebidas-list").innerHTML = (DB.bebidas || []).map(b => `
         <tr>
-          <td><strong>${b.nome}</strong>${!b.ativo ? '<span class="badge badge-gray" style="margin-left:6px">Inativo</span>' : ''}</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:8px">
+              ${b.foto ? `<img src="${b.foto}" style="width:32px;height:32px;border-radius:4px;object-fit:cover;border:1px solid var(--border)">` : '<span style="font-size:24px">🥤</span>'}
+              <strong>${b.nome}</strong>
+            </div>
+            ${!b.ativo ? '<span class="badge badge-gray" style="margin-left:6px">Inativo</span>' : ''}
+          </td>
           <td>${fmtR(b.preco)}</td>
           <td>
             <button class="btn btn-sm btn-ghost" onclick="editBebida('${b.id}')">✏️</button>
@@ -2561,7 +2954,11 @@
       document.getElementById("beb-edit-id").value = "";
       document.getElementById("beb-nome").value = "";
       document.getElementById("beb-preco").value = "";
+      document.getElementById("beb-foto").value = "";
+      document.getElementById("beb-foto-file").value = "";
       document.getElementById("beb-ativo").checked = true;
+      document.getElementById("beb-foto-preview").style.display = 'none';
+      document.getElementById("beb-foto-preview").innerHTML = '';
       openModal("modal-bebida");
     }
     function editBebida(id) {
@@ -2571,21 +2968,25 @@
       document.getElementById("beb-edit-id").value = id;
       document.getElementById("beb-nome").value = b.nome;
       document.getElementById("beb-preco").value = b.preco;
+      document.getElementById("beb-foto").value = b.foto || "";
+      document.getElementById("beb-foto-file").value = "";
       document.getElementById("beb-ativo").checked = b.ativo !== false;
+      showFotoPreview('beb-foto', 'beb-foto-preview');
       openModal("modal-bebida");
     }
     function saveBebida() {
       const editId = document.getElementById("beb-edit-id").value;
       const nome = document.getElementById("beb-nome").value.trim();
       const preco = parseNum(document.getElementById("beb-preco").value);
+      const foto = document.getElementById("beb-foto").value.trim();
       const ativo = document.getElementById("beb-ativo").checked;
       if (!nome || !preco || preco <= 0) { toast("⚠️ Preencha nome e preço."); return }
       DB.bebidas = DB.bebidas || [];
       if (editId) {
         const b = DB.bebidas.find(x => x.id === editId);
-        if (b) { b.nome = nome; b.preco = preco; b.ativo = ativo }
+        if (b) { b.nome = nome; b.preco = preco; b.foto = foto; b.ativo = ativo }
       } else {
-        DB.bebidas.push({ id: uid(), nome, preco, ativo });
+        DB.bebidas.push({ id: uid(), nome, preco, foto, ativo });
       }
       save(DB); renderBebidas(); closeModal("modal-bebida"); toast("✅ Bebida salva!");
     }

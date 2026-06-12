@@ -138,7 +138,6 @@
     .hero>* {
       position: relative;
       z-index: 1;
-      text-shadow: 0 1px 6px rgba(0, 0, 0, .5)
     }
 
     .hero::before {
@@ -166,7 +165,6 @@
       font-size: clamp(28px, 5vw, 48px);
       line-height: 1.2;
       margin-bottom: 12px;
-      text-shadow: 0 2px 8px rgba(0, 0, 0, .4)
     }
 
     .hero h1 em {
@@ -182,6 +180,9 @@
     }
 
     .hero-tags {
+      position: absolute;
+      bottom: 10px;
+      right: 0;
       display: flex;
       gap: 10px;
       justify-content: center;
@@ -189,11 +190,12 @@
     }
 
     .hero-tag {
-      background: rgba(255, 255, 255, .15);
+      background: rgb(90, 107, 69, 0.8);
       border: 1px solid rgba(255, 255, 255, .3);
       border-radius: 20px;
       padding: 6px 14px;
-      font-size: 13px
+      font-size: 13px;
+      color: #fff;
     }
 
     .cats {
@@ -796,17 +798,20 @@
       border: 1px solid var(--border);
       padding: 24px
     }
+
     .half-selector h3 {
       font-family: var(--font-display);
       font-size: 18px;
       margin-bottom: 16px
     }
+
     .flavor-grid {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
       margin-bottom: 20px
     }
+
     .flavor-card {
       flex: 1 1 180px;
       min-width: 0;
@@ -818,29 +823,35 @@
       text-align: center;
       transition: all .2s
     }
+
     .flavor-card:hover {
       border-color: var(--gold)
     }
+
     .flavor-card.selected-1 {
       border-color: var(--terracotta);
       background: #f5e0d6;
       box-shadow: 0 0 0 2px var(--terracotta)
     }
+
     .flavor-card.selected-2 {
       border-color: var(--green-olive);
       background: #e0ebe0;
       box-shadow: 0 0 0 2px var(--green-olive)
     }
+
     .flavor-card .flavor-name {
       font-weight: 600;
       font-size: 14px;
       margin-bottom: 4px
     }
+
     .flavor-card .flavor-price {
       font-size: 13px;
       color: var(--terracotta);
       font-weight: 700
     }
+
     .flavor-card .flavor-badge {
       display: inline-block;
       font-size: 10px;
@@ -849,14 +860,17 @@
       border-radius: 10px;
       margin-top: 6px
     }
+
     .flavor-card .flavor-badge.s1 {
       background: var(--terracotta);
       color: #fff
     }
+
     .flavor-card .flavor-badge.s2 {
       background: var(--green-olive);
       color: #fff
     }
+
     .half-preview {
       background: var(--cream);
       border-radius: var(--radius-sm);
@@ -864,21 +878,25 @@
       text-align: center;
       margin-bottom: 16px
     }
+
     .half-preview .half-combo {
       font-size: 18px;
       font-weight: 700;
       margin-bottom: 4px
     }
+
     .half-preview .half-price {
       font-size: 24px;
       font-weight: 700;
       color: var(--terracotta)
     }
+
     .half-preview .half-price span {
       font-size: 14px;
       font-weight: 400;
       color: var(--muted)
     }
+
     .add-half-btn {
       width: 100%;
       background: var(--terracotta);
@@ -891,53 +909,64 @@
       cursor: pointer;
       transition: background .2s
     }
+
     .add-half-btn:hover {
       background: var(--green-dark)
     }
+
     .add-half-btn:disabled {
       opacity: .5;
       cursor: default
     }
+
     /* ---- TRACKING ---- */
     .tracking-result {
       max-height: 400px;
       overflow-y: auto
     }
+
     .tracking-card {
       background: var(--cream);
       border-radius: var(--radius-sm);
       padding: 16px;
       margin-bottom: 12px
     }
+
     .tracking-card:last-child {
       margin-bottom: 0
     }
+
     .tracking-id {
       font-size: 13px;
       font-weight: 700;
       color: var(--muted);
       margin-bottom: 4px
     }
+
     .tracking-id span {
       color: var(--terracotta)
     }
+
     .tracking-items {
       font-size: 13px;
       color: var(--muted);
       margin-bottom: 8px;
       line-height: 1.4
     }
+
     .tracking-total {
       font-size: 15px;
       font-weight: 700;
       color: var(--terracotta);
       margin-bottom: 10px
     }
+
     .status-bar {
       display: flex;
       gap: 4px;
       margin-top: 8px
     }
+
     .status-step {
       flex: 1;
       text-align: center;
@@ -949,39 +978,48 @@
       color: #9CA3AF;
       transition: all .3s
     }
+
     .status-step.done {
       background: var(--green-olive);
       color: #fff
     }
+
     .status-step.cancelled {
       background: #ccc;
       color: #666;
       text-decoration: line-through
     }
+
     .status-step.s-active {
       background: #3B82F6;
       color: #fff
     }
+
     .status-step.s-active-1 {
       background: #F97316;
       color: #fff
     }
+
     .status-step.s-active-2 {
       background: #10B981;
       color: #fff
     }
+
     .status-step.s-active-3 {
       background: #6B7280;
       color: #fff
     }
+
     .tracking-empty {
       text-align: center;
       padding: 40px 20px;
       color: var(--muted)
     }
+
     .tracking-search {
       margin-bottom: 16px
     }
+
     /* ---- AGENDAMENTO ---- */
     .agendamento-toggle {
       display: flex;
@@ -992,39 +1030,257 @@
       font-size: 14px;
       font-weight: 600
     }
+
     .agendamento-toggle input {
       width: 18px;
       height: 18px;
       accent-color: var(--terracotta)
     }
+
     .agendamento-fields {
       display: none;
       gap: 12px;
       margin-bottom: 16px
     }
+
     .agendamento-fields.show {
       display: flex
     }
+
     .agendamento-fields .field {
       flex: 1;
       min-width: 0;
       margin-bottom: 0
     }
 
-    @media(max-width:600px) {
+    @media(max-width:768px) {
+      .header-inner {
+        padding: 0 12px;
+        height: 56px
+      }
+
+      .logo-text {
+        font-size: 16px
+      }
+
+      .logo-icon {
+        width: 30px;
+        height: 30px;
+        font-size: 15px
+      }
+
+      .cart-btn {
+        padding: 8px 12px;
+        font-size: 13px
+      }
+
+      .cart-btn:nth-child(1) {
+        padding: 8px 10px;
+        font-size: 12px
+      }
+
       .hero {
-        padding: 40px 20px 32px
+        padding: 32px 16px 28px;
+        min-height: 160px
+      }
+
+      .hero h1 {
+        font-size: clamp(22px, 6vw, 32px)
+      }
+
+      .hero p {
+        font-size: 14px;
+        margin-bottom: 16px
+      }
+
+      .hero-tags {
+        position: relative;
+        bottom: auto;
+        right: auto;
+        margin-top: 16px
+      }
+
+      .hero-tag {
+        font-size: 11px;
+        padding: 4px 10px
+      }
+
+      .cats-inner {
+        padding: 0 12px
+      }
+
+      .cat-btn {
+        padding: 12px 14px;
+        font-size: 13px
+      }
+
+      main {
+        padding: 20px 12px 100px
+      }
+
+      .section-title {
+        font-size: 18px
+      }
+
+      .menu-grid>* {
+        flex: 1 1 100%
+      }
+
+      .card-emoji {
+        font-size: 36px;
+        padding: 16px;
+        min-height: 72px
+      }
+
+      .cart-panel {
+        width: 100vw
+      }
+
+      .cart-header {
+        padding: 14px 16px
+      }
+
+      .cart-items {
+        padding: 12px
+      }
+
+      .cart-footer {
+        padding: 12px
+      }
+
+      .checkout-btn {
+        padding: 12px;
+        font-size: 14px
+      }
+
+      .modal {
+        max-width: 100%;
+        border-radius: 12px 12px 0 0;
+        margin-top: auto;
+        max-height: 92vh
+      }
+
+      .modal-bg {
+        align-items: flex-end;
+        padding: 0
+      }
+
+      .modal-body {
+        padding: 16px
+      }
+
+      .modal-header {
+        padding: 16px
       }
 
       .field-row {
-        grid-template-columns: 1fr
+        flex-direction: column;
+        gap: 0
       }
 
-      .menu-grid {
-        grid-template-columns: 1fr
+      .payment-options {
+        flex-direction: row;
+        gap: 6px
       }
-      .agendamento-fields.show {
-        flex-direction: column
+
+      .pay-option label {
+        padding: 10px 8px;
+        font-size: 12px
+      }
+
+      .whatsapp-btn {
+        padding: 12px;
+        font-size: 14px
+      }
+
+      .order-summary {
+        padding: 12px
+      }
+
+      .field {
+        margin-bottom: 12px
+      }
+
+      .field input, .field select, .field textarea {
+        padding: 9px 12px;
+        font-size: 14px
+      }
+
+      .flavor-card {
+        flex: 1 1 140px;
+        padding: 10px
+      }
+
+      .flavor-card .flavor-name {
+        font-size: 12px
+      }
+
+      .half-selector {
+        padding: 16px
+      }
+
+      .half-selector h3 {
+        font-size: 15px
+      }
+
+      .success-screen h2 {
+        font-size: 22px
+      }
+
+      .success-icon {
+        font-size: 56px
+      }
+
+      .tracking-card {
+        padding: 12px
+      }
+
+      .status-step {
+        font-size: 8px;
+        padding: 4px 2px
+      }
+    }
+
+    @media(max-width:400px) {
+      .cart-btn {
+        padding: 6px 10px;
+        font-size: 12px
+      }
+
+      .cart-btn:nth-child(1) {
+        padding: 6px 8px;
+        font-size: 11px
+      }
+
+      .header-inner {
+        height: 50px
+      }
+
+      .card-body {
+        padding: 12px
+      }
+
+      .card-price {
+        font-size: 16px
+      }
+
+      .hero-tag {
+        font-size: 10px;
+        padding: 3px 8px
+      }
+
+      .payment-options {
+        flex-direction: column;
+        gap: 4px
+      }
+
+      .flavor-card {
+        flex: 1 1 120px;
+        padding: 8px
+      }
+
+      .flavor-grid {
+        gap: 6px
       }
     }
   </style>
@@ -1041,7 +1297,8 @@
         <div class="logo-text" id="logo-name">Tonda <span>Pizzaria</span></div>
       </div>
       <div style="display:flex;gap:6px;align-items:center">
-        <button class="cart-btn" onclick="openTracking()" style="background:var(--green-olive);font-size:13px;padding:10px 12px" title="Acompanhar pedido">
+        <button class="cart-btn" onclick="openTracking()"
+          style="background:var(--green-olive);font-size:13px;padding:10px 12px" title="Acompanhar pedido">
           📋
         </button>
         <button class="cart-btn" onclick="toggleCart()">
@@ -1166,7 +1423,8 @@
           <label for="inp-tracking-tel">Seu WhatsApp</label>
           <div class="field-row">
             <input type="tel" id="inp-tracking-tel" placeholder="(11) 99999-9999" oninput="maskPhone(this)">
-            <button class="checkout-btn" onclick="buscarPedidos()" style="flex:0 0 auto;padding:10px 16px;width:auto">Buscar</button>
+            <button class="checkout-btn" onclick="buscarPedidos()"
+              style="flex:0 0 auto;padding:10px 16px;width:auto">Buscar</button>
           </div>
         </div>
         <div id="tracking-results">
@@ -1223,6 +1481,7 @@
         agendado: agendar,
         dataAgendada,
         carrinho: Object.values(cart).map(i => ({
+          id: i.id,
           nome: i.nome,
           qtd: i.qty,
           preco: i.preco,
@@ -1382,19 +1641,19 @@
         <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Selecione o <strong>1º sabor</strong> e depois o <strong>2º sabor</strong>. O preço será o do mais caro.</p>
         <div class="flavor-grid">
           ${pizzas.map(p => {
-            const selectedClass = sel1 && sel1.id === p.id ? "selected-1" : (sel2 && sel2.id === p.id ? "selected-2" : "");
-            const badge = sel1 && sel1.id === p.id ? '<span class="flavor-badge s1">1º Sabor</span>' : (sel2 && sel2.id === p.id ? '<span class="flavor-badge s2">2º Sabor</span>' : '');
-            return `<div class="flavor-card ${selectedClass}" onclick="selectHalf('${p.id}')">
+        const selectedClass = sel1 && sel1.id === p.id ? "selected-1" : (sel2 && sel2.id === p.id ? "selected-2" : "");
+        const badge = sel1 && sel1.id === p.id ? '<span class="flavor-badge s1">1º Sabor</span>' : (sel2 && sel2.id === p.id ? '<span class="flavor-badge s2">2º Sabor</span>' : '');
+        return `<div class="flavor-card ${selectedClass}" onclick="selectHalf('${p.id}')">
               <div class="flavor-name">${p.nome}</div>
               <div class="flavor-price">R$ ${p.preco.toFixed(2).replace(".", ",")}</div>
               ${badge}
             </div>`;
-          }).join("")}
+      }).join("")}
         </div>
         <div class="half-preview">
           ${sel1 && sel2 ? `<div class="half-combo">1/2 ${sel1.nome} + 1/2 ${sel2.nome}</div>
-            <div class="half-price"><span>Total: </span>R$ ${preco.toFixed(2).replace(".", ",")}</div>` 
-            : sel1 ? `<div style="font-size:16px;color:var(--muted)">1º sabor: <strong>${sel1.nome}</strong> — agora escolha o 2º sabor</div>`
+            <div class="half-price"><span>Total: </span>R$ ${preco.toFixed(2).replace(".", ",")}</div>`
+          : sel1 ? `<div style="font-size:16px;color:var(--muted)">1º sabor: <strong>${sel1.nome}</strong> — agora escolha o 2º sabor</div>`
             : `<div style="font-size:16px;color:var(--muted)">Clique em uma pizza para selecionar o 1º sabor</div>`}
         </div>
         <button class="add-half-btn" onclick="addHalfToCart()" ${sel1 && sel2 ? '' : 'disabled'}>${sel1 && sel2 ? 'Adicionar ao carrinho →' : 'Selecione 2 sabores'}</button>
@@ -1473,8 +1732,9 @@
     <div class="menu-grid">
       ${BEBIDAS.map(item => {
         const qty = cart[item.id]?.qty || 0;
+        const bebImg = item.foto ? `style="background:url('${item.foto}') center/cover no-repeat;font-size:0"` : "";
         return `<div class="card">
-          <div class="card-emoji">🥤</div>
+          <div class="card-emoji" ${bebImg}>${item.foto ? "" : "🥤"}</div>
           <div class="card-body">
             <div class="card-name">${item.nome}</div>
             <div class="card-footer">
@@ -1721,7 +1981,7 @@
           <div class="tracking-items">${itensStr || '—'}</div>
           <div class="tracking-total">${p.total ? 'R$ ' + p.total.toFixed(2).replace('.', ',') : '—'}</div>
           <div class="status-bar">
-            ${isCancelled ? `<div class="status-step cancelled" style="flex:1">❌ Cancelado</div>` 
+            ${isCancelled ? `<div class="status-step cancelled" style="flex:1">❌ Cancelado</div>`
             : STATUS_STEPS.map((s, i) => `<div class="status-step ${i < idx ? 'done' : (i === idx ? 's-active' + (i > 0 ? '-' + i : '') : '')}">${s}</div>`).join("")}
           </div>
         </div>`;
