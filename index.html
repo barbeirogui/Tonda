@@ -789,6 +789,228 @@
       }
     }
 
+    /* ---- MEIA A MEIO ---- */
+    .half-selector {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 24px
+    }
+    .half-selector h3 {
+      font-family: var(--font-display);
+      font-size: 18px;
+      margin-bottom: 16px
+    }
+    .flavor-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px
+    }
+    .flavor-card {
+      flex: 1 1 180px;
+      min-width: 0;
+      background: var(--cream);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      cursor: pointer;
+      text-align: center;
+      transition: all .2s
+    }
+    .flavor-card:hover {
+      border-color: var(--gold)
+    }
+    .flavor-card.selected-1 {
+      border-color: var(--terracotta);
+      background: #f5e0d6;
+      box-shadow: 0 0 0 2px var(--terracotta)
+    }
+    .flavor-card.selected-2 {
+      border-color: var(--green-olive);
+      background: #e0ebe0;
+      box-shadow: 0 0 0 2px var(--green-olive)
+    }
+    .flavor-card .flavor-name {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 4px
+    }
+    .flavor-card .flavor-price {
+      font-size: 13px;
+      color: var(--terracotta);
+      font-weight: 700
+    }
+    .flavor-card .flavor-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 10px;
+      margin-top: 6px
+    }
+    .flavor-card .flavor-badge.s1 {
+      background: var(--terracotta);
+      color: #fff
+    }
+    .flavor-card .flavor-badge.s2 {
+      background: var(--green-olive);
+      color: #fff
+    }
+    .half-preview {
+      background: var(--cream);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      text-align: center;
+      margin-bottom: 16px
+    }
+    .half-preview .half-combo {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 4px
+    }
+    .half-preview .half-price {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--terracotta)
+    }
+    .half-preview .half-price span {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--muted)
+    }
+    .add-half-btn {
+      width: 100%;
+      background: var(--terracotta);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s
+    }
+    .add-half-btn:hover {
+      background: var(--green-dark)
+    }
+    .add-half-btn:disabled {
+      opacity: .5;
+      cursor: default
+    }
+    /* ---- TRACKING ---- */
+    .tracking-result {
+      max-height: 400px;
+      overflow-y: auto
+    }
+    .tracking-card {
+      background: var(--cream);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin-bottom: 12px
+    }
+    .tracking-card:last-child {
+      margin-bottom: 0
+    }
+    .tracking-id {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 4px
+    }
+    .tracking-id span {
+      color: var(--terracotta)
+    }
+    .tracking-items {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 8px;
+      line-height: 1.4
+    }
+    .tracking-total {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--terracotta);
+      margin-bottom: 10px
+    }
+    .status-bar {
+      display: flex;
+      gap: 4px;
+      margin-top: 8px
+    }
+    .status-step {
+      flex: 1;
+      text-align: center;
+      padding: 6px 4px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 600;
+      background: #E5E7EB;
+      color: #9CA3AF;
+      transition: all .3s
+    }
+    .status-step.done {
+      background: var(--green-olive);
+      color: #fff
+    }
+    .status-step.cancelled {
+      background: #ccc;
+      color: #666;
+      text-decoration: line-through
+    }
+    .status-step.s-active {
+      background: #3B82F6;
+      color: #fff
+    }
+    .status-step.s-active-1 {
+      background: #F97316;
+      color: #fff
+    }
+    .status-step.s-active-2 {
+      background: #10B981;
+      color: #fff
+    }
+    .status-step.s-active-3 {
+      background: #6B7280;
+      color: #fff
+    }
+    .tracking-empty {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--muted)
+    }
+    .tracking-search {
+      margin-bottom: 16px
+    }
+    /* ---- AGENDAMENTO ---- */
+    .agendamento-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600
+    }
+    .agendamento-toggle input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--terracotta)
+    }
+    .agendamento-fields {
+      display: none;
+      gap: 12px;
+      margin-bottom: 16px
+    }
+    .agendamento-fields.show {
+      display: flex
+    }
+    .agendamento-fields .field {
+      flex: 1;
+      min-width: 0;
+      margin-bottom: 0
+    }
+
     @media(max-width:600px) {
       .hero {
         padding: 40px 20px 32px
@@ -800,6 +1022,9 @@
 
       .menu-grid {
         grid-template-columns: 1fr
+      }
+      .agendamento-fields.show {
+        flex-direction: column
       }
     }
   </style>
@@ -815,9 +1040,14 @@
         <div class="logo-icon">🍕</div>
         <div class="logo-text" id="logo-name">Tonda <span>Pizzaria</span></div>
       </div>
-      <button class="cart-btn" onclick="toggleCart()">
-        🛒 Carrinho <span class="cart-badge" id="cart-badge">0</span>
-      </button>
+      <div style="display:flex;gap:6px;align-items:center">
+        <button class="cart-btn" onclick="openTracking()" style="background:var(--green-olive);font-size:13px;padding:10px 12px" title="Acompanhar pedido">
+          📋
+        </button>
+        <button class="cart-btn" onclick="toggleCart()">
+          🛒 Carrinho <span class="cart-badge" id="cart-badge">0</span>
+        </button>
+      </div>
     </div>
   </header>
   <section class="hero">
@@ -885,6 +1115,14 @@
           <div class="field"><label for="inp-comp">Complemento</label><input type="text" id="inp-comp"
               placeholder="Apto 12, Bloco B"></div>
         </div>
+        <div class="agendamento-toggle">
+          <input type="checkbox" id="inp-agendar" onchange="toggleAgendamento()">
+          <label for="inp-agendar">📅 Agendar entrega para outro dia/horário</label>
+        </div>
+        <div class="agendamento-fields" id="agendamento-fields">
+          <div class="field"><label>Data *</label><input type="date" id="inp-agend-data"></div>
+          <div class="field"><label>Horário *</label><input type="time" id="inp-agend-horario"></div>
+        </div>
         <div class="field">
           <label>Forma de pagamento *</label>
           <div class="payment-options">
@@ -913,8 +1151,32 @@
   <div class="success-screen" id="success">
     <div class="success-icon">✅</div>
     <h2>Pedido enviado!</h2>
-    <p>Sua mensagem foi aberta no WhatsApp. Confirme o envio para finalizar o pedido.</p>
+    <p id="success-msg">Sua mensagem foi aberta no WhatsApp. Confirme o envio para finalizar o pedido.</p>
+    <div id="success-tracking" style="margin-bottom:16px;font-size:14px;color:var(--muted)"></div>
     <button class="back-btn" onclick="resetAll()">Fazer novo pedido</button>
+  </div>
+  <div class="modal-bg" id="tracking-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>📋 Acompanhar Pedido</h2>
+        <button class="close-btn" onclick="closeTracking()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="field tracking-search">
+          <label for="inp-tracking-tel">Seu WhatsApp</label>
+          <div class="field-row">
+            <input type="tel" id="inp-tracking-tel" placeholder="(11) 99999-9999" oninput="maskPhone(this)">
+            <button class="checkout-btn" onclick="buscarPedidos()" style="flex:0 0 auto;padding:10px 16px;width:auto">Buscar</button>
+          </div>
+        </div>
+        <div id="tracking-results">
+          <div class="tracking-empty">
+            <div style="font-size:40px;margin-bottom:12px">🔍</div>
+            <p>Digite seu WhatsApp para acompanhar seus pedidos.</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <script>
     // Validação e feedback do formulário de pedido
@@ -941,6 +1203,13 @@
     }
 
     function buildPedido() {
+      const agendar = document.getElementById('inp-agendar').checked;
+      let dataAgendada = null;
+      if (agendar) {
+        const d = document.getElementById('inp-agend-data').value;
+        const h = document.getElementById('inp-agend-horario').value;
+        if (d && h) dataAgendada = new Date(d + 'T' + h).toISOString();
+      }
       return {
         nome: document.getElementById('inp-nome').value,
         tel: document.getElementById('inp-tel').value,
@@ -951,10 +1220,14 @@
         obs: document.getElementById('inp-obs').value,
         pagamento: document.querySelector('input[name="pay"]:checked').value,
         total: cartTotal(),
+        agendado: agendar,
+        dataAgendada,
         carrinho: Object.values(cart).map(i => ({
           nome: i.nome,
           qtd: i.qty,
           preco: i.preco,
+          tipo: i.tipo || "normal",
+          sabores: i.sabores || null,
           complementos: selectedComps[i.id] ? Object.values(selectedComps[i.id]) : []
         }))
       };
@@ -962,11 +1235,15 @@
 
     async function enviarPedidoAoServer(pedido) {
       try {
-        await fetch(`${API_HOST}/api/pedidos`, {
+        const resp = await fetch(`${API_HOST}/api/pedidos`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(pedido)
         });
+        if (resp.ok) {
+          const data = await resp.json();
+          if (data.trackingId) pedido.trackingId = data.trackingId;
+        }
       } catch (e) {
         console.warn('Erro ao enviar pedido ao servidor:', e);
       }
@@ -1071,6 +1348,8 @@
     let selectedComps = {};
     let activecat = "";
     let BEBIDAS = [];
+    const HALF_KEY = "meia-meio";
+    let halfSelected = [null, null];
 
     function updateConfigUI() {
       document.getElementById("logo-name").innerHTML = `${CFG.nome.split(" ")[0]} <span>${CFG.nome.split(" ").slice(1).join(" ") || "Pizzaria"}</span>`;
@@ -1086,11 +1365,76 @@
     function renderCats() {
       const cats = getCategories();
       let html = cats.map(c => `<button class="cat-btn${c === activecat ? " active" : ""}" onclick="setcat('${c}')">${catIcon(c)} ${c}</button>`).join("");
+      if (MENU.length) html += `<button class="cat-btn${activecat === HALF_KEY ? " active" : ""}" onclick="setcat('${HALF_KEY}')">🍕 1/2 Meia a Meio</button>`;
       if (BEBIDAS.length) html += `<button class="cat-btn${activecat === "Bebidas" ? " active" : ""}" onclick="setcat('Bebidas')">🥤 Bebidas</button>`;
       document.getElementById("cat-tabs").innerHTML = html;
     }
-    function setcat(c) { activecat = c; renderCats(); renderMenu() }
+    function setcat(c) { activecat = c; halfSelected = [null, null]; renderCats(); renderMenu() }
+    function renderHalfSelector() {
+      const pizzas = MENU.filter(p => p.categoria !== "Doces");
+      if (!pizzas.length) {
+        return `<div class="half-selector"><p style="color:var(--muted);text-align:center">Nenhuma pizza disponível para Meia a Meio.</p></div>`;
+      }
+      const sel1 = halfSelected[0], sel2 = halfSelected[1];
+      const preco = sel1 && sel2 ? Math.max(sel1.preco, sel2.preco) : 0;
+      return `<div class="half-selector">
+        <h3>🍕 Escolha 2 sabores para sua pizza Meia a Meio</h3>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Selecione o <strong>1º sabor</strong> e depois o <strong>2º sabor</strong>. O preço será o do mais caro.</p>
+        <div class="flavor-grid">
+          ${pizzas.map(p => {
+            const selectedClass = sel1 && sel1.id === p.id ? "selected-1" : (sel2 && sel2.id === p.id ? "selected-2" : "");
+            const badge = sel1 && sel1.id === p.id ? '<span class="flavor-badge s1">1º Sabor</span>' : (sel2 && sel2.id === p.id ? '<span class="flavor-badge s2">2º Sabor</span>' : '');
+            return `<div class="flavor-card ${selectedClass}" onclick="selectHalf('${p.id}')">
+              <div class="flavor-name">${p.nome}</div>
+              <div class="flavor-price">R$ ${p.preco.toFixed(2).replace(".", ",")}</div>
+              ${badge}
+            </div>`;
+          }).join("")}
+        </div>
+        <div class="half-preview">
+          ${sel1 && sel2 ? `<div class="half-combo">1/2 ${sel1.nome} + 1/2 ${sel2.nome}</div>
+            <div class="half-price"><span>Total: </span>R$ ${preco.toFixed(2).replace(".", ",")}</div>` 
+            : sel1 ? `<div style="font-size:16px;color:var(--muted)">1º sabor: <strong>${sel1.nome}</strong> — agora escolha o 2º sabor</div>`
+            : `<div style="font-size:16px;color:var(--muted)">Clique em uma pizza para selecionar o 1º sabor</div>`}
+        </div>
+        <button class="add-half-btn" onclick="addHalfToCart()" ${sel1 && sel2 ? '' : 'disabled'}>${sel1 && sel2 ? 'Adicionar ao carrinho →' : 'Selecione 2 sabores'}</button>
+      </div>`;
+    }
+    function selectHalf(id) {
+      const pizza = MENU.find(p => p.id === id);
+      if (!pizza) return;
+      if (!halfSelected[0]) {
+        halfSelected[0] = pizza;
+      } else if (!halfSelected[1]) {
+        if (halfSelected[0].id === id) {
+          halfSelected = [null, null];
+          renderMenu();
+          return;
+        }
+        halfSelected[1] = pizza;
+      } else {
+        halfSelected = [pizza, null];
+      }
+      renderMenu();
+    }
+    function addHalfToCart() {
+      if (!halfSelected[0] || !halfSelected[1]) return;
+      const preco = Math.max(halfSelected[0].preco, halfSelected[1].preco);
+      const id = "mm_" + Math.random().toString(36).slice(2, 9);
+      const nome = `1/2 ${halfSelected[0].nome} + 1/2 ${halfSelected[1].nome}`;
+      cart[id] = {
+        id, nome, preco, qty: 1, tipo: "meia-meio",
+        sabores: halfSelected.map(s => ({ id: s.id, nome: s.nome, preco: s.preco })),
+      };
+      halfSelected = [null, null];
+      updateCart(); renderMenu();
+      toggleCart();
+    }
     function renderMenu() {
+      if (activecat === HALF_KEY) {
+        document.getElementById("menu-main").innerHTML = renderHalfSelector();
+        return;
+      }
       const cats = activecat ? [activecat] : getCategories();
       const showBebidas = activecat === "" || activecat === "Bebidas";
       if (!MENU.length && !BEBIDAS.length) {
@@ -1196,10 +1540,10 @@
         items.innerHTML = `<div class="cart-empty"><div class="empty-icon">🛒</div><p>Seu carrinho está vazio.<br>Adicione pizzas deliciosas!</p></div>`;
         footer.style.display = "none";
       } else {
-        const icon = p => p.categoria === "Doces" ? "🍰" : (p.categoria ? "🍕" : "🥤");
+        const icon = p => p.tipo === "meia-meio" ? "🍕" : (p.categoria === "Doces" ? "🍰" : (p.categoria ? "🍕" : "🥤"));
         items.innerHTML = Object.values(cart).map(i => `<div class="cart-item">
       <div style="font-size:28px">${icon(i)}</div>
-      <div class="item-info"><div class="item-name">${i.nome}</div><div class="item-price">${fmtR(i.preco * i.qty)}</div>
+      <div class="item-info"><div class="item-name">${formatItemName(i)}</div><div class="item-price">${fmtR(i.preco * i.qty)}</div>
         ${selectedComps[i.id] && Object.values(selectedComps[i.id]).length ? `<div style="font-size:11px;color:var(--muted)">${Object.values(selectedComps[i.id]).map(c => `${c.nome} (+${fmtR(c.preco * i.qty)})`).join(", ")}</div>` : ""}
       </div>
       <div class="item-qty">
@@ -1223,7 +1567,8 @@
         const isPizza = !!MENU.find(p => p.id === i.id);
         const comps = isPizza && selectedComps[i.id] ? Object.values(selectedComps[i.id]) : [];
         const compStr = comps.length ? " (" + comps.map(c => `${c.nome} +${fmtR(c.preco)}`).join(", ") + ")" : "";
-        return `<div class="summary-item"><span>${i.qty}x ${i.nome}${compStr}</span><span>${fmtR(i.preco * i.qty + comps.reduce((s, c) => s + c.preco * i.qty, 0))}</span></div>`;
+        const nomeItem = formatItemName(i);
+        return `<div class="summary-item"><span>${i.qty}x ${nomeItem}${compStr}</span><span>${fmtR(i.preco * i.qty + comps.reduce((s, c) => s + c.preco * i.qty, 0))}</span></div>`;
       }).join("");
       const del = `<div class="summary-item"><span>Taxa de entrega</span><span>${fmtR(CFG.taxaEntrega ?? 0)}</span></div>`;
       document.getElementById("modal-items").innerHTML = lines + del;
@@ -1254,7 +1599,22 @@
     function normalizeWhatsAppNumber(number) {
       return String(number || "").replace(/\D/g, "");
     }
-    function sendToWhatsApp() {
+    function toggleAgendamento() {
+      const checked = document.getElementById('inp-agendar').checked;
+      document.getElementById('agendamento-fields').classList.toggle('show', checked);
+      if (checked) {
+        const hoje = new Date();
+        document.getElementById('inp-agend-data').value = hoje.toISOString().slice(0, 10);
+        document.getElementById('inp-agend-horario').value = String(hoje.getHours() + 1).padStart(2, '0') + ':00';
+      }
+    }
+    function formatItemName(i) {
+      if (i.tipo === "meia-meio" && i.sabores) {
+        return `1/2 ${i.sabores[0].nome} + 1/2 ${i.sabores[1].nome} (Meia a Meio)`;
+      }
+      return i.nome;
+    }
+    async function sendToWhatsApp() {
       if (!validate()) return;
       if (cartCount() === 0) {
         alert('Adicione pelo menos um item ao carrinho para enviar o pedido.');
@@ -1264,36 +1624,110 @@
       const nome = g("inp-nome"), tel = g("inp-tel"), rua = g("inp-rua"), num = g("inp-num"), bairro = g("inp-bairro"), comp = g("inp-comp"), obs = g("inp-obs");
       const pay = document.querySelector("input[name='pay']:checked").value;
       const end = [`${rua}, ${num}`, comp, bairro].filter(Boolean).join(" — ");
+      const agendar = document.getElementById('inp-agendar').checked;
+      let agendStr = "";
+      if (agendar) {
+        const d = document.getElementById('inp-agend-data').value;
+        const h = document.getElementById('inp-agend-horario').value;
+        if (d && h) agendStr = `\nAgendado para: ${new Date(d + 'T' + h).toLocaleString('pt-BR')}`;
+      }
       const itens = Object.values(cart).map(i => {
         const comps = selectedComps[i.id] ? Object.values(selectedComps[i.id]) : [];
         const compStr = comps.length ? " (" + comps.map(c => `${c.nome} +${fmtR(c.preco)}`).join(", ") + ")" : "";
-        return `  • ${i.qty}x ${i.nome}${compStr} — ${fmtR(i.preco * i.qty + comps.reduce((s, c) => s + c.preco * i.qty, 0))}`;
+        const nomeItem = formatItemName(i);
+        return `  • ${i.qty}x ${nomeItem}${compStr} — ${fmtR(i.preco * i.qty + comps.reduce((s, c) => s + c.preco * i.qty, 0))}`;
       }).join("\n");
-      const msg = `NOVO PEDIDO - ${CFG.nome}\n\nCliente: ${nome}\nTelefone: ${tel}\nEndereço: ${end}\n\nItens:\n${itens}\n\nSubtotal: ${fmtR(cartSub())}\nEntrega: ${fmtR(CFG.taxaEntrega ?? 0)}\nTotal: ${fmtR(cartTotal())}\nPagamento: ${pay}${obs ? `\nObs: ${obs}` : ""}\nTempo estimado: ${CFG.tempoEstimado}`;
+      const pedidoData = buildPedido();
+      const msg = `NOVO PEDIDO - ${CFG.nome}\n\nCliente: ${nome}\nTelefone: ${tel}\nEndereço: ${end}${agendStr}\n\nItens:\n${itens}\n\nSubtotal: ${fmtR(cartSub())}\nEntrega: ${fmtR(CFG.taxaEntrega ?? 0)}\nTotal: ${fmtR(cartTotal())}\nPagamento: ${pay}${obs ? `\nObs: ${obs}` : ""}\nTempo estimado: ${CFG.tempoEstimado}`;
       const whatsapp = normalizeWhatsAppNumber(CFG.whatsapp);
       if (!whatsapp || whatsapp.length < 10) {
         alert('Número do WhatsApp da loja inválido. Verifique a configuração.');
         return;
       }
       recordCheckoutVenda();
-      enviarPedidoAoServer(buildPedido());
-      window.open(`https://wa.me/${whatsapp}?text=${encodeURIComponent(msg)}`, "_blank");
+      await enviarPedidoAoServer(pedidoData);
+      const trackingId = pedidoData.trackingId || '';
+      const msgFinal = trackingId ? msg + `\n\nID do Pedido: ${trackingId}` : msg;
+      document.getElementById('success-tracking').innerHTML = trackingId
+        ? `<strong>ID do Pedido:</strong> ${trackingId}<br>Use o 📋 Acompanhar para ver o status.`
+        : '';
+      window.open(`https://wa.me/${whatsapp}?text=${encodeURIComponent(msgFinal)}`, "_blank");
       closeCheckout();
       document.getElementById("success").classList.add("show");
     }
     function resetAll() {
       cart = {}; selectedComps = {}; updateCart(); renderMenu();
       document.getElementById("success").classList.remove("show");
+      document.getElementById("success-tracking").innerHTML = '';
       document.getElementById("checkout-modal").classList.remove("open");
       ["inp-nome", "inp-tel", "inp-rua", "inp-num", "inp-bairro", "inp-comp", "inp-obs"].forEach(id => document.getElementById(id).value = "");
       document.getElementById("pay-pix").checked = true;
+      document.getElementById("inp-agendar").checked = false;
+      document.getElementById("agendamento-fields").classList.remove("show");
     }
     function maskPhone(el) {
       let v = el.value.replace(/\D/g, "");
+      if (v.length > 11 && v.startsWith("55")) v = v.slice(2);
       if (v.length > 11) v = v.slice(0, 11);
       v = v.length <= 10 ? v.replace(/(\d{2})(\d{4})(\d{0,4})/, "($1) $2-$3") : v.replace(/(\d{2})(\d{5})(\d{0,4})/, "($1) $2-$3");
       el.value = v;
     }
+
+    // ---- ACOMPANHAMENTO DE PEDIDOS ----
+    function openTracking() {
+      document.getElementById('tracking-modal').classList.add('open');
+      document.getElementById('tracking-results').innerHTML = `<div class="tracking-empty"><div style="font-size:40px;margin-bottom:12px">🔍</div><p>Digite seu WhatsApp para acompanhar seus pedidos.</p></div>`;
+      document.getElementById('inp-tracking-tel').value = '';
+    }
+    function closeTracking() {
+      document.getElementById('tracking-modal').classList.remove('open');
+    }
+    async function buscarPedidos() {
+      const tel = document.getElementById('inp-tracking-tel').value.replace(/\D/g, '');
+      if (tel.length < 8) {
+        document.getElementById('tracking-results').innerHTML = `<div class="tracking-empty"><div style="font-size:40px;margin-bottom:12px">⚠️</div><p>Digite um WhatsApp válido com pelo menos 8 dígitos.</p></div>`;
+        return;
+      }
+      document.getElementById('tracking-results').innerHTML = `<div class="tracking-empty"><div style="font-size:40px;margin-bottom:12px">⏳</div><p>Buscando seus pedidos...</p></div>`;
+      try {
+        const resp = await fetch(`${API_HOST}/api/pedido/status?tel=${encodeURIComponent(tel)}`);
+        if (!resp.ok) throw new Error(resp.statusText);
+        const pedidos = await resp.json();
+        renderTrackingResults(pedidos);
+      } catch (e) {
+        console.warn('Erro ao buscar pedidos:', e);
+        document.getElementById('tracking-results').innerHTML = `<div class="tracking-empty"><div style="font-size:40px;margin-bottom:12px">❌</div><p>Erro ao buscar pedidos. Tente novamente.</p></div>`;
+      }
+    }
+    const STATUS_STEPS = ["Recebido", "Preparando", "Saiu pra entrega", "Entregue"];
+    function getStatusIndex(status) {
+      const idx = STATUS_STEPS.indexOf(status);
+      return idx >= 0 ? idx : (status === "Agendado" ? 0 : (status === "Cancelado" ? -1 : 0));
+    }
+    function renderTrackingResults(pedidos) {
+      const container = document.getElementById('tracking-results');
+      if (!pedidos || !pedidos.length) {
+        container.innerHTML = `<div class="tracking-empty"><div style="font-size:40px;margin-bottom:12px">🔍</div><p>Nenhum pedido encontrado para este WhatsApp.</p></div>`;
+        return;
+      }
+      container.innerHTML = `<div class="tracking-result">${pedidos.sort((a, b) => b.data.localeCompare(a.data)).map(p => {
+        const statusAtual = p.status || "Recebido";
+        const idx = getStatusIndex(statusAtual);
+        const isCancelled = statusAtual === "Cancelado";
+        const agendStr = p.agendado && p.dataAgendada ? `<br>📅 Agendado: ${new Date(p.dataAgendada).toLocaleString('pt-BR')}` : '';
+        const itensStr = (p.carrinho || []).map(i => `${i.qtd}x ${i.nome}`).join(', ');
+        return `<div class="tracking-card">
+          <div class="tracking-id">Pedido: <span>${p.trackingId || '—'}</span>${agendStr}</div>
+          <div class="tracking-items">${itensStr || '—'}</div>
+          <div class="tracking-total">${p.total ? 'R$ ' + p.total.toFixed(2).replace('.', ',') : '—'}</div>
+          <div class="status-bar">
+            ${isCancelled ? `<div class="status-step cancelled" style="flex:1">❌ Cancelado</div>` 
+            : STATUS_STEPS.map((s, i) => `<div class="status-step ${i < idx ? 'done' : (i === idx ? 's-active' + (i > 0 ? '-' + i : '') : '')}">${s}</div>`).join("")}
+          </div>
+        </div>`;
+      }).join("")}</div>`;
+    }
+
     async function init() {
       DB = loadLocalDB();
       CFG = DB.config || FALLBACK.config;
@@ -1318,6 +1752,10 @@
         saveLocalDB(DB);
       }
     }
+
+    document.getElementById('tracking-modal')?.addEventListener('click', function (e) {
+      if (e.target === this) closeTracking();
+    });
 
     init();
   </script>

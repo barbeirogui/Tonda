@@ -2,13 +2,8 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "tondapizzaria",
   "pages_build_output_dir": ".",
-  "kv_namespaces": [
-    {
-      "binding": "TONDA_DB",
-      "id": "721c35209dbb4c62a38b6a11a504bdb9"
-    }
-  ],
   "vars": {
-    "API_TOKEN": "tonda1103"
+    "API_TOKEN": "tonda1103",
+    "SUPABASE_URL": "https://orgbcemfgxhwzmgohwhg.supabase.co"
   }
 }

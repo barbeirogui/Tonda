@@ -1,41 +1,59 @@
-# Tonda Pizzaria - Deploy Cloudflare
+# Tonda Pizzaria
 
-## Estrutura do Projeto
-- **index.html**: Site público (frontend)
-- **tonda-admin.html**: Painel administrativo (protegido por PIN)
-- **src/index.js**: Worker (API de pedidos)
-- **wrangler.jsonc**: Configuração do Worker
+Site de pedidos + painel admin para pizzaria.
 
-## Melhorias implementadas
-- Validação de formulário e feedback ao usuário
-- Proteção por PIN no admin
-- CORS e tratamento de erros no backend
-- Pronto para integração com serviço de e-mail (exemplo no README)
-- SEO e acessibilidade básica
+**Stack:** Cloudflare Pages + Supabase (PostgreSQL)
 
-## Como publicar no Cloudflare
+## Estrutura
 
-### 1. Frontend (Cloudflare Pages)
-1. Crie um repositório no GitHub com index.html, tonda-admin.html e demais arquivos estáticos.
-2. No painel Cloudflare, acesse "Pages" e conecte seu repositório.
-3. Siga o fluxo (build command: vazio, output: root).
-4. O site será publicado em https://tondapizzaria.pages.dev
+- `index.html` — site público (cardápio, carrinho, checkout, meia a meio, agendamento, tracking)
+- `tonda-admin.html` — painel admin (insumos, cardápio, pedidos com status, configurações)
+- `functions/api/[[route]].js` — API (Cloudflare Functions)
+- `wrangler.jsonc` — configuração Cloudflare
 
-### 2. Backend (Cloudflare Workers)
-1. Instale o Wrangler CLI:
-   npm install -g wrangler
-2. Faça login:
-   wrangler login
-3. No terminal, dentro da pasta do projeto, rode:
-   wrangler deploy
-4. O endpoint será https://tondapizzaria.<subdomínio>.workers.dev
+## Setup local
 
-### 3. Conectar frontend e backend
-- No frontend, envie pedidos para o endpoint do Worker (exemplo: fetch('https://tondapizzaria.<subdomínio>.workers.dev/api/pedidos'))
+```bash
+npm install
+npx wrangler pages dev .
+```
 
-### 4. (Opcional) Receber pedidos por e-mail
-- Crie conta no Formspree, EmailJS ou similar.
-- No frontend, envie o pedido para o serviço de e-mail ou configure o Worker para chamar o webhook do serviço.
+## Deploy
 
----
-Dúvidas? Consulte a documentação oficial do Cloudflare ou peça ajuda aqui!
+```bash
+npx wrangler pages deploy .
+```
+
+## Variáveis de ambiente
+
+No `wrangler.jsonc` (vai pro git):
+
+| Chave | Valor |
+|---|---|
+| `API_TOKEN` | Token de autenticação da API |
+| `SUPABASE_URL` | URL do projeto Supabase |
+
+Secret (configurar uma vez via `wrangler secret put`):
+
+| Chave | Valor |
+|---|---|
+| `SUPABASE_SERVICE_KEY` | Service role key do Supabase |
+
+```bash
+npx wrangler secret put SUPABASE_SERVICE_KEY
+```
+
+## Admin
+
+- PIN padrão: `1234`
+- URL: `/tonda-admin.html`
+- API token: `tonda1103` (definido em `wrangler.jsonc`)
+- WhatsApp: botão 📲 ao lado do telefone de cada pedido — abre wa.me com mensagem de status pré-preenchida
+
+## Funcionalidades
+
+- **Meia a Meio:** selecionar 2 sabores, cobra o valor do mais caro
+- **Agendamento:** checkbox com data/hora no checkout
+- **Acompanhamento:** cliente busca por telefone, barra de progresso por step
+- **Status:** fundo colorido + texto branco, fluxo: Recebido → Preparando → Saiu pra entrega → Entregue
+- **Estoque/CMV:** controle de insumos e custos no admin

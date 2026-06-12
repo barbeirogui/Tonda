@@ -443,6 +443,32 @@
       color: #78716C
     }
 
+    /* Status badges - fundo colorido, texto branco */
+    .badge-recebido {
+      background: #3B82F6;
+      color: #fff
+    }
+    .badge-agendado {
+      background: #F59E0B;
+      color: #fff
+    }
+    .badge-preparando {
+      background: #F97316;
+      color: #fff
+    }
+    .badge-saiu {
+      background: #10B981;
+      color: #fff
+    }
+    .badge-entregue {
+      background: #6B7280;
+      color: #fff
+    }
+    .badge-cancelado {
+      background: #EF4444;
+      color: #fff
+    }
+
     /* CMV BAR */
     .cmv-bar-wrap {
       display: flex;
@@ -1120,6 +1146,7 @@
         <table>
           <thead>
             <tr>
+              <th>ID</th>
               <th>Data</th>
               <th>Cliente</th>
               <th>Telefone</th>
@@ -1127,7 +1154,8 @@
               <th>Itens</th>
               <th>Total</th>
               <th>Pagamento</th>
-              <th>Obs</th>
+              <th>Status</th>
+              <th>Ações</th>
             </tr>
           </thead>
           <tbody id="pedidos-list"></tbody>
@@ -1147,7 +1175,8 @@
         <div class="field"><label>Nome da pizzaria</label><input type="text" id="cfg-nome"
             value="Tonda Pizzaria Artesanal"></div>
         <div class="field"><label>Número WhatsApp (55 + DDD + número)</label><input type="text" id="cfg-wp"
-            placeholder="5511999999999"></div>
+            placeholder="5511999999999" oninput="cfgPhonePreview()">
+          <div style="font-size:12px;color:var(--muted);margin-top:4px" id="cfg-wp-preview"></div></div>
         <div class="field-row">
           <div class="field"><label>Taxa de entrega (R$)</label><input type="number" id="cfg-taxa" step="0.50"
               value="0.00"></div>
@@ -1637,6 +1666,7 @@
       // Foco inicial
       setTimeout(() => { document.getElementById('p0').focus(); }, 100);
       loadServerData();
+      setInterval(() => { if (document.getElementById('tab-pedidos').classList.contains('active')) loadPedidosFromServer(); }, 15000);
     });
 
     function doLogin() {
@@ -1687,7 +1717,7 @@
       if (id === "config") renderConfig();
       if (id === "estoque") renderEstoque();
       if (id === "vendas") renderVendas();
-      if (id === "pedidos") renderPedidos();
+      if (id === "pedidos") { renderPedidos(); loadPedidosFromServer(); }
       if (id === "analise") renderAnalise();
       if (id === "massa") renderMassa();
     }
@@ -1752,26 +1782,121 @@
 
     // ---- PEDIDOS (dos clientes) ----
     let cachedPedidos = [];
+    function formatPhone(tel) {
+      if (!tel) return '-';
+      const d = tel.replace(/\D/g, '');
+      let nums = d;
+      if (nums.length > 11 && nums.startsWith('55')) nums = nums.slice(2);
+      if (nums.length === 11) return '(' + nums.slice(0, 2) + ') ' + nums.slice(2, 7) + '-' + nums.slice(7);
+      if (nums.length === 10) return '(' + nums.slice(0, 2) + ') ' + nums.slice(2, 6) + '-' + nums.slice(6);
+      return tel;
+    }
+    function waLink(tel, trackingId, status) {
+      if (!tel) return '';
+      const d = tel.replace(/\D/g, '');
+      const nums = d.startsWith('55') ? d : '55' + d;
+      const msg = encodeURIComponent(`Olá! Seu pedido ${trackingId} está: ${status} 🍕`);
+      return `<a href="https://wa.me/${nums}?text=${msg}" target="_blank" rel="noopener" title="Enviar WhatsApp" style="text-decoration:none;margin-left:6px;font-size:18px">📲</a>`;
+    }
+    const STATUS_LIST = ["Recebido", "Agendado", "Preparando", "Saiu pra entrega", "Entregue", "Cancelado"];
+    const STATUS_FLOW = ["Recebido", "Preparando", "Saiu pra entrega", "Entregue"];
+    function statusBadge(status) {
+      const map = {
+        "Recebido": "badge-recebido",
+        "Agendado": "badge-agendado",
+        "Preparando": "badge-preparando",
+        "Saiu pra entrega": "badge-saiu",
+        "Entregue": "badge-entregue",
+        "Cancelado": "badge-cancelado"
+      };
+      return `<span class="badge ${map[status] || 'badge-gray'}">${status || '—'}</span>`;
+    }
+    function nextStatus(status) {
+      if (status === "Agendado") return "Preparando";
+      const idx = STATUS_FLOW.indexOf(status);
+      return idx >= 0 && idx < STATUS_FLOW.length - 1 ? STATUS_FLOW[idx + 1] : null;
+    }
+    function prevStatus(status) {
+      if (status === "Agendado") return "Recebido";
+      const idx = STATUS_FLOW.indexOf(status);
+      return idx > 0 ? STATUS_FLOW[idx - 1] : null;
+    }
+    async function updatePedidoStatus(trackingId, newStatus) {
+      try {
+        const resp = await fetch(`${API_HOST}/api/admin/pedido/status`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Authorization": "Bearer " + API_TOKEN },
+          body: JSON.stringify({ trackingId, status: newStatus }),
+        });
+        if (!resp.ok) throw new Error(resp.statusText);
+        const data = await resp.json();
+        if (data.status === "ok") {
+          toast(`✅ Pedido ${trackingId} atualizado para "${newStatus}"`);
+          loadPedidosFromServer();
+        } else {
+          toast('⚠️ Erro ao atualizar status.');
+        }
+      } catch (e) {
+        console.warn('Erro ao atualizar status:', e);
+        toast('⚠️ Erro ao atualizar status.');
+      }
+    }
     function renderPedidos() {
       const list = document.getElementById('pedidos-list');
       if (!list) return;
       if (!cachedPedidos.length) {
-        list.innerHTML = `<tr><td colspan='8' style='text-align:center;color:var(--muted);padding:24px'>Nenhum pedido recebido. Os pedidos dos clientes aparecem aqui.</td></tr>`;
+        list.innerHTML = `<tr><td colspan='10' style='text-align:center;color:var(--muted);padding:24px'>Nenhum pedido recebido. Os pedidos dos clientes aparecem aqui.</td></tr>`;
         return;
       }
       list.innerHTML = [...cachedPedidos].reverse().map(p => {
-        const itens = (p.carrinho || []).map(i => `${i.qtd}x ${i.nome}`).join(', ');
+        const itens = (p.carrinho || []).map(i => {
+          if (i.tipo === "meia-meio" && i.sabores) {
+            return `${i.qtd}x 1/2 ${i.sabores[0]?.nome || '?'} + 1/2 ${i.sabores[1]?.nome || '?'} (Meia a Meio)`;
+          }
+          return `${i.qtd}x ${i.nome}`;
+        }).join('<br>');
+        const agendado = p.agendado && p.dataAgendada ? `📅 ${new Date(p.dataAgendada).toLocaleString()}` : '';
+        const next = nextStatus(p.status);
+        const prev = prevStatus(p.status);
         return `<tr>
-          <td>${p.data ? new Date(p.data).toLocaleString() : '-'}</td>
+          <td><strong>${p.trackingId || '—'}</strong></td>
+          <td>${p.data ? new Date(p.data).toLocaleString() : '-'}${agendado ? '<br>' + agendado : ''}</td>
           <td>${p.nome || '-'}</td>
-          <td>${p.tel || '-'}</td>
-          <td>${[p.rua, p.num, p.bairro, p.comp].filter(Boolean).join(', ') || '-'}</td>
-          <td>${itens || '-'}</td>
+          <td>${formatPhone(p.tel)}${waLink(p.tel, p.trackingId, p.status)}</td>
+          <td style="max-width:200px;white-space:normal;word-break:break-word">${[p.rua, p.num, p.bairro, p.comp].filter(Boolean).join(', ') || '-'}</td>
+          <td style="white-space:normal;word-break:break-word">${itens || '-'}</td>
           <td>${p.total ? 'R$ ' + p.total.toFixed(2).replace('.', ',') : '-'}</td>
           <td>${p.pagamento || '-'}</td>
-          <td style="max-width:160px;white-space:normal;word-break:break-word">${p.obs || '-'}</td>
+          <td>${statusBadge(p.status)}</td>
+          <td style="white-space:nowrap">
+            ${prev ? `<button class="btn btn-sm btn-ghost" onclick="updatePedidoStatus('${p.trackingId}','${prev}')" title="Voltar para ${prev}">◀</button>` : ''}
+            ${next ? `<button class="btn btn-sm btn-primary" onclick="updatePedidoStatus('${p.trackingId}','${next}')" title="Avançar para ${next}">${next === 'Entregue' ? '✅' : '▶'}</button>` : ''}
+            ${p.status !== 'Cancelado' && p.status !== 'Entregue' ? `<button class="btn btn-sm btn-danger" onclick="updatePedidoStatus('${p.trackingId}','Cancelado')" title="Cancelar pedido">✕</button>` : ''}
+            <button class="btn btn-sm btn-danger" onclick="deletePedido('${p.trackingId}')" title="Excluir pedido" style="margin-left:4px">🗑️</button>
+          </td>
         </tr>`;
       }).join('');
+    }
+    async function deletePedido(trackingId) {
+      if (!trackingId || trackingId === '—') { toast('⚠️ Pedido sem ID válido.'); return; }
+      if (!confirm(`Excluir pedido ${trackingId}?`)) return;
+      try {
+        const resp = await fetch(`${API_HOST}/api/admin/pedido/delete`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Authorization": "Bearer " + API_TOKEN },
+          body: JSON.stringify({ trackingId }),
+        });
+        const data = await resp.json();
+        if (data.status === "ok") {
+          toast(`🗑️ Pedido ${trackingId} excluído.`);
+          loadPedidosFromServer();
+        } else {
+          toast('⚠️ Erro ao excluir: ' + (data.erro || 'desconhecido'));
+        }
+      } catch (e) {
+        console.warn('Erro ao excluir pedido:', e);
+        toast('⚠️ Erro ao excluir pedido.');
+      }
     }
     async function loadPedidosFromServer() {
       try {
@@ -1779,7 +1904,29 @@
           headers: { "Authorization": "Bearer " + API_TOKEN },
         });
         if (!resp.ok) throw new Error(resp.statusText);
-        cachedPedidos = await resp.json();
+        let pedidos = await resp.json();
+        // Migra pedidos legados (sem trackingId/status) e salva de volta no servidor
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        let migrados = false;
+        pedidos = pedidos.map(p => {
+          if (!p.trackingId) {
+            let code = "";
+            for (let i = 0; i < 4; i++) code += chars[Math.floor(Math.random() * chars.length)];
+            p.trackingId = "TD-" + code;
+            migrados = true;
+          }
+          if (!p.status) { p.status = p.agendado ? "Agendado" : "Recebido"; migrados = true; }
+          if (!p.statusHistory) { p.statusHistory = [{ status: p.status, timestamp: p.data || new Date().toISOString() }]; migrados = true; }
+          return p;
+        });
+        if (migrados) {
+          fetch(`${API_HOST}/api/admin/pedidos/salvar`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Authorization": "Bearer " + API_TOKEN },
+            body: JSON.stringify(pedidos),
+          }).catch(e => console.warn('Erro ao salvar migração:', e));
+        }
+        cachedPedidos = pedidos;
         renderPedidos();
         toast('✅ Pedidos carregados do servidor.');
       } catch (e) {
@@ -1906,6 +2053,11 @@
     }
 
     // ---- CONFIG ----
+    function cfgPhonePreview() {
+      const el = document.getElementById('cfg-wp');
+      const preview = document.getElementById('cfg-wp-preview');
+      preview.textContent = el.value ? 'Formatado: ' + formatPhone(el.value) : '';
+    }
     function renderConfig() {
       const cfg = DB.config;
       document.getElementById("cfg-nome").value = cfg.nome || "";
@@ -1913,6 +2065,7 @@
       document.getElementById("cfg-taxa").value = cfg.taxaEntrega || 0;
       document.getElementById("cfg-tempo").value = cfg.tempoEstimado || "30-40 minutos";
       document.getElementById("cfg-cmv").value = cfg.cmvIdeal || 30;
+      cfgPhonePreview();
     }
     function saveConfig() {
       DB.config.nome = document.getElementById("cfg-nome").value.trim();
