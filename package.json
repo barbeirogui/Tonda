@@ -2,7 +2,7 @@
   "name": "tonda-pizzaria",
   "version": "1.0.0",
   "private": true,
-  "description": "Tonda Pizzaria Artesanal - sistema de pedidos e gestão",
+  "description": "Tonda Pizza Artesanal - sistema de pedidos e gestão",
   "devDependencies": {
     "wrangler": "^4.0.0"
   },

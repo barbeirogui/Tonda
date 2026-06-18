@@ -5,7 +5,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tonda Admin</title>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
   <style>
     *,
     *::before,
@@ -16,7 +19,7 @@
     }
 
     :root {
-      --cream: #F5EBDD;
+      --cream: #EFE7DC;
       --green-dark: #1F3A2F;
       --green-olive: #5A6B45;
       --terracotta: #B85C38;
@@ -35,7 +38,7 @@
     }
 
     body {
-      font-family: 'Outfit', Arial, sans-serif;
+      font-family: 'Manrope', sans-serif;
       background: var(--cream);
       color: var(--black)
     }
@@ -86,7 +89,8 @@
 
     .login-box h1 {
       font-size: 24px;
-      margin-bottom: 6px
+      margin-bottom: 6px;
+      font-family: 'Playfair Display', serif
     }
 
     .login-box p {
@@ -183,7 +187,8 @@
 
     .sidebar-logo span {
       display: block;
-      font-weight: 700
+      font-weight: 700;
+      font-family: 'Playfair Display', serif
     }
 
     .sidebar-logo small {
@@ -265,7 +270,8 @@
 
     .page-title {
       font-size: 22px;
-      font-weight: 700
+      font-weight: 700;
+      font-family: 'Playfair Display', serif
     }
 
     .page-title small {
@@ -448,22 +454,27 @@
       background: #3B82F6;
       color: #fff
     }
+
     .badge-agendado {
       background: #F59E0B;
       color: #fff
     }
+
     .badge-preparando {
       background: #F97316;
       color: #fff
     }
+
     .badge-saiu {
       background: #10B981;
       color: #fff
     }
+
     .badge-entregue {
       background: #6B7280;
       color: #fff
     }
+
     .badge-cancelado {
       background: #EF4444;
       color: #fff
@@ -532,7 +543,8 @@
 
     .modal-head h3 {
       font-size: 17px;
-      font-weight: 700
+      font-weight: 700;
+      font-family: 'Playfair Display', serif
     }
 
     .modal-body {
@@ -849,6 +861,10 @@
     }
 
     /* Mobile menu button */
+    .mobile-header {
+      display: none
+    }
+
     .menu-toggle {
       display: none;
       background: none;
@@ -865,12 +881,25 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,.45);
+      background: rgba(0, 0, 0, .45);
       z-index: 19
     }
 
     @media(max-width:900px) {
-      .menu-toggle {
+      .mobile-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 25;
+        background: var(--white);
+        border-bottom: 1px solid var(--border);
+        padding: 8px 12px;
+        height: 52px
+      }
+
+      .mobile-header .menu-toggle {
         display: flex;
         align-items: center;
         justify-content: center
@@ -896,7 +925,7 @@
 
       .main {
         margin-left: 0;
-        padding: 16px 12px
+        padding: 68px 12px 16px
       }
 
       .page-header {
@@ -1056,7 +1085,8 @@
         background: var(--white)
       }
 
-      td, th {
+      td,
+      th {
         padding: 8px 10px;
         font-size: 12px
       }
@@ -1064,7 +1094,7 @@
 
     @media(max-width:600px) {
       .main {
-        padding: 12px 8px
+        padding: 64px 8px 12px
       }
 
       .stat-card {
@@ -1084,7 +1114,8 @@
         font-size: 12px
       }
 
-      td, th {
+      td,
+      th {
         padding: 6px 8px;
         font-size: 11px
       }
@@ -1103,25 +1134,51 @@
         padding: 10px
       }
 
-      .field input, .field select, .field textarea {
+      .field input,
+      .field select,
+      .field textarea {
         padding: 8px 10px;
         font-size: 13px
       }
     }
 
     @media(max-width:768px) {
-      table, thead, tbody, tr, th, td { display: block }
-      thead { display: none }
-      table { min-width: 0 }
-      .table-wrap { overflow-x: visible; border: none; background: transparent }
-      .table-wrap table { border: none }
+
+      table,
+      thead,
+      tbody,
+      tr,
+      th,
+      td {
+        display: block
+      }
+
+      thead {
+        display: none
+      }
+
+      table {
+        min-width: 0
+      }
+
+      .table-wrap {
+        overflow-x: visible;
+        border: none;
+        background: transparent
+      }
+
+      .table-wrap table {
+        border: none
+      }
+
       tr {
         border: 1px solid var(--border);
         border-radius: 8px;
         margin-bottom: 10px;
         background: var(--white);
-        box-shadow: 0 1px 3px rgba(0,0,0,.04)
+        box-shadow: 0 1px 3px rgba(0, 0, 0, .04)
       }
+
       td {
         display: flex;
         align-items: center;
@@ -1130,7 +1187,11 @@
         border-bottom: 1px solid var(--border);
         gap: 6px
       }
-      td:last-child { border-bottom: none }
+
+      td:last-child {
+        border-bottom: none
+      }
+
       td::before {
         content: attr(data-label);
         font-weight: 600;
@@ -1141,50 +1202,94 @@
         letter-spacing: .03em;
         flex-shrink: 0
       }
-      td[data-label=""]::before { content: none }
-      tr:hover td { background: none }
-      td:empty { display: none }
-      td[style*="white-space:nowrap"] { white-space: normal !important }
-      td:has(.btn) { flex-wrap: wrap; gap: 4px }
+
+      td[data-label=""]::before {
+        content: none
+      }
+
+      tr:hover td {
+        background: none
+      }
+
+      td:empty {
+        display: none
+      }
+
+      td[style*="white-space:nowrap"] {
+        white-space: normal !important
+      }
+
+      td:has(.btn) {
+        flex-wrap: wrap;
+        gap: 4px
+      }
     }
   </style>
 </head>
 
 <body>
 
+  <div class="mobile-header">
+    <button class="menu-toggle" id="menu-toggle" onclick="toggleSidebar()" aria-label="Abrir menu"><i data-lucide="menu"
+        style="display:inline-block;width:28px;height:28px"></i></button>
+    <div style="display:flex;align-items:center;gap:10px">
+      <img src="src/logo.svg" alt="Tonda" style="width:32px;height:32px">
+      <span style="font-family:'Playfair Display',serif;font-weight:700;font-size:18px">Tonda Admin</span>
+    </div>
+    <div></div>
+  </div>
   <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
-  <button class="menu-toggle" id="menu-toggle" onclick="toggleSidebar()" aria-label="Abrir menu">☰</button>
   <aside id="sidebar">
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 8px 22px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:14px">
+    <div
+      style="display:flex;align-items:center;justify-content:space-between;padding:6px 8px 22px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:14px">
       <div style="display:flex;align-items:center;gap:10px">
-        <div class="icon" style="width:38px;height:38px;border-radius:9px;background:var(--terracotta);display:flex;align-items:center;justify-content:center;font-size:20px">🍕</div>
-        <div><span style="display:block;font-weight:700">Tonda</span><small style="display:block;color:rgba(255,255,255,.6);font-size:12px;margin-top:1px">Admin</small></div>
+        <img src="src/logo.svg" alt="Tonda"
+          style="width:38px;height:38px;border-radius:9px;background:var(--terracotta);object-fit:cover">
+        <div><span style="display:block;font-weight:700">Tonda</span><small
+            style="display:block;color:rgba(255,255,255,.6);font-size:12px;margin-top:1px">Admin</small></div>
       </div>
-      <button onclick="toggleSidebar()" class="close-x" style="background:none;border:none;color:#fff;font-size:22px;cursor:pointer;display:none;width:32px;height:32px;align-items:center;justify-content:center;border-radius:6px" id="sidebar-close">✕</button>
+      <button onclick="toggleSidebar()" class="close-x"
+        style="background:none;border:none;color:#fff;font-size:22px;cursor:pointer;display:none;width:32px;height:32px;align-items:center;justify-content:center;border-radius:6px"
+        id="sidebar-close"><i data-lucide="x" style="display:inline-block;width:22px;height:22px"></i></button>
     </div>
     <nav>
-      <button class="nav-btn active" data-tab="dashboard" onclick="showTab('dashboard')"><span class="ni">📊</span>
+      <button class="nav-btn active" data-tab="dashboard" onclick="showTab('dashboard')"><span class="ni"><i
+            data-lucide="bar-chart-3"
+            style="display:inline-block;width:20px;height:20px;vertical-align:middle"></i></span>
         Dashboard</button>
-      <button class="nav-btn" data-tab="insumos" onclick="showTab('insumos')"><span class="ni">🧄</span>
+      <button class="nav-btn" data-tab="insumos" onclick="showTab('insumos')"><span class="ni"><i data-lucide="chef-hat"
+            style="display:inline-block;width:20px;height:20px;vertical-align:middle"></i></span>
         Insumos</button>
-      <button class="nav-btn" data-tab="cardapio" onclick="showTab('cardapio')"><span class="ni">🍕</span>
+      <button class="nav-btn" data-tab="cardapio" onclick="showTab('cardapio')"><span class="ni"><i data-lucide="pizza"
+            style="display:inline-block;width:20px;height:20px;vertical-align:middle"></i></span>
         Cardápio</button>
-      <button class="nav-btn" data-tab="bebidas" onclick="showTab('bebidas')"><span class="ni">🥤</span>
+      <button class="nav-btn" data-tab="bebidas" onclick="showTab('bebidas')"><span class="ni"><i data-lucide="cup-soda"
+            style="display:inline-block;width:20px;height:20px;vertical-align:middle"></i></span>
         Bebidas</button>
-      <button class="nav-btn" data-tab="estoque" onclick="showTab('estoque')"><span class="ni">📦</span>
+      <button class="nav-btn" data-tab="estoque" onclick="showTab('estoque')"><span class="ni"><i data-lucide="package"
+            style="display:inline-block;width:20px;height:20px;vertical-align:middle"></i></span>
         Estoque</button>
-      <button class="nav-btn" data-tab="massa" onclick="showTab('massa')"><span class="ni">🍞</span>
+      <button class="nav-btn" data-tab="massa" onclick="showTab('massa')"><span class="ni"><i data-lucide="bread"
+            style="display:inline-block;width:20px;height:20px;vertical-align:middle"></i></span>
         Massa</button>
-      <button class="nav-btn" data-tab="vendas" onclick="showTab('vendas')"><span class="ni">🧾</span> Vendas</button>
-      <button class="nav-btn" data-tab="pedidos" onclick="showTab('pedidos')"><span class="ni">📋</span>
+      <button class="nav-btn" data-tab="vendas" onclick="showTab('vendas')"><span class="ni"><i data-lucide="receipt"
+            style="display:inline-block;width:20px;height:20px;vertical-align:middle"></i></span> Vendas</button>
+      <button class="nav-btn" data-tab="pedidos" onclick="showTab('pedidos')"><span class="ni"><i
+            data-lucide="clipboard-list"
+            style="display:inline-block;width:20px;height:20px;vertical-align:middle"></i></span>
         Pedidos</button>
-      <button class="nav-btn" data-tab="analise" onclick="showTab('analise')"><span class="ni">📈</span>
+      <button class="nav-btn" data-tab="analise" onclick="showTab('analise')"><span class="ni"><i
+            data-lucide="trending-up"
+            style="display:inline-block;width:20px;height:20px;vertical-align:middle"></i></span>
         Análise</button>
-      <button class="nav-btn" data-tab="config" onclick="showTab('config')"><span class="ni">⚙️</span>
+      <button class="nav-btn" data-tab="config" onclick="showTab('config')"><span class="ni"><i data-lucide="settings"
+            style="display:inline-block;width:20px;height:20px;vertical-align:middle"></i></span>
         Configurações</button>
     </nav>
     <div class="sidebar-footer">
-      <a href="index.html" target="_blank" class="store-link">🔗 Ver loja online →</a>
+      <a href="index.html" target="_blank" class="store-link"><i data-lucide="link"
+          style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Ver loja online <i
+          data-lucide="arrow-right" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i></a>
     </div>
   </aside>
 
@@ -1205,7 +1310,8 @@
         <div id="dash-cmv-list"></div>
       </div>
       <div class="page-header" style="margin-bottom:12px;margin-top:28px">
-        <div style="font-size:15px;font-weight:700">Ranking de pizzas mais vendidas 🏆</div>
+        <div style="font-size:15px;font-weight:700">Ranking de pizzas mais vendidas <i data-lucide="trophy"
+            style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i></div>
       </div>
       <div class="table-wrap">
         <div class="cmv-table-row cmv-table-head">
@@ -1282,8 +1388,11 @@
     <!-- MASSA -->
     <div class="tab-content" id="tab-massa">
       <div class="page-header">
-        <div class="page-title">Massa <small>Receita e custo da massa artesanal</small></div>
-        <button class="btn btn-primary" onclick="calcMassa()">🔄 Recalcular custo</button>
+        <div class="page-title"><i data-lucide="utensils"
+            style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Massa <small>Receita e custo da
+            massa artesanal</small></div>
+        <button class="btn btn-primary" onclick="calcMassa()"><i data-lucide="refresh-ccw"
+            style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Recalcular custo</button>
       </div>
       <div
         style="background:var(--white);border-radius:var(--radius);border:1px solid var(--border);padding:20px;max-width:90%">
@@ -1319,7 +1428,8 @@
             <span id="massa-atual">R$ 0,00</span>
           </div>
         </div>
-        <button class="btn btn-primary" onclick="saveMassa()" style="margin-top:14px">💾 Salvar receita e atualizar
+        <button class="btn btn-primary" onclick="saveMassa()" style="margin-top:14px"><i data-lucide="save"
+            style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Salvar receita e atualizar
           custo</button>
       </div>
     </div>
@@ -1445,7 +1555,8 @@
       <div class="page-header">
         <div class="page-title">Pedidos <small>Pedidos recebidos dos clientes</small></div>
         <div style="display:flex;gap:8px">
-          <button class="btn btn-ghost" onclick="loadPedidosFromServer()">🔄 Recarregar</button>
+          <button class="btn btn-ghost" onclick="loadPedidosFromServer()"><i data-lucide="refresh-ccw"
+              style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Recarregar</button>
         </div>
       </div>
       <div class="table-wrap">
@@ -1472,17 +1583,19 @@
       <div class="page-header">
         <div class="page-title">Configurações <small>Dados da pizzaria e WhatsApp</small></div>
         <div style="display:flex;gap:8px;align-items:center">
-          <button class="btn btn-ghost" id="btn-reload-server" onclick="reloadServerData()">🔄 Recarregar do
+          <button class="btn btn-ghost" id="btn-reload-server" onclick="reloadServerData()"><i data-lucide="refresh-ccw"
+              style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Recarregar do
             servidor</button>
         </div>
       </div>
       <div
         style="background:var(--white);border-radius:var(--radius);border:1px solid var(--border);padding:24px;max-width:520px">
         <div class="field"><label>Nome da pizzaria</label><input type="text" id="cfg-nome"
-            value="Tonda Pizzaria Artesanal"></div>
+            value="Tonda Pizza Artesanal"></div>
         <div class="field"><label>Número WhatsApp (55 + DDD + número)</label><input type="text" id="cfg-wp"
             placeholder="5511999999999" oninput="cfgPhonePreview()">
-          <div style="font-size:12px;color:var(--muted);margin-top:4px" id="cfg-wp-preview"></div></div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px" id="cfg-wp-preview"></div>
+        </div>
         <div class="field-row">
           <div class="field"><label>Taxa de entrega (R$)</label><input type="number" id="cfg-taxa" step="0.50"
               value="0.00"></div>
@@ -1515,7 +1628,8 @@
     <div class="modal">
       <div class="modal-head">
         <h3>Registrar compra de insumo</h3>
-        <button class="close-x" onclick="closeModal('modal-compra')">✕</button>
+        <button class="close-x" onclick="closeModal('modal-compra')"><i data-lucide="x"
+            style="display:inline-block;width:20px;height:20px"></i></button>
       </div>
       <div class="modal-body">
         <div class="field"><label>Insumo *</label>
@@ -1541,7 +1655,8 @@
     <div class="modal">
       <div class="modal-head">
         <h3>Registrar venda</h3>
-        <button class="close-x" onclick="closeModal('modal-venda')">✕</button>
+        <button class="close-x" onclick="closeModal('modal-venda')"><i data-lucide="x"
+            style="display:inline-block;width:20px;height:20px"></i></button>
       </div>
       <div class="modal-body">
         <div class="field"><label>Pizza *</label>
@@ -1564,7 +1679,8 @@
     <div class="modal">
       <div class="modal-head">
         <h3 id="insumo-modal-title">Novo insumo</h3>
-        <button class="close-x" onclick="closeModal('modal-insumo')">✕</button>
+        <button class="close-x" onclick="closeModal('modal-insumo')"><i data-lucide="x"
+            style="display:inline-block;width:20px;height:20px"></i></button>
       </div>
       <div class="modal-body">
         <input type="hidden" id="insumo-edit-id">
@@ -1598,7 +1714,8 @@
     <div class="modal" style="max-width:640px">
       <div class="modal-head">
         <h3 id="pizza-modal-title">Nova pizza</h3>
-        <button class="close-x" onclick="closeModal('modal-pizza')">✕</button>
+        <button class="close-x" onclick="closeModal('modal-pizza')"><i data-lucide="x"
+            style="display:inline-block;width:20px;height:20px"></i></button>
       </div>
       <div class="modal-body">
         <input type="hidden" id="pizza-edit-id">
@@ -1621,8 +1738,10 @@
               placeholder="0,00" oninput="updateCmvPreview()"></div>
           <div class="field"><label>Foto da pizza</label>
             <div style="display:flex;gap:4px;flex-wrap:wrap">
-              <input type="text" id="pz-foto" placeholder="https://... ou upload" style="flex:1;min-width:120px" oninput="showFotoPreview('pz-foto','pz-foto-preview')">
-              <input type="file" id="pz-foto-file" accept="image/*" style="width:100px;font-size:12px" onchange="handleFotoUpload('pz-foto','pz-foto-preview')">
+              <input type="text" id="pz-foto" placeholder="https://... ou upload" style="flex:1;min-width:120px"
+                oninput="showFotoPreview('pz-foto','pz-foto-preview')">
+              <input type="file" id="pz-foto-file" accept="image/*" style="width:100px;font-size:12px"
+                onchange="handleFotoUpload('pz-foto','pz-foto-preview')">
             </div>
             <div id="pz-foto-preview" style="margin-top:4px;max-width:100px;display:none"></div>
           </div>
@@ -1661,10 +1780,11 @@
           <div class="cmv-preview-row" style="color:var(--muted)"><span>CMV (Custo / Venda)</span><span id="pv-cmv"
               style="font-weight:700">— %</span></div>
           <div class="cmv-preview-row"><span>Margem bruta</span><span id="pv-margem">R$ 0,00</span></div>
-          <div class="cmv-preview-row"
-            style="background:var(--cream);border-radius:6px;padding:4px 0;margin-top:4px"><span
-              style="font-weight:700" id="pv-faixa-label">💡 Faixa ideal</span><span id="pv-sugerido"
-              style="font-weight:700">R$ 0,00</span></div>
+          <div class="cmv-preview-row" style="background:var(--cream);border-radius:6px;padding:4px 0;margin-top:4px">
+            <span style="font-weight:700" id="pv-faixa-label"><i data-lucide="lightbulb"
+                style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Faixa ideal</span><span
+              id="pv-sugerido" style="font-weight:700">R$ 0,00</span>
+          </div>
         </div>
       </div>
       <div class="modal-foot">
@@ -1678,7 +1798,8 @@
     <div class="modal">
       <div class="modal-head">
         <span id="bebida-modal-title">Nova bebida</span>
-        <button class="close-x" onclick="closeModal('modal-bebida')">✕</button>
+        <button class="close-x" onclick="closeModal('modal-bebida')"><i data-lucide="x"
+            style="display:inline-block;width:20px;height:20px"></i></button>
       </div>
       <div class="modal-body">
         <input type="hidden" id="beb-edit-id">
@@ -1689,14 +1810,16 @@
               placeholder="0,00"></div>
           <div class="field"><label>Foto da bebida</label>
             <div style="display:flex;gap:4px;flex-wrap:wrap">
-              <input type="text" id="beb-foto" placeholder="https://... ou upload" style="flex:1;min-width:120px" oninput="showFotoPreview('beb-foto','beb-foto-preview')">
-              <input type="file" id="beb-foto-file" accept="image/*" style="width:100px;font-size:12px" onchange="handleFotoUpload('beb-foto','beb-foto-preview')">
+              <input type="text" id="beb-foto" placeholder="https://... ou upload" style="flex:1;min-width:120px"
+                oninput="showFotoPreview('beb-foto','beb-foto-preview')">
+              <input type="file" id="beb-foto-file" accept="image/*" style="width:100px;font-size:12px"
+                onchange="handleFotoUpload('beb-foto','beb-foto-preview')">
             </div>
             <div id="beb-foto-preview" style="margin-top:4px;max-width:100px;display:none"></div>
           </div>
         </div>
         <div class="field"><label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="beb-ativo"
-                checked> Ativo no cardápio</label></div>
+              checked> Ativo no cardápio</label></div>
       </div>
       <div class="modal-foot">
         <button class="btn btn-ghost" onclick="closeModal('modal-bebida')">Cancelar</button>
@@ -1734,7 +1857,7 @@
 
     // ---- DEFAULT DATA ----
     const DEFAULT = {
-      config: { nome: "Tonda Pizzaria Artesanal", whatsapp: "5511983746277", taxaEntrega: 0, tempoEstimado: "30-40 minutos", pin: PIN, cmvIdeal: 30, massaRecipe: [{ insumoId: "i16", qtd: 1 }, { insumoId: "i17", qtd: 650 }, { insumoId: "i18", qtd: 1 }, { insumoId: "i19", qtd: 24 }, { insumoId: "i20", qtd: 13 }], massaPesoPaneto: 270 },
+      config: { nome: "Tonda Pizza Artesanal", whatsapp: "5511983746277", taxaEntrega: 0, tempoEstimado: "30-40 minutos", pin: PIN, cmvIdeal: 30, massaRecipe: [{ insumoId: "i16", qtd: 1 }, { insumoId: "i17", qtd: 650 }, { insumoId: "i18", qtd: 1 }, { insumoId: "i19", qtd: 24 }, { insumoId: "i20", qtd: 13 }], massaPesoPaneto: 270 },
       insumos: [
         { id: "i1", nome: "Massa artesanal", unidade: "un", custo: 1.13, grupo: "massa" },
         { id: "i2", nome: "Mussarela Bacio", unidade: "kg", custo: 41.83, grupo: "cobertura" },
@@ -1886,7 +2009,7 @@
         return true;
       } catch (e) {
         console.error(e);
-        toast("⚠️ Não foi possível salvar. Verifique o armazenamento do navegador.");
+        toast(`<i data-lucide="alert-triangle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Não foi possível salvar. Verifique o armazenamento do navegador.`);
         return false;
       }
     }
@@ -1900,20 +2023,20 @@
         if (!resp.ok) {
           const text = await resp.text().catch(() => resp.statusText);
           console.warn("Erro ao salvar no servidor:", resp.status, text);
-          toast("⚠️ Não foi possível salvar no servidor. Dados gravados localmente.");
+          toast(`<i data-lucide="alert-triangle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Não foi possível salvar no servidor. Dados gravados localmente.`);
           return false;
         }
         const json = await resp.json().catch(() => null);
         if (json && json.status && json.status !== "ok") {
           console.warn("Resposta inesperada ao salvar no servidor:", json);
-          toast("⚠️ Não foi possível salvar no servidor. Dados gravados localmente.");
+          toast(`<i data-lucide="alert-triangle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Não foi possível salvar no servidor. Dados gravados localmente.`);
           return false;
         }
-        toast("✅ Dados salvos no servidor e localmente.");
+        toast(`<i data-lucide="check-circle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Dados salvos no servidor e localmente.`);
         return true;
       } catch (e) {
         console.warn("Não foi possível salvar no KV:", e);
-        toast("⚠️ Não foi possível salvar no servidor. Dados gravados localmente.");
+        toast(`<i data-lucide="alert-triangle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Não foi possível salvar no servidor. Dados gravados localmente.`);
       }
     }
     async function loadServerData() {
@@ -1925,7 +2048,7 @@
           DB = normalizeDb(data);
           localStorage.setItem(STORE_KEY, JSON.stringify(DB));
           renderAll();
-          toast('✅ Dados do servidor carregados.');
+          toast('<i data-lucide="check-circle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Dados do servidor carregados.');
           return true;
         }
         console.warn('Servidor retornou dados vazios; mantendo dados locais.');
@@ -1933,7 +2056,7 @@
         return false;
       } catch (e) {
         console.warn("Não foi possível carregar dados do servidor:", e);
-        toast('⚠️ Não foi possível carregar dados do servidor. Usando cache local.');
+        toast('<i data-lucide="alert-triangle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Não foi possível carregar dados do servidor. Usando cache local.');
         return false;
       }
     }
@@ -2012,13 +2135,13 @@
       try {
         const ok = await loadServerData();
         if (ok) {
-          toast('✅ Dados atualizados a partir do servidor.');
+          toast('<i data-lucide="check-circle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Dados atualizados a partir do servidor.');
         } else {
-          toast('⚠️ Nenhum dado novo no servidor.');
+          toast('<i data-lucide="alert-triangle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Nenhum dado novo no servidor.');
         }
       } catch (e) {
         console.warn('Erro ao recarregar dados do servidor:', e);
-        toast('⚠️ Erro ao recarregar dados.');
+        toast('<i data-lucide="alert-triangle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Erro ao recarregar dados.');
       } finally {
         if (btn) btn.disabled = false;
       }
@@ -2075,6 +2198,7 @@
       <td>${pz ? fmtR((pz.preco || 0) * v.qtd) : '-'}</td>
     </tr>`;
       }).join('') || `<tr><td colspan='4' style='text-align:center;color:var(--muted);padding:24px'>Nenhuma venda registrada.</td></tr>`;
+      lucide.createIcons();
       renderAnalise();
     }
 
@@ -2092,7 +2216,7 @@
       const qtd = parseInt(document.getElementById('venda-qtd').value);
       const data = document.getElementById('venda-data').value || new Date().toISOString().slice(0, 10);
       if (!pizzaId || isNaN(qtd) || qtd <= 0) {
-        toast('⚠️ Preencha todos os campos corretamente.');
+        toast('<i data-lucide="alert-triangle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Preencha todos os campos corretamente.');
         return;
       }
       DB.vendas = DB.vendas || [];
@@ -2119,7 +2243,7 @@
       renderEstoque();
       renderDashboard();
       closeModal('modal-venda');
-      toast('✅ Venda registrada!');
+      toast('<i data-lucide="check-circle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Venda registrada!');
     }
 
     // ---- PEDIDOS (dos clientes) ----
@@ -2138,7 +2262,7 @@
       const d = tel.replace(/\D/g, '');
       const nums = d.startsWith('55') ? d : '55' + d;
       const msg = encodeURIComponent(`Olá! Seu pedido ${trackingId} está: ${status} 🍕`);
-      return `<a href="https://wa.me/${nums}?text=${msg}" target="_blank" rel="noopener" title="Enviar WhatsApp" style="text-decoration:none;margin-left:6px;font-size:18px">📲</a>`;
+      return `<a href="https://wa.me/${nums}?text=${msg}" target="_blank" rel="noopener" title="Enviar WhatsApp" style="text-decoration:none;margin-left:6px;font-size:18px"><i data-lucide="smartphone" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i></a>`;
     }
     const STATUS_LIST = ["Recebido", "Agendado", "Preparando", "Saiu pra entrega", "Entregue", "Cancelado"];
     const STATUS_FLOW = ["Recebido", "Preparando", "Saiu pra entrega", "Entregue"];
@@ -2174,14 +2298,14 @@
         if (!resp.ok) throw new Error(resp.statusText);
         const data = await resp.json();
         if (data.status === "ok") {
-          toast(`✅ Pedido ${trackingId} atualizado para "${newStatus}"`);
+          toast(`<i data-lucide="check-circle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Pedido ${trackingId} atualizado para "${newStatus}"`);
           loadPedidosFromServer();
         } else {
-          toast('⚠️ Erro ao atualizar status.');
+          toast('<i data-lucide="alert-triangle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Erro ao atualizar status.');
         }
       } catch (e) {
         console.warn('Erro ao atualizar status:', e);
-        toast('⚠️ Erro ao atualizar status.');
+        toast('<i data-lucide="alert-triangle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Erro ao atualizar status.');
       }
     }
     function renderPedidos() {
@@ -2189,6 +2313,7 @@
       if (!list) return;
       if (!cachedPedidos.length) {
         list.innerHTML = `<tr><td colspan='10' style='text-align:center;color:var(--muted);padding:24px'>Nenhum pedido recebido. Os pedidos dos clientes aparecem aqui.</td></tr>`;
+        lucide.createIcons();
         return;
       }
       list.innerHTML = [...cachedPedidos].reverse().map(p => {
@@ -2198,7 +2323,7 @@
           }
           return `${i.qtd}x ${i.nome}`;
         }).join('<br>');
-        const agendado = p.agendado && p.dataAgendada ? `📅 ${new Date(p.dataAgendada).toLocaleString()}` : '';
+        const agendado = p.agendado && p.dataAgendada ? `<i data-lucide="calendar" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> ${new Date(p.dataAgendada).toLocaleString()}` : '';
         const next = nextStatus(p.status);
         const prev = prevStatus(p.status);
         return `<tr>
@@ -2212,16 +2337,17 @@
           <td>${p.pagamento || '-'}</td>
           <td>${statusBadge(p.status)}</td>
           <td style="white-space:nowrap">
-            ${prev ? `<button class="btn btn-sm btn-ghost" onclick="updatePedidoStatus('${p.trackingId}','${prev}')" title="Voltar para ${prev}">◀</button>` : ''}
-            ${next ? `<button class="btn btn-sm btn-primary" onclick="updatePedidoStatus('${p.trackingId}','${next}')" title="Avançar para ${next}">${next === 'Entregue' ? '✅' : '▶'}</button>` : ''}
-            ${p.status !== 'Cancelado' && p.status !== 'Entregue' ? `<button class="btn btn-sm btn-danger" onclick="updatePedidoStatus('${p.trackingId}','Cancelado')" title="Cancelar pedido">✕</button>` : ''}
-            <button class="btn btn-sm btn-danger" onclick="deletePedido('${p.trackingId}')" title="Excluir pedido" style="margin-left:4px">🗑️</button>
+            ${prev ? `<button class="btn btn-sm btn-ghost" onclick="updatePedidoStatus('${p.trackingId}','${prev}')" title="Voltar para ${prev}"><i data-lucide="chevron-left" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i></button>` : ''}
+            ${next ? `<button class="btn btn-sm btn-primary" onclick="updatePedidoStatus('${p.trackingId}','${next}')" title="Avançar para ${next}">${next === 'Entregue' ? '<i data-lucide="check-circle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i>' : '<i data-lucide="chevron-right" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i>'}</button>` : ''}
+            ${p.status !== 'Cancelado' && p.status !== 'Entregue' ? `<button class="btn btn-sm btn-danger" onclick="updatePedidoStatus('${p.trackingId}','Cancelado')" title="Cancelar pedido"><i data-lucide="x" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i></button>` : ''}
+            <button class="btn btn-sm btn-danger" onclick="deletePedido('${p.trackingId}')" title="Excluir pedido" style="margin-left:4px"><i data-lucide="trash-2" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i></button>
           </td>
         </tr>`;
       }).join('');
+      lucide.createIcons();
     }
     async function deletePedido(trackingId) {
-      if (!trackingId || trackingId === '—') { toast('⚠️ Pedido sem ID válido.'); return; }
+      if (!trackingId || trackingId === '—') { toast('<i data-lucide="alert-triangle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Pedido sem ID válido.'); return; }
       if (!confirm(`Excluir pedido ${trackingId}?`)) return;
       try {
         const resp = await fetch(`${API_HOST}/api/admin/pedido/delete`, {
@@ -2231,14 +2357,14 @@
         });
         const data = await resp.json();
         if (data.status === "ok") {
-          toast(`🗑️ Pedido ${trackingId} excluído.`);
+          toast(`<i data-lucide="trash-2" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Pedido ${trackingId} excluído.`);
           loadPedidosFromServer();
         } else {
-          toast('⚠️ Erro ao excluir: ' + (data.erro || 'desconhecido'));
+          toast('<i data-lucide="alert-triangle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Erro ao excluir: ' + (data.erro || 'desconhecido'));
         }
       } catch (e) {
         console.warn('Erro ao excluir pedido:', e);
-        toast('⚠️ Erro ao excluir pedido.');
+        toast('<i data-lucide="alert-triangle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Erro ao excluir pedido.');
       }
     }
     // Sincroniza pedidos FINALIZADOS (status = Entregue) com o DB.vendas para análise
@@ -2300,10 +2426,10 @@
         if (document.getElementById('tab-dashboard').classList.contains('active')) renderDashboard();
         if (document.getElementById('tab-analise').classList.contains('active')) renderAnalise();
         if (document.getElementById('tab-vendas').classList.contains('active')) renderVendas();
-        toast('✅ Pedidos carregados do servidor.');
+        toast('<i data-lucide="check-circle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Pedidos carregados do servidor.');
       } catch (e) {
         console.warn('Não foi possível carregar pedidos:', e);
-        toast('⚠️ Erro ao carregar pedidos do servidor.');
+        toast('<i data-lucide="alert-triangle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Erro ao carregar pedidos do servidor.');
       }
     }
     // ---- CMV HELPERS ----
@@ -2384,6 +2510,7 @@
     <div class="stat-card"><div class="stat-label">Ticket médio</div><div class="stat-value">${fmtR(ticket)}</div><div class="stat-sub">${totalVendas} pedidos</div></div>
     <div class="stat-card"><div class="stat-label">CMV médio</div><div class="stat-value" style="color:${cmvColor(avgCmv)}">${fmtP(avgCmv)}</div><div class="stat-sub">Meta ideal: ≤ 35%</div></div>
   `;
+      lucide.createIcons();
       // ---- CMV por pizza ----
       const sorted = [...cmvs].sort((a, b) => a.pct - b.pct);
       document.getElementById("dash-cmv-list").innerHTML = sorted.map(p => {
@@ -2392,7 +2519,7 @@
           return ins ? `<div style='font-size:12px;color:var(--muted)'>${ins.nome}: <b>${ing.quantidade}</b> ${ins.unidade} <span style='color:#888'>(${fmtR(ins.custo)} / ${ins.unidade})</span></div>` : '';
         }).join("");
         return `<div class="cmv-table-row">
-      <span style="font-weight:600">${p.foto ? `<img src="${p.foto}" style="width:24px;height:24px;border-radius:4px;object-fit:cover;vertical-align:middle;margin-right:6px">` : ''}${p.nome}<br>${ingList}</span>
+      <span style="font-weight:600"><img src="${p.foto || 'src/logo.jpeg'}" style="width:24px;height:24px;border-radius:4px;object-fit:cover;vertical-align:middle;margin-right:6px">${p.nome}<br>${ingList}</span>
       <span>${fmtR(p.custo)}</span>
       <span>${fmtR(p.preco)}</span>
       <span style="color:var(--green-olive)">${fmtR(p.margem)}</span>
@@ -2403,6 +2530,7 @@
       </div></span>
     </div>`;
       }).join("") || "<div style='padding:20px;text-align:center;color:var(--muted);font-size:13px'>Nenhuma pizza com ingredientes cadastrados.</div>";
+      lucide.createIcons();
       // ---- Ranking de pizzas mais vendidas ----
       const rank = {};
       vendas.forEach(v => {
@@ -2417,7 +2545,7 @@
         rankHtml.innerHTML = topPizzas.length ? topPizzas.map(([id, qtd], i) => {
           const p = DB.pizzas.find(x => x.id === id);
           if (!p) return '';
-          const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i + 1}º`;
+          const medal = i === 0 ? '<i data-lucide="medal" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i>' : i === 1 ? '<i data-lucide="medal" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i>' : i === 2 ? '<i data-lucide="medal" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i>' : `${i + 1}º`;
           const receita = qtd * p.preco;
           return `<div class="cmv-table-row">
             <span style="font-weight:600">${medal} ${p.nome}</span>
@@ -2425,6 +2553,7 @@
             <span>${fmtR(receita)}</span>
           </div>`;
         }).join('') : '<div style="padding:16px;text-align:center;color:var(--muted);font-size:13px">Nenhuma venda registrada ainda.</div>';
+        lucide.createIcons();
       }
     }
 
@@ -2435,7 +2564,7 @@
         const g = ins.grupo === "massa" ? "massa" : "cobertura";
         grupos[g].push(ins);
       });
-      const labels = { cobertura: "🧀 Coberturas", massa: "🍞 Massa" };
+      const labels = { cobertura: '<i data-lucide="chef-hat" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Coberturas', massa: '<i data-lucide="bread" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Massa' };
       let html = "";
       ["cobertura", "massa"].forEach(g => {
         if (!grupos[g].length) return;
@@ -2449,14 +2578,15 @@
         <td>${usadoEm > 0 ? `<span class="badge badge-green">${usadoEm} pizza${usadoEm > 1 ? "s" : ""}</span>` : "<span class='badge badge-gray'>—</span>"}</td>
         <td>
           <div style="display:flex;gap:6px">
-            <button class="btn btn-ghost btn-sm" onclick="editInsumo('${ins.id}')">✏️</button>
-            <button class="btn btn-danger btn-sm" onclick="delInsumo('${ins.id}')">✕</button>
+            <button class="btn btn-ghost btn-sm" onclick="editInsumo('${ins.id}')"><i data-lucide="pencil" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i></button>
+            <button class="btn btn-danger btn-sm" onclick="delInsumo('${ins.id}')"><i data-lucide="x" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i></button>
           </div>
         </td>
       </tr>`;
         }).join("");
       });
       document.getElementById("insumos-list").innerHTML = html || "<tr><td colspan='5' style='text-align:center;color:var(--muted);padding:24px'>Nenhum insumo cadastrado.</td></tr>";
+      lucide.createIcons();
     }
 
     // ---- PIZZAS ----
@@ -2466,7 +2596,7 @@
         return `<tr>
       <td>
         <div style="display:flex;align-items:center;gap:8px">
-          ${p.foto ? `<img src="${p.foto}" style="width:32px;height:32px;border-radius:4px;object-fit:cover;border:1px solid var(--border)">` : '<span style="font-size:20px">🍕</span>'}
+          <img src="${p.foto || 'src/logo.jpeg'}" style="width:32px;height:32px;border-radius:4px;object-fit:cover;border:1px solid var(--border)">
           <strong>${p.nome}</strong>
         </div>
         ${!p.ativo ? "<span class='badge badge-gray' style='margin-left:6px'>Inativo</span>" : ""}
@@ -2478,13 +2608,14 @@
       <td style="color:var(--green-olive);font-weight:600">${fmtR(margem)}</td>
       <td>
         <div style="display:flex;gap:6px">
-          <button class="btn btn-ghost btn-sm" onclick="editPizza('${p.id}')">✏️</button>
-          <button class="btn btn-danger btn-sm" onclick="delPizza('${p.id}')">✕</button>
+          <button class="btn btn-ghost btn-sm" onclick="editPizza('${p.id}')"><i data-lucide="pencil" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i></button>
+          <button class="btn btn-danger btn-sm" onclick="delPizza('${p.id}')"><i data-lucide="x" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i></button>
         </div>
       </td>
     </tr>`;
       }).join("");
       document.getElementById("pizzas-list").innerHTML = rows || "<tr><td colspan='7' style='text-align:center;color:var(--muted);padding:24px'>Nenhuma pizza cadastrada.</td></tr>";
+      lucide.createIcons();
     }
 
     // ---- CONFIG ----
@@ -2510,7 +2641,7 @@
       DB.config.cmvIdeal = parseNum(document.getElementById("cfg-cmv").value) || 30;
       const newPin = document.getElementById("cfg-pin").value.trim();
       if (newPin.length === 4 && /^[0-9]{4}$/.test(newPin)) DB.config.pin = newPin;
-      if (save(DB)) toast("✅ Configurações salvas!");
+      if (save(DB)) toast(`<i data-lucide="check-circle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Configurações salvas!`);
     }
 
     function exportBackup() {
@@ -2531,7 +2662,7 @@
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      toast("✅ Backup exportado!");
+      toast(`<i data-lucide="check-circle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Backup exportado!`);
     }
     function downloadCSV(filename, header, rows) {
       const csv = [header.join(","), ...rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(","))].join("\n");
@@ -2545,7 +2676,7 @@
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      toast("✅ CSV exportado!");
+      toast(`<i data-lucide="check-circle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> CSV exportado!`);
     }
     function exportCSV(type) {
       if (type === "insumos") {
@@ -2584,7 +2715,7 @@
       DB = normalizeDb(data);
       save(DB);
       renderAll();
-      toast("✅ Backup importado!");
+      toast(`<i data-lucide="check-circle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Backup importado!`);
     }
 
     // ---- INSUMO MODAL ----
@@ -2609,7 +2740,7 @@
       const nome = document.getElementById("ins-nome").value.trim();
       const un = document.getElementById("ins-un").value;
       const custo = parseNum(document.getElementById("ins-custo").value);
-      if (!nome || isNaN(custo)) { toast("⚠️ Preencha todos os campos."); return }
+      if (!nome || isNaN(custo)) { toast(`<i data-lucide="alert-triangle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Preencha todos os campos.`); return }
       const editId = document.getElementById("insumo-edit-id").value;
       if (editId) {
         const ins = DB.insumos.find(i => i.id === editId);
@@ -2619,7 +2750,7 @@
       }
       if (save(DB)) {
         renderInsumos(); renderPizzas(); renderDashboard();
-        closeModal("modal-insumo"); toast("✅ Insumo salvo!");
+        closeModal("modal-insumo"); toast(`<i data-lucide="check-circle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Insumo salvo!`);
       }
     }
     function delInsumo(id) {
@@ -2680,9 +2811,10 @@
     <input type="number" step="any" min="0" value="${data ? data.quantidade : ""}" placeholder="0" oninput="updateCmvPreview()">
     <span style="font-size:12px;color:var(--muted);align-self:center" id="ing-un-${rowId}"></span>
     <span style="font-size:11px;color:#888;align-self:center" id="ing-preco-${rowId}"></span>
-    <button class="ing-del" onclick="document.getElementById('ing-row-${rowId}').remove();updateCmvPreview()">✕</button>
+    <button class="ing-del" onclick="document.getElementById('ing-row-${rowId}').remove();updateCmvPreview()"><i data-lucide="x" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i></button>
   `;
       document.getElementById("ing-rows").appendChild(row);
+      lucide.createIcons();
       // Exibe unidade e preço do insumo
       const sel = row.querySelector("select");
       const unSpan = row.querySelector(`#ing-un-${rowId}`);
@@ -2736,6 +2868,7 @@
       <td>${ult ? new Date(ult.data).toLocaleDateString() : '-'}</td>
     </tr>`;
       }).join('') || `<tr><td colspan='4' style='text-align:center;color:var(--muted);padding:24px'>Nenhum insumo cadastrado.</td></tr>`;
+      lucide.createIcons();
       // Popula filtro de insumo
       const filtroSel = document.getElementById('filtro-insumo');
       const currentFilter = filtroSel.value;
@@ -2755,6 +2888,7 @@
       <td style="font-size:12px;color:var(--muted)">${ins ? fmtR(e.valorTotal / e.qtd) + '/' + ins.unidade : '-'}</td>
     </tr>`;
       }).join('') || `<tr><td colspan='6' style='text-align:center;color:var(--muted);padding:24px'>Nenhuma compra registrada.</td></tr>`;
+      lucide.createIcons();
     }
 
     function openCompraModal() {
@@ -2786,7 +2920,7 @@
       const qtd = parseNum(document.getElementById('compra-qtd').value);
       const valorTotal = parseNum(document.getElementById('compra-valor').value);
       if (!insumoId || isNaN(qtd) || qtd <= 0 || isNaN(valorTotal) || valorTotal <= 0) {
-        toast('⚠️ Preencha todos os campos corretamente.');
+        toast('<i data-lucide="alert-triangle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Preencha todos os campos corretamente.');
         return;
       }
       DB.estoque = DB.estoque || [];
@@ -2810,7 +2944,7 @@
         renderPizzas();
         renderDashboard();
         closeModal('modal-compra');
-        toast('✅ Compra registrada!');
+        toast('<i data-lucide="check-circle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Compra registrada!');
       }
     }
     function getIngRows() {
@@ -2845,9 +2979,10 @@
         <input type="number" step="any" min="0" value="${data ? data.qtd : ""}" placeholder="qtd" oninput="updateMassaRow('${rowId}')">
         <span style="font-size:12px;color:var(--muted);align-self:center" id="massa-un-${rowId}"></span>
         <span style="font-size:11px;color:#888;align-self:center" id="massa-preco-${rowId}"></span>
-        <button class="ing-del" onclick="document.getElementById('massa-row-${rowId}').remove();calcMassa()">✕</button>
+        <button class="ing-del" onclick="document.getElementById('massa-row-${rowId}').remove();calcMassa()"><i data-lucide="x" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i></button>
       `;
       document.getElementById("massa-rows").appendChild(row);
+      lucide.createIcons();
       updateMassaRow(rowId);
       calcMassa();
     }
@@ -2906,7 +3041,7 @@
     }
     function saveMassa() {
       const rows = getMassaRows();
-      if (rows.length === 0) { toast("⚠️ Adicione pelo menos um ingrediente."); return }
+      if (rows.length === 0) { toast(`<i data-lucide="alert-triangle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Adicione pelo menos um ingrediente.`); return }
       const pesoPaneto = parseInt(document.getElementById("massa-peso-paneto").value) || 270;
       const pesoTotalG = rows.reduce((s, r) => {
         const mi = DB.insumos.find(i => i.id === r.insumoId);
@@ -2926,7 +3061,7 @@
         massaIns.unidade = "un";
       }
       if (save(DB)) {
-        toast("✅ Massa atualizada! " + pesoTotalG + "g · " + rend + " bolas · " + fmtR(custoBola) + "/bola");
+        toast(`<i data-lucide="check-circle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Massa atualizada! ${pesoTotalG}g · ${rend} bolas · ${fmtR(custoBola)}/bola`);
         renderMassa();
         renderPizzas();
         renderDashboard();
@@ -2947,7 +3082,8 @@
       const cmvMax = 0.32;
       const precoMin = custo > 0 ? custo / cmvMax : 0;
       const precoMax = custo > 0 ? custo / cmvMin : 0;
-      document.getElementById("pv-faixa-label").textContent = `💡 Faixa ideal (${(cmvMin * 100).toFixed(0)}%-${(cmvMax * 100).toFixed(0)}%)`;
+      document.getElementById("pv-faixa-label").innerHTML = `<i data-lucide="lightbulb" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Faixa ideal (${(cmvMin * 100).toFixed(0)}%-${(cmvMax * 100).toFixed(0)}%)`;
+      lucide.createIcons();
       document.getElementById("pv-custo").textContent = fmtR(custo);
       document.getElementById("pv-preco").textContent = fmtR(preco);
       document.getElementById("pv-margem").textContent = fmtR(margem);
@@ -2962,7 +3098,7 @@
       const preco = parseNum(document.getElementById("pz-preco").value);
       const foto = document.getElementById("pz-foto").value.trim();
       const ativo = document.getElementById("pz-ativo").checked;
-      if (!nome || isNaN(preco) || preco <= 0) { toast("⚠️ Informe nome e preço."); return }
+      if (!nome || isNaN(preco) || preco <= 0) { toast(`<i data-lucide="alert-triangle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Informe nome e preço.`); return }
       const ingredientes = getIngRows();
       const complementos = getComps();
       const editId = document.getElementById("pizza-edit-id").value;
@@ -2974,7 +3110,7 @@
       }
       if (save(DB)) {
         renderPizzas(); renderDashboard();
-        closeModal("modal-pizza"); toast("✅ Pizza salva!");
+        closeModal("modal-pizza"); toast(`<i data-lucide="check-circle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Pizza salva!`);
       }
     }
     function delPizza(id) {
@@ -2989,18 +3125,19 @@
         <tr>
           <td>
             <div style="display:flex;align-items:center;gap:8px">
-              ${b.foto ? `<img src="${b.foto}" style="width:32px;height:32px;border-radius:4px;object-fit:cover;border:1px solid var(--border)">` : '<span style="font-size:24px">🥤</span>'}
+              ${b.foto ? `<img src="${b.foto}" style="width:32px;height:32px;border-radius:4px;object-fit:cover;border:1px solid var(--border)">` : '<i data-lucide="cup-soda" style="display:inline-block;width:24px;height:24px"></i>'}
               <strong>${b.nome}</strong>
             </div>
             ${!b.ativo ? '<span class="badge badge-gray" style="margin-left:6px">Inativo</span>' : ''}
           </td>
           <td>${fmtR(b.preco)}</td>
           <td>
-            <button class="btn btn-sm btn-ghost" onclick="editBebida('${b.id}')">✏️</button>
-            <button class="btn btn-sm btn-danger" onclick="delBebida('${b.id}')">🗑️</button>
+            <button class="btn btn-sm btn-ghost" onclick="editBebida('${b.id}')"><i data-lucide="pencil" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i></button>
+            <button class="btn btn-sm btn-danger" onclick="delBebida('${b.id}')"><i data-lucide="trash-2" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i></button>
           </td>
         </tr>
       `).join("") || `<tr><td colspan="3" style="text-align:center;color:var(--muted);padding:24px">Nenhuma bebida cadastrada.</td></tr>`;
+      lucide.createIcons();
     }
     function openBebidaModal() {
       document.getElementById("bebida-modal-title").textContent = "Nova bebida";
@@ -3033,7 +3170,7 @@
       const preco = parseNum(document.getElementById("beb-preco").value);
       const foto = document.getElementById("beb-foto").value.trim();
       const ativo = document.getElementById("beb-ativo").checked;
-      if (!nome || !preco || preco <= 0) { toast("⚠️ Preencha nome e preço."); return }
+      if (!nome || !preco || preco <= 0) { toast(`<i data-lucide="alert-triangle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Preencha nome e preço.`); return }
       DB.bebidas = DB.bebidas || [];
       if (editId) {
         const b = DB.bebidas.find(x => x.id === editId);
@@ -3041,7 +3178,7 @@
       } else {
         DB.bebidas.push({ id: uid(), nome, preco, foto, ativo });
       }
-      save(DB); renderBebidas(); closeModal("modal-bebida"); toast("✅ Bebida salva!");
+      save(DB); renderBebidas(); closeModal("modal-bebida"); toast(`<i data-lucide="check-circle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Bebida salva!`);
     }
     function delBebida(id) {
       if (!confirm("Remover esta bebida?")) return;
@@ -3058,9 +3195,10 @@
       div.innerHTML = `
         <input type="text" placeholder="Nome" value="${data ? data.nome : ""}" style="flex:1;padding:4px 6px;border:1px solid var(--border);border-radius:4px;font-size:12px">
         <input type="number" step="0.50" min="0" placeholder="R$" value="${data ? data.preco : ""}" style="width:70px;padding:4px 6px;border:1px solid var(--border);border-radius:4px;font-size:12px">
-        <button class="ing-del" onclick="this.parentElement.remove()">✕</button>
+        <button class="ing-del" onclick="this.parentElement.remove()"><i data-lucide="x" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i></button>
       `;
       document.getElementById("comp-container").appendChild(div);
+      lucide.createIcons();
     }
     function getComps() {
       const arr = [];
@@ -3091,6 +3229,7 @@
         <div class="stat-card"><div class="stat-label">Faturamento total</div><div class="stat-value" style="color:var(--green-olive)">${fmtR(faturamento)}</div></div>
         <div class="stat-card"><div class="stat-label">Ticket médio</div><div class="stat-value">${fmtR(ticket)}</div></div>
       `;
+      lucide.createIcons();
       // Ranking por pizza
       const rank = {};
       vendas.forEach(v => {
@@ -3116,6 +3255,7 @@
           <td><span class="badge ${cmvClass(cmv.pct)}">${fmtP(cmv.pct)}</span></td>
         </tr>`;
       }).join("") : "<tr><td colspan='7' style='text-align:center;color:var(--muted);padding:24px'>Nenhuma venda registrada.</td></tr>";
+      lucide.createIcons();
       // Faturamento por período
       const periodos = {};
       vendas.forEach(v => {
@@ -3137,6 +3277,7 @@
           <td>${fmtR(d.fat / d.pedidos)}</td>
         </tr>`;
       }).join("") : "<tr><td colspan='4' style='text-align:center;color:var(--muted);padding:24px'>Nenhuma venda registrada.</td></tr>";
+      lucide.createIcons();
       // CMV real vs teórico
       renderCmvReal();
     }
@@ -3168,7 +3309,7 @@
       const cmvReal = totalCompras - valorEstoqueAtual;
       const diff = cmvReal - cmvTeorico;
       const diffPct = cmvTeorico > 0 ? (diff / cmvTeorico) * 100 : 0;
-      const status = diff <= 0 ? "✅ Ok" : (diffPct <= 10 ? "⚠️ Pequena diferença" : "🔴 Atenção");
+      const status = diff <= 0 ? "<i data-lucide=\"check-circle\" style=\"display:inline-block;width:1em;height:1em;vertical-align:-.15em\"></i> Ok" : (diffPct <= 10 ? "<i data-lucide=\"alert-triangle\" style=\"display:inline-block;width:1em;height:1em;vertical-align:-.15em\"></i> Pequena diferença" : "<i data-lucide=\"circle\" style=\"display:inline-block;width:1em;height:1em;vertical-align:-.15em\"></i> Atenção");
       const statusClass = diff <= 0 ? "badge-green" : (diffPct <= 10 ? "badge-amber" : "badge-red");
       document.getElementById("cmv-real-list").innerHTML = `
         <div class="cmv-table-row">
@@ -3179,6 +3320,7 @@
           <span><span class="badge ${statusClass}">${status}</span></span>
         </div>
       `;
+      lucide.createIcons();
     }
     function openModal(id) { document.getElementById(id).classList.add("open") }
     function closeModal(id) { document.getElementById(id).classList.remove("open") }
@@ -3189,9 +3331,11 @@
     // ---- TOAST ----
     function toast(msg) {
       const el = document.getElementById("toast");
-      el.textContent = msg; el.classList.add("show");
+      el.innerHTML = msg; el.classList.add("show");
+      lucide.createIcons();
       setTimeout(() => el.classList.remove("show"), 2800);
     }
+    lucide.createIcons();
   </script>
 </body>
 
