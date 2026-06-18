@@ -167,41 +167,51 @@
       overflow-x: hidden;
       overflow-y: hidden
     }
+
     aside.collapsed {
       width: 72px;
       padding: 20px 8px;
       overflow-x: hidden
     }
+
     aside.collapsed .nav-btn {
       justify-content: center;
       padding: 11px 0;
       gap: 0;
       font-size: 0
     }
+
     aside.collapsed .nav-btn .ni {
       font-size: 20px
     }
+
     aside.collapsed .sidebar-logo .logo-sub {
       display: none
     }
+
     aside.collapsed .sidebar-logo {
       justify-content: center;
       padding: 6px 0 22px
     }
+
     aside.collapsed .store-link {
       font-size: 0;
       display: flex;
       justify-content: center
     }
+
     aside.collapsed .store-link i:last-child {
       display: none
     }
+
     aside.collapsed .collapse-btn {
       justify-content: center
     }
+
     aside.collapsed .collapse-btn .collapse-label {
       display: none
     }
+
     aside.collapsed .collapse-btn i {
       transform: rotate(180deg)
     }
@@ -256,6 +266,7 @@
       justify-content: center;
       border-radius: 6px
     }
+
     #sidebar-close {
       display: none
     }
@@ -269,7 +280,7 @@
       overflow-y: auto;
       -ms-overflow-style: none;
       scrollbar-width: thin;
-      scrollbar-color: rgba(255,255,255,.2) transparent
+      scrollbar-color: rgba(255, 255, 255, .2) transparent
     }
 
     .nav-btn {
@@ -279,10 +290,11 @@
       border-radius: var(--radius);
       padding: 11px 12px;
       text-align: left;
-      font-weight: 600;
+      font-size: 14px;
+      font-weight: 300;
       display: flex;
       align-items: center;
-      gap: 9px
+      gap: 8px
     }
 
     .nav-btn:hover,
@@ -302,6 +314,7 @@
       flex-shrink: 0;
       margin-top: auto
     }
+
     .collapse-btn {
       background: rgba(255, 255, 255, .06);
       border: 1px solid rgba(255, 255, 255, .08);
@@ -318,6 +331,7 @@
       font-size: 12px;
       font-family: inherit
     }
+
     .collapse-btn:hover {
       background: rgba(255, 255, 255, .14);
       border-color: rgba(255, 255, 255, .2);
@@ -342,6 +356,7 @@
       overflow-x: hidden;
       transition: margin-left .25s
     }
+
     aside.collapsed+.main {
       margin-left: 72px
     }
@@ -473,6 +488,153 @@
     }
 
     /* TABLE */
+    .pedido-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, .04);
+      transition: box-shadow .2s;
+      display: flex;
+      overflow: hidden
+    }
+
+    .pedido-card:hover {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .08)
+    }
+
+    .pedido-card .card-body {
+      flex: 1;
+      padding: 12px 16px;
+      min-width: 0
+    }
+
+    .pedido-card .card-actions {
+      width: 100px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 8px;
+      gap: 4px;
+      background: #fff;
+      border-left: 1px solid var(--border);
+      justify-content: flex-start
+    }
+
+    .pedido-card .card-actions .act-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 8px;
+      border: none;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      text-align: left;
+      transition: background .15s
+    }
+
+    .pedido-card .card-actions .act-btn i {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0
+    }
+
+    .pedido-card .card-actions .act-btn-ghost {
+      background: transparent;
+      color: var(--muted)
+    }
+
+    .pedido-card .card-actions .act-btn-ghost:hover {
+      background: rgba(0, 0, 0, .06)
+    }
+
+    .pedido-card .card-actions .act-btn-primary {
+      background: var(--terracotta);
+      color: #fff
+    }
+
+    .pedido-card .card-actions .act-btn-primary:hover {
+      opacity: .85
+    }
+
+    .pedido-card .card-actions .act-btn-danger {
+      background: transparent;
+      color: var(--terracotta)
+    }
+
+    .pedido-card .card-actions .act-btn-danger:hover {
+      background: rgba(184, 92, 56, .1)
+    }
+
+    .pedido-card .top-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border)
+    }
+
+    .pedido-card .top-row .id {
+      font-weight: 700;
+      font-size: 14px;
+      margin-right: auto
+    }
+
+    .pedido-card .top-row .meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--muted)
+    }
+
+    .pedido-card .top-row .total {
+      font-weight: 700;
+      white-space: nowrap;
+      font-size: 16px;
+      color: var(--green-olive)
+    }
+
+    .pedido-card .body-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px 24px
+    }
+
+    .pedido-card .body-grid .full {
+      grid-column: 1 / -1
+    }
+
+    .pedido-card .row {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      font-size: 13px;
+      padding: 3px 0
+    }
+
+    .pedido-card .row .label {
+      min-width: 44px;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .03em;
+      flex-shrink: 0
+    }
+
+    .pedido-card .row .value {
+      flex: 1;
+      min-width: 0;
+      word-break: break-word;
+      line-height: 1.4
+    }
+
     .table-wrap {
       background: var(--white);
       border-radius: var(--radius);
@@ -524,18 +686,18 @@
     }
 
     .badge-green {
-      background: var(--cream);
-      color: var(--green-olive)
+      background: #2ecc71;
+      color: #fff
     }
 
     .badge-amber {
-      background: var(--cream);
-      color: var(--gold)
+      background: #f1c40f;
+      color: #333
     }
 
     .badge-red {
-      background: #ECD5CC;
-      color: var(--terracotta)
+      background: #e74c3c;
+      color: #fff
     }
 
     .badge-gray {
@@ -783,11 +945,32 @@
       text-transform: uppercase;
       letter-spacing: .04em
     }
-    .ing-head span:nth-child(1) { flex: 1; min-width: 0 }
-    .ing-head span:nth-child(2) { width: 100px; flex: none; text-align: center }
-    .ing-head span:nth-child(3) { flex: none }
-    .ing-head span:nth-child(4) { width: 90px; flex: none; text-align: right }
-    .ing-head span:nth-child(5) { width: 32px; flex: none }
+
+    .ing-head span:nth-child(1) {
+      flex: 1;
+      min-width: 0
+    }
+
+    .ing-head span:nth-child(2) {
+      width: 100px;
+      flex: none;
+      text-align: center
+    }
+
+    .ing-head span:nth-child(3) {
+      flex: none
+    }
+
+    .ing-head span:nth-child(4) {
+      width: 90px;
+      flex: none;
+      text-align: right
+    }
+
+    .ing-head span:nth-child(5) {
+      width: 32px;
+      flex: none
+    }
 
     .ing-row select,
     .ing-row input {
@@ -1322,6 +1505,42 @@
         flex-wrap: wrap;
         gap: 4px
       }
+
+      .pedido-card .body-grid {
+        grid-template-columns: 1fr
+      }
+
+      .pedido-card .body-grid .full {
+        grid-column: 1
+      }
+
+      .pedido-card .top-row .meta {
+        font-size: 11px
+      }
+
+      .pedido-card .top-row .meta i {
+        display: none
+      }
+
+      .pedido-card {
+        flex-direction: column
+      }
+
+      .pedido-card .card-actions {
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        border-left: none;
+        border-top: 1px solid var(--border);
+        justify-content: stretch
+      }
+
+      .pedido-card .card-actions .act-btn {
+        flex: 1;
+        justify-content: center;
+        min-width: 80px;
+        text-align: center
+      }
     }
   </style>
 </head>
@@ -1342,8 +1561,8 @@
     <div class="sidebar-logo">
       <img src="src/logo.svg" alt="Tonda" class="logo-img">
       <div class="logo-text"><span class="logo-name">Tonda</span><small class="logo-sub">Admin</small></div>
-      <button onclick="toggleSidebar()" class="close-x"
-        id="sidebar-close"><i data-lucide="x" style="display:inline-block;width:22px;height:22px"></i></button>
+      <button onclick="toggleSidebar()" class="close-x" id="sidebar-close"><i data-lucide="x"
+          style="display:inline-block;width:22px;height:22px"></i></button>
     </div>
     <nav>
       <button class="nav-btn active" data-tab="dashboard" onclick="showTab('dashboard')"><span class="ni"><i
@@ -1373,6 +1592,9 @@
             data-lucide="trending-up"
             style="display:inline-block;width:20px;height:20px;vertical-align:middle"></i></span>
         Análise</button>
+      <button class="nav-btn" data-tab="fidelidade" onclick="showTab('fidelidade')"><span class="ni"><i
+            data-lucide="gift" style="display:inline-block;width:20px;height:20px;vertical-align:middle"></i></span>
+        Fidelidade</button>
       <button class="nav-btn" data-tab="config" onclick="showTab('config')"><span class="ni"><i data-lucide="settings"
             style="display:inline-block;width:20px;height:20px;vertical-align:middle"></i></span>
         Configurações</button>
@@ -1381,8 +1603,9 @@
       <a href="index.html" target="_blank" class="store-link"><i data-lucide="link"
           style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Ver loja online <i
           data-lucide="arrow-right" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i></a>
-      <button class="collapse-btn" onclick="toggleSidebarCollapse()" title="Recolher sidebar"><i data-lucide="chevron-left"
-          style="display:inline-block;width:18px;height:18px"></i> <span class="collapse-label">Recolher</span></button>
+      <button class="collapse-btn" onclick="toggleSidebarCollapse()" title="Recolher sidebar"><i
+          data-lucide="chevron-left" style="display:inline-block;width:18px;height:18px"></i> <span
+          class="collapse-label">Recolher</span></button>
     </div>
   </aside>
 
@@ -1635,23 +1858,40 @@
               style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Recarregar</button>
         </div>
       </div>
+      <div id="pedidos-list"></div>
+    </div>
+    <!-- FIDELIDADE -->
+    <div class="tab-content" id="tab-fidelidade">
+      <div class="page-header">
+        <div class="page-title">Fidelidade <small>Programa de pontos</small></div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-ghost" onclick="recalcularFidelidade()"><i data-lucide="refresh-ccw"
+              style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Recalcular de
+            pedidos</button>
+        </div>
+      </div>
+      <div
+        style="background:var(--cream);border-radius:var(--radius);padding:14px 16px;margin-bottom:16px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;font-size:13px">
+        <span><i data-lucide="info" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i>
+          <strong>Regra:</strong> R$ 1 = 1 ponto &nbsp;|&nbsp; <strong>80 pontos</strong> = R$ 10 de desconto</span>
+        <span style="flex:1"></span>
+        <button class="btn btn-primary" onclick="abrirModalFidelidade()"><i data-lucide="plus"
+            style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Novo cliente / Pontos</button>
+      </div>
       <div class="table-wrap">
         <table>
           <thead>
             <tr>
-              <th>ID</th>
-              <th>Data</th>
-              <th>Cliente</th>
               <th>Telefone</th>
-              <th>Endereço</th>
-              <th>Itens</th>
-              <th>Total</th>
-              <th>Pagamento</th>
-              <th>Status</th>
+              <th>Nome</th>
+              <th>Total gasto</th>
+              <th>Pontos</th>
+              <th>Resgatados</th>
+              <th>Saldo</th>
               <th>Ações</th>
             </tr>
           </thead>
-          <tbody id="pedidos-list"></tbody>
+          <tbody id="fidelidade-list"></tbody>
         </table>
       </div>
     </div>
@@ -1683,7 +1923,9 @@
           <div class="field"><label>PIN de acesso (4 dígitos)</label><input type="password" id="cfg-pin" maxlength="4"
               placeholder="1103"></div>
         </div>
-        <div class="field"><label>Custo fixo por pizza (R$) <small style="color:var(--muted);font-weight:400">gás, luz, embalagem, mão de obra</small></label><input type="number" id="cfg-custo-fixo" step="0.10" min="0" placeholder="0,00"></div>
+        <div class="field"><label>Custo fixo por pizza (R$) <small style="color:var(--muted);font-weight:400">gás, luz,
+              embalagem, mão de obra</small></label><input type="number" id="cfg-custo-fixo" step="0.10" min="0"
+            placeholder="0,00"></div>
         <button class="btn btn-primary" onclick="saveConfig()">Salvar configurações</button>
         <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:16px">
           <button class="btn btn-ghost" onclick="exportBackup()">Exportar backup</button>
@@ -1834,7 +2076,9 @@
           <div class="cmv-preview-row"><span>Margem bruta</span><span id="pv-margem">R$ 0,00</span></div>
           <div class="cmv-preview-row" style="margin-top:6px">
             <span style="font-size:13px">🎯 Meta CMV</span>
-            <span><input type="number" id="pv-meta-cmv" value="30" min="20" max="50" step="1" style="width:60px;padding:2px 6px;border:1px solid var(--border);border-radius:4px;font-size:13px;text-align:center" oninput="updateCmvPreview()"> %</span>
+            <span><input type="number" id="pv-meta-cmv" value="30" min="20" max="50" step="1"
+                style="width:60px;padding:2px 6px;border:1px solid var(--border);border-radius:4px;font-size:13px;text-align:center"
+                oninput="updateCmvPreview()"> %</span>
           </div>
           <div class="cmv-preview-row" style="background:var(--cream);border-radius:6px;padding:6px 0;margin-top:4px">
             <span style="font-weight:700;font-size:14px">💡 Preço sugerido</span>
@@ -1864,7 +2108,8 @@
         <div class="field-row">
           <div class="field"><label>Preço de venda (R$) *</label><input type="number" id="beb-preco" step="0.50" min="0"
               placeholder="0,00"></div>
-          <div class="field"><label>Custo (R$) *</label><input type="number" id="beb-custo" step="0.10" min="0" placeholder="0,00"></div>
+          <div class="field"><label>Custo (R$) *</label><input type="number" id="beb-custo" step="0.10" min="0"
+              placeholder="0,00"></div>
           <div class="field"><label>Foto da bebida</label>
             <div style="display:flex;gap:4px;flex-wrap:wrap">
               <input type="text" id="beb-foto" placeholder="https://... ou upload" style="flex:1;min-width:120px"
@@ -1881,6 +2126,35 @@
       <div class="modal-foot">
         <button class="btn btn-ghost" onclick="closeModal('modal-bebida')">Cancelar</button>
         <button class="btn btn-primary" onclick="saveBebida()">Salvar bebida</button>
+      </div>
+    </div>
+  </div>
+  <!-- MODAL FIDELIDADE -->
+  <div class="modal-overlay" id="modal-fidelidade">
+    <div class="modal" style="max-width:420px">
+      <div class="modal-head">
+        <h3 id="fid-modal-title">Adicionar / Resgatar pontos</h3>
+        <button class="close-x" onclick="closeModal('modal-fidelidade')"><i data-lucide="x"
+            style="display:inline-block;width:20px;height:20px"></i></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="fid-edit-tel">
+        <div class="field"><label>Telefone do cliente *</label><input type="text" id="fid-tel"
+            placeholder="(11) 99999-9999"></div>
+        <div class="field"><label>Nome do cliente</label><input type="text" id="fid-nome" placeholder="João"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div class="field"><label>Adicionar pontos</label><input type="number" id="fid-add" value="0" min="0"
+              step="1"></div>
+          <div class="field"><label>Resgatar pontos</label><input type="number" id="fid-resgatar" value="0" min="0"
+              step="1"></div>
+        </div>
+        <div id="fid-preview"
+          style="font-size:13px;padding:10px;background:var(--cream);border-radius:6px;margin-bottom:14px"></div>
+        <div style="display:flex;gap:8px;justify-content:flex-end">
+          <button class="btn btn-ghost" onclick="closeModal('modal-fidelidade')">Cancelar</button>
+          <button class="btn btn-primary" onclick="salvarFidelidade()"><i data-lucide="check"
+              style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Salvar</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1952,6 +2226,7 @@
       estoque: [], // [{insumoId, qtd, data, valorTotal}]
       vendas: [], // [{pizzaId, qtd, data}]
       consumo: [], // [{insumoId, qtd, data, pizzaNome}]
+      fidelidade: {}, // {"11999999999": {nome, telefone, pontos, resgatados, totalGasto}}
     };
 
     // ---- STORAGE ----
@@ -2052,6 +2327,7 @@
         estoque,
         vendas: toArray(db.vendas) || [],
         consumo: toArray(db.consumo) || [],
+        fidelidade: (db.fidelidade && typeof db.fidelidade === "object") ? db.fidelidade : {},
       };
     }
     function load() {
@@ -2239,9 +2515,10 @@
       if (id === "pedidos") { renderPedidos(); loadPedidosFromServer(); }
       if (id === "analise") renderAnalise();
       if (id === "massa") renderMassa();
+      if (id === "fidelidade") renderFidelidade();
       setTimeout(addTableLabels, 50);
     }
-    function renderAll() { renderDashboard(); renderInsumos(); renderPizzas(); renderBebidas(); renderConfig(); renderMassa(); renderAnalise(); renderPedidos(); addTableLabels() }
+    function renderAll() { renderDashboard(); renderInsumos(); renderPizzas(); renderBebidas(); renderConfig(); renderMassa(); renderAnalise(); renderPedidos(); renderFidelidade(); addTableLabels() }
     function addTableLabels() {
       document.querySelectorAll('table').forEach(table => {
         const headers = [...table.querySelectorAll('thead th')].map(th => th.textContent.trim());
@@ -2321,7 +2598,7 @@
       const list = document.getElementById('pedidos-list');
       if (!list) return;
       if (!cachedPedidos.length) {
-        list.innerHTML = `<tr><td colspan='10' style='text-align:center;color:var(--muted);padding:24px'>Nenhum pedido recebido. Os pedidos dos clientes aparecem aqui.</td></tr>`;
+        list.innerHTML = `<div style="text-align:center;color:var(--muted);padding:24px;font-size:13px">Nenhum pedido recebido. Os pedidos dos clientes aparecem aqui.</div>`;
         lucide.createIcons();
         return;
       }
@@ -2331,27 +2608,37 @@
             return `${i.qtd}x 1/2 ${i.sabores[0]?.nome || '?'} + 1/2 ${i.sabores[1]?.nome || '?'} (Meia a Meio)`;
           }
           return `${i.qtd}x ${i.nome}`;
-        }).join('<br>');
+        }).join(', ');
         const agendado = p.agendado && p.dataAgendada ? `<i data-lucide="calendar" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> ${new Date(p.dataAgendada).toLocaleString()}` : '';
+        const endereco = [p.rua, p.num, p.bairro, p.comp].filter(Boolean).join(', ') || '-';
         const next = nextStatus(p.status);
         const prev = prevStatus(p.status);
-        return `<tr>
-          <td><strong>${p.trackingId || '—'}</strong></td>
-          <td>${p.data ? new Date(p.data).toLocaleString() : '-'}${agendado ? '<br>' + agendado : ''}</td>
-          <td>${p.nome || '-'}</td>
-          <td>${formatPhone(p.tel)}${waLink(p.tel, p.trackingId, p.status)}</td>
-          <td style="max-width:200px;white-space:normal;word-break:break-word">${[p.rua, p.num, p.bairro, p.comp].filter(Boolean).join(', ') || '-'}</td>
-          <td style="white-space:normal;word-break:break-word">${itens || '-'}</td>
-          <td>${p.total ? 'R$ ' + p.total.toFixed(2).replace('.', ',') : '-'}</td>
-          <td>${p.pagamento || '-'}</td>
-          <td>${statusBadge(p.status)}</td>
-          <td style="white-space:nowrap">
-            ${prev ? `<button class="btn btn-sm btn-ghost" onclick="updatePedidoStatus('${p.trackingId}','${prev}')" title="Voltar para ${prev}"><i data-lucide="chevron-left" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i></button>` : ''}
-            ${next ? `<button class="btn btn-sm btn-primary" onclick="updatePedidoStatus('${p.trackingId}','${next}')" title="Avançar para ${next}">${next === 'Entregue' ? '<i data-lucide="check-circle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i>' : '<i data-lucide="chevron-right" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i>'}</button>` : ''}
-            ${p.status !== 'Cancelado' && p.status !== 'Entregue' ? `<button class="btn btn-sm btn-danger" onclick="updatePedidoStatus('${p.trackingId}','Cancelado')" title="Cancelar pedido"><i data-lucide="x" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i></button>` : ''}
-            <button class="btn btn-sm btn-danger" onclick="deletePedido('${p.trackingId}')" title="Excluir pedido" style="margin-left:4px"><i data-lucide="trash-2" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i></button>
-          </td>
-        </tr>`;
+        const totalStr = p.total ? 'R$ ' + p.total.toFixed(2).replace('.', ',') : '-';
+        const dataStr = p.data ? new Date(p.data).toLocaleString() : '-';
+        const actHtml = [];
+        if (prev) actHtml.push(`<button class="act-btn act-btn-ghost" onclick="updatePedidoStatus('${p.trackingId}','${prev}')" title="Voltar para ${prev}"><i data-lucide="chevron-left"></i> Voltar</button>`);
+        if (next) actHtml.push(`<button class="act-btn act-btn-primary" onclick="updatePedidoStatus('${p.trackingId}','${next}')" title="Avançar para ${next}">${next === 'Entregue' ? '<i data-lucide="check-circle"></i> Entregar' : '<i data-lucide="chevron-right"></i> Avançar'}</button>`);
+        if (p.status !== 'Cancelado' && p.status !== 'Entregue') actHtml.push(`<button class="act-btn act-btn-danger" onclick="updatePedidoStatus('${p.trackingId}','Cancelado')" title="Cancelar pedido"><i data-lucide="ban"></i> Cancelar</button>`);
+        actHtml.push(`<button class="act-btn act-btn-danger" onclick="deletePedido('${p.trackingId}')" title="Excluir pedido"><i data-lucide="trash-2" style="width:13px;height:13px"></i> Excluir</button>`);
+        return `<div class="pedido-card">
+          <div class="card-body">
+            <div class="top-row">
+              <span class="id">${p.trackingId || '—'}</span>
+              <span class="meta"><i data-lucide="clock" style="display:inline-block;width:12px;height:12px;vertical-align:-.15em"></i> ${dataStr}${agendado ? ' • ' + agendado : ''}</span>
+              <span class="total">${totalStr}</span>
+              ${statusBadge(p.status)}
+            </div>
+            <div class="body-grid">
+              <div class="row"><span class="label">Cliente</span><span class="value"><strong>${p.nome || '-'}</strong> ${formatPhone(p.tel)}${waLink(p.tel, p.trackingId, p.status)}</span></div>
+              <div class="row"><span class="label">Pagamento</span><span class="value">${p.pagamento || '-'}</span></div>
+              <div class="row full"><span class="label">Endereço</span><span class="value">${endereco}</span></div>
+              <div class="row full"><span class="label">Itens</span><span class="value">${itens || '-'}</span></div>
+            </div>
+          </div>
+          <div class="card-actions">
+            ${actHtml.join('')}
+          </div>
+        </div>`;
       }).join('');
       lucide.createIcons();
     }
@@ -2459,15 +2746,20 @@
     }
     function cmvColor(pct, cat) {
       const [min, max] = cat === "Premium" ? [30, 35] : cat === "Doces" ? [25, 32] : [25, 32];
-      if (pct <= min) return "#5A6B45";
-      if (pct <= max) return "#C9A86A";
-      return "#B85C38";
+      if (pct <= min) return "#2ecc71";
+      if (pct <= max) return "#f1c40f";
+      return "#e74c3c";
     }
     function cmvLabel(pct, cat) {
       const [min, max] = cat === "Premium" ? [30, 35] : cat === "Doces" ? [25, 32] : [25, 32];
       if (pct <= min) return "Ótimo";
       if (pct <= max) return "Atenção";
       return "Alto";
+    }
+    function cmvIcon(c) {
+      if (c === "badge-green") return `<i data-lucide="arrow-up" style="display:inline-block;width:12px;height:12px;vertical-align:-.15em"></i>`;
+      if (c === "badge-red") return `<i data-lucide="arrow-down" style="display:inline-block;width:12px;height:12px;vertical-align:-.15em"></i>`;
+      return `<i data-lucide="minus" style="display:inline-block;width:12px;height:12px;vertical-align:-.15em"></i>`;
     }
     function cmvFaixa(cat) {
       if (cat === "Premium") return [28, 35];
@@ -2506,6 +2798,115 @@
       }
     }
 
+    // ---- FIDELIDADE ----
+    function recalcularFidelidade() {
+      const fidelidade = {};
+      (cachedPedidos || []).forEach(p => {
+        if (p.status !== "Entregue" || !p.tel) return;
+        const tel = p.tel.replace(/\D/g, '');
+        if (tel.length < 8) return;
+        if (!fidelidade[tel]) fidelidade[tel] = { nome: p.nome || '', telefone: tel, pontos: 0, resgatados: 0, totalGasto: 0 };
+        const totalPedido = p.total || 0;
+        fidelidade[tel].totalGasto += totalPedido;
+        fidelidade[tel].pontos = Math.floor(fidelidade[tel].totalGasto);
+        if (p.nome && !fidelidade[tel].nome) fidelidade[tel].nome = p.nome;
+      });
+      // Mescla com registros manuais existentes (preserva resgatados)
+      Object.entries(DB.fidelidade || {}).forEach(([tel, rec]) => {
+        if (fidelidade[tel]) {
+          fidelidade[tel].resgatados = rec.resgatados || 0;
+          fidelidade[tel].nome = fidelidade[tel].nome || rec.nome;
+        } else {
+          fidelidade[tel] = { ...rec };
+        }
+      });
+      // Recalcula saldo
+      Object.values(fidelidade).forEach(f => { f.pontos = Math.floor(f.totalGasto) - (f.resgatados || 0); });
+      DB.fidelidade = fidelidade;
+      save(DB);
+      renderFidelidade();
+      toast(`<i data-lucide="check-circle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Fidelidade recalculada a partir de ${cachedPedidos.length} pedidos.`);
+    }
+    function renderFidelidade() {
+      const list = document.getElementById('fidelidade-list');
+      if (!list) return;
+      const fidelidade = DB.fidelidade || {};
+      const entries = Object.values(fidelidade);
+      if (!entries.length) {
+        list.innerHTML = `<tr><td colspan='7' style='text-align:center;color:var(--muted);padding:24px'>Nenhum cliente cadastrado. Clique em "Recalcular de pedidos" ou adicione manualmente.</td></tr>`;
+        lucide.createIcons();
+        return;
+      }
+      list.innerHTML = entries.sort((a, b) => (b.pontos || 0) - (a.pontos || 0)).map(f => {
+        const saldo = (f.pontos || 0) - (f.resgatados || 0);
+        const desponivel = Math.floor(saldo / 80);
+        return `<tr>
+          <td>${formatPhone(f.telefone)}</td>
+          <td><strong>${f.nome || '—'}</strong></td>
+          <td>${fmtR(f.totalGasto || 0)}</td>
+          <td>${(f.pontos || 0) + (f.resgatados || 0)}</td>
+          <td>${f.resgatados || 0}</td>
+          <td style="font-weight:700;color:${saldo >= 80 ? 'var(--green-olive)' : 'var(--muted)'}">${saldo} pts ${desponivel >= 1 ? `<span class="badge badge-green" style="margin-left:6px">${desponivel}x R$10</span>` : ''}</td>
+          <td>
+            <button class="btn btn-sm btn-primary" onclick="editarFidelidade('${f.telefone}')"><i data-lucide="pencil" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i></button>
+          </td>
+        </tr>`;
+      }).join('');
+      lucide.createIcons();
+    }
+    function abrirModalFidelidade() {
+      document.getElementById('fid-edit-tel').value = '';
+      document.getElementById('fid-tel').value = '';
+      document.getElementById('fid-nome').value = '';
+      document.getElementById('fid-add').value = '0';
+      document.getElementById('fid-resgatar').value = '0';
+      document.getElementById('fid-preview').innerHTML = '';
+      document.getElementById('fid-modal-title').textContent = 'Adicionar cliente / Pontos';
+      openModal('modal-fidelidade');
+    }
+    function editarFidelidade(tel) {
+      const rec = DB.fidelidade[tel];
+      if (!rec) return;
+      document.getElementById('fid-edit-tel').value = tel;
+      document.getElementById('fid-tel').value = formatPhone(tel);
+      document.getElementById('fid-nome').value = rec.nome || '';
+      document.getElementById('fid-add').value = '0';
+      document.getElementById('fid-resgatar').value = '0';
+      document.getElementById('fid-preview').innerHTML = `<div style="color:var(--muted)">Saldo atual: <strong>${rec.pontos || 0}</strong> pts | Resgatados: <strong>${rec.resgatados || 0}</strong></div>`;
+      document.getElementById('fid-modal-title').textContent = 'Editar pontos - ' + (rec.nome || tel);
+      openModal('modal-fidelidade');
+    }
+    function salvarFidelidade() {
+      const telRaw = document.getElementById('fid-tel').value.replace(/\D/g, '');
+      if (telRaw.length < 8) { toast(`<i data-lucide="alert-triangle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Informe um telefone válido.`); return; }
+      const editTel = document.getElementById('fid-edit-tel').value;
+      const tel = telRaw;
+      const nome = document.getElementById('fid-nome').value.trim();
+      const addPts = parseInt(document.getElementById('fid-add').value) || 0;
+      const resgPts = parseInt(document.getElementById('fid-resgatar').value) || 0;
+      if (!DB.fidelidade[tel]) DB.fidelidade[tel] = { nome: '', telefone: tel, pontos: 0, resgatados: 0, totalGasto: 0 };
+      const rec = DB.fidelidade[tel];
+      if (nome) rec.nome = nome;
+      rec.totalGasto = (rec.totalGasto || 0) + addPts;
+      rec.pontos = Math.floor(rec.totalGasto) - (rec.resgatados || 0);
+      if (resgPts > 0) {
+        const saldoAtual = rec.pontos || 0;
+        if (resgPts > saldoAtual) { toast(`<i data-lucide="alert-triangle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Saldo insuficiente. Disponível: ${saldoAtual} pts.`); return; }
+        rec.resgatados = (rec.resgatados || 0) + resgPts;
+        rec.pontos = Math.floor(rec.totalGasto) - rec.resgatados;
+      }
+      // Se editou telefone diferente, migra
+      if (editTel && editTel !== tel) {
+        delete DB.fidelidade[editTel];
+      }
+      save(DB);
+      renderFidelidade();
+      closeModal('modal-fidelidade');
+      const msg = [];
+      if (addPts > 0) msg.push(`${addPts} pts adicionados`);
+      if (resgPts > 0) msg.push(`${resgPts} pts resgatados`);
+      toast(`<i data-lucide="gift" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> ${msg.join(' e ') || 'Cliente salvo'}!`);
+    }
     // ---- DASHBOARD ----
     function renderDashboard() {
       const pizzas = DB.pizzas.filter(p => p.ativo);
@@ -2549,7 +2950,7 @@
       <span><div class="cmv-bar-wrap">
          <div class="cmv-bar-bg"><div class="cmv-bar-fill" style="width:${Math.min(p.pct, 100)}%;background:${cmvColor(p.pct, p.categoria)}"></div></div>
         <span class="cmv-pct" style="color:${cmvColor(p.pct, p.categoria)}">${fmtP(p.pct)}</span>
-        <span class="badge ${cmvClass(p.pct, p.categoria)}">${cmvLabel(p.pct, p.categoria)}</span>
+        <span class="badge ${cmvClass(p.pct, p.categoria)}">${cmvIcon(cmvClass(p.pct, p.categoria))} ${cmvLabel(p.pct, p.categoria)}</span>
       </div></span>
     </div>`;
       }).join("") || "<div style='padding:20px;text-align:center;color:var(--muted);font-size:13px'>Nenhuma pizza com ingredientes cadastrados.</div>";
@@ -2578,23 +2979,57 @@
         }).join('') : '<div style="padding:16px;text-align:center;color:var(--muted);font-size:13px">Nenhuma venda registrada ainda.</div>';
         lucide.createIcons();
       }
-      // ---- Menu Engineering Matrix ----
-      const matriz = { star: [], cashCow: [], enigma: [], dog: [] };
-      cmvs.forEach(p => {
-        const margemPct = p.margem / p.preco;
-        if (margemPct >= 0.5) matriz.star.push(p);
-        else if (margemPct >= 0.3) matriz.cashCow.push(p);
-        else if (margemPct >= 0.15) matriz.enigma.push(p);
-        else matriz.dog.push(p);
+      // ---- Menu Engineering Matrix (dual-axis: popularidade x margem) ----
+      const rankMap = {};
+      vendas.forEach(v => { rankMap[v.pizzaId] = (rankMap[v.pizzaId] || 0) + v.qtd; });
+      const rankedPizzas = cmvs.map(p => ({
+        ...p,
+        qtd: rankMap[p.id] || 0,
+        margemPct: p.preco > 0 ? p.margem / p.preco : 0
+      }));
+      const median = (arr, fn) => { const s = [...arr].map(fn).sort((a, b) => a - b); const m = Math.floor(s.length / 2); return s.length ? s[m] : 0; };
+      const medPop = median(rankedPizzas, p => p.qtd);
+      const medMarg = median(rankedPizzas, p => p.margemPct);
+      const q = { star: [], cashCow: [], enigma: [], dog: [] };
+      rankedPizzas.forEach(p => {
+        const highPop = p.qtd >= medPop;
+        const highMarg = p.margemPct >= medMarg;
+        if (highPop && highMarg) q.star.push(p);
+        else if (highPop && !highMarg) q.cashCow.push(p);
+        else if (!highPop && highMarg) q.enigma.push(p);
+        else q.dog.push(p);
       });
+      const qHtml = (items, cor, icone, titulo, recomendacao) => items.length
+        ? items.map(p => `<div style="display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid rgba(0,0,0,.04)"><img src="${p.foto || 'src/logo.jpeg'}" style="width:22px;height:22px;border-radius:4px;object-fit:cover;flex-shrink:0"><span style="flex:1;font-weight:600;font-size:12px">${p.nome}</span><span style="font-size:11px;color:var(--muted)">${fmtR(p.preco)}</span><span style="font-size:11px;font-weight:600;color:${cor}">${fmtP(p.margemPct * 100)}</span></div>`).join('')
+        : '<div style="padding:8px 0;font-size:12px;color:var(--muted);font-style:italic">Nenhum item neste quadrante</div>';
       document.getElementById("dash-matriz").innerHTML = `
-        <div class="page-title" style="font-size:17px;margin-bottom:12px">📊 Matriz Menu Engineering</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div class="page-title" style="font-size:17px;margin:0"><i data-lucide="layout" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Matriz Menu Engineering</div>
+          <div style="font-size:11px;color:var(--muted)">Mediana popularidade: ${medPop} vendas &nbsp;|&nbsp; Mediana margem: ${fmtP(medMarg * 100)}</div>
+        </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px">
-          <div style="background:#e8f5e9;border-radius:8px;padding:12px"><b>⭐ Estrelas</b><br>Alta margem (>50%)<br>${matriz.star.map(p => p.nome).join(', ') || '—'}</div>
-          <div style="background:#fff3e0;border-radius:8px;padding:12px"><b>🐄 Vaca leiteira</b><br>Margem média (30-50%)<br>${matriz.cashCow.map(p => p.nome).join(', ') || '—'}</div>
-          <div style="background:#e3f2fd;border-radius:8px;padding:12px"><b>❓ Enigma</b><br>Margem baixa (15-30%)<br>${matriz.enigma.map(p => p.nome).join(', ') || '—'}</div>
-          <div style="background:#fce4ec;border-radius:8px;padding:12px"><b>🐕 Cachorro</b><br>Margem crítica (<15%)<br>${matriz.dog.map(p => p.nome).join(', ') || '—'}</div>
+          <div style="background:#e8f5e9;border-radius:10px;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,.06)">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><i data-lucide="star" style="display:inline-block;width:18px;height:18px;color:#2e7d32"></i><b style="font-size:14px">Estrelas</b><span class="badge badge-green">${q.star.length}</span></div>
+            <div style="font-size:11px;color:#555;margin-bottom:8px;padding:6px 8px;background:rgba(46,125,50,.08);border-radius:6px"><i data-lucide="trending-up" style="display:inline-block;width:12px;height:12px;vertical-align:-.15em"></i> Margem alta + Popularidade alta — manter preço, destacar no cardápio, dar prioridade</div>
+            ${qHtml(q.star, '#2e7d32', 'star', 'Estrelas', 'Manter preço, destacar no cardápio')}
+          </div>
+          <div style="background:#fff8e1;border-radius:10px;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,.06)">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><i data-lucide="circle-dollar-sign" style="display:inline-block;width:18px;height:18px;color:#f57f17"></i><b style="font-size:14px">Vacas Leiteiras</b><span class="badge badge-amber">${q.cashCow.length}</span></div>
+            <div style="font-size:11px;color:#555;margin-bottom:8px;padding:6px 8px;background:rgba(245,127,23,.08);border-radius:6px"><i data-lucide="arrow-up" style="display:inline-block;width:12px;height:12px;vertical-align:-.15em"></i> Margem baixa + Popularidade alta — aumentar preço ou reduzir custo dos ingredientes</div>
+            ${qHtml(q.cashCow, '#f57f17', 'milk', 'Vacas Leiteiras', 'Aumentar preço ou reduzir custo')}
+          </div>
+          <div style="background:#e3f2fd;border-radius:10px;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,.06)">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><i data-lucide="help-circle" style="display:inline-block;width:18px;height:18px;color:#1565c0"></i><b style="font-size:14px">Enigmas</b><span class="badge" style="background:#bbdefb;color:#1565c0">${q.enigma.length}</span></div>
+            <div style="font-size:11px;color:#555;margin-bottom:8px;padding:6px 8px;background:rgba(21,101,192,.08);border-radius:6px"><i data-lucide="volume-2" style="display:inline-block;width:12px;height:12px;vertical-align:-.15em"></i> Margem alta + Popularidade baixa — promover, criar combo, colocar em destaque no site</div>
+            ${qHtml(q.enigma, '#1565c0', 'help-circle', 'Enigmas', 'Promover, criar combo, destacar')}
+          </div>
+          <div style="background:#fce4ec;border-radius:10px;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,.06)">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><i data-lucide="ban" style="display:inline-block;width:18px;height:18px;color:#c62828"></i><b style="font-size:14px">Cachorros</b><span class="badge badge-red">${q.dog.length}</span></div>
+            <div style="font-size:11px;color:#555;margin-bottom:8px;padding:6px 8px;background:rgba(198,40,40,.08);border-radius:6px"><i data-lucide="alert-triangle" style="display:inline-block;width:12px;height:12px;vertical-align:-.15em"></i> Margem baixa + Popularidade baixa — reformular (trocar ingredientes caros) ou remover do cardápio</div>
+            ${qHtml(q.dog, '#c62828', 'ban', 'Cachorros', 'Reformular ou remover')}
+          </div>
         </div>`;
+      lucide.createIcons();
       // ---- CMV Real vs Teórico ----
       const cmvReal = { custo: 0, venda: 0 };
       vendas.forEach(v => {
@@ -2663,7 +3098,7 @@
       <td><span class="badge badge-gray">${p.categoria}</span></td>
       <td>${fmtR(custo)}</td>
       <td>${fmtR(p.preco)}</td>
-      <td><span class="badge ${cmvClass(pct, p.categoria)}">${fmtP(pct)}</span></td>
+      <td><span class="badge ${cmvClass(pct, p.categoria)}">${cmvIcon(cmvClass(pct, p.categoria))} ${fmtP(pct)}</span></td>
       <td style="color:var(--green-olive);font-weight:600">${fmtR(margem)}</td>
       <td>
         <div style="display:flex;gap:6px">
@@ -3209,7 +3644,7 @@
           </td>
           <td>${fmtR(b.preco)}</td>
           <td>${fmtR(b.custo || 0)}</td>
-          <td><span class="badge ${cmvClass(b.preco > 0 ? ((b.custo||0)/b.preco)*100 : 0)}">${b.preco > 0 ? fmtP(((b.custo||0)/b.preco)*100) : "—"}</span></td>
+          <td><span class="badge ${cmvClass(b.preco > 0 ? ((b.custo || 0) / b.preco) * 100 : 0)}">${b.preco > 0 ? cmvIcon(cmvClass(b.preco > 0 ? ((b.custo || 0) / b.preco) * 100 : 0)) + ' ' + fmtP(((b.custo || 0) / b.preco) * 100) : "—"}</span></td>
           <td>
             <button class="btn btn-sm btn-ghost" onclick="editBebida('${b.id}')"><i data-lucide="pencil" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i></button>
             <button class="btn btn-sm btn-danger" onclick="delBebida('${b.id}')"><i data-lucide="trash-2" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i></button>
@@ -3334,7 +3769,7 @@
           <td>${fmtR(r.fat)}</td>
           <td>${fmtR(custoTotal)}</td>
           <td style="color:var(--green-olive)">${fmtR(lucro)}</td>
-          <td><span class="badge ${cmvClass(cmv.pct, p.categoria)}">${fmtP(cmv.pct)}</span></td>
+          <td><span class="badge ${cmvClass(cmv.pct, p.categoria)}">${cmvIcon(cmvClass(cmv.pct, p.categoria))} ${fmtP(cmv.pct)}</span></td>
         </tr>`;
       }).join("") : "<tr><td colspan='7' style='text-align:center;color:var(--muted);padding:24px'>Nenhuma venda registrada.</td></tr>";
       lucide.createIcons();

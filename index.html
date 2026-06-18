@@ -8,7 +8,7 @@
   <meta name="description" content="Pizza artesanal com entrega rápida e ingredientes selecionados. Peça online!">
   <meta name="keywords" content="pizza, pizzaria, artesanal, delivery, tonda">
   <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
     rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
   <style>
@@ -1274,6 +1274,7 @@
       .cart-btn:first-child {
         padding: 6px 8px
       }
+
       .cart-btn:first-child .btn-label {
         display: none
       }
@@ -1321,8 +1322,8 @@
       <div style="display:flex;gap:6px;align-items:center">
         <button class="cart-btn" onclick="openTracking()"
           style="background:var(--green-olive);font-size:13px;padding:10px 12px" title="Acompanhar pedido">
-          <i data-lucide="motorbike"
-            style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i><span class="btn-label">Acompanhe</span>
+          <i data-lucide="motorbike" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i><span
+            class="btn-label">Acompanhe</span>
         </button>
         <button class="cart-btn" onclick="toggleCart()">
           <i data-lucide="shopping-cart" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i>
@@ -1444,6 +1445,7 @@
     </div>
     <h2>Pedido enviado!</h2>
     <p id="success-msg">Sua mensagem foi aberta no WhatsApp. Confirme o envio para finalizar o pedido.</p>
+    <div id="success-pontos" style="margin-bottom:12px"></div>
     <div id="success-tracking" style="margin-bottom:16px;font-size:14px;color:var(--muted)"></div>
     <button class="back-btn" onclick="resetAll()">Fazer novo pedido</button>
   </div>
@@ -1471,6 +1473,7 @@
             <p>Digite seu WhatsApp para acompanhar seus pedidos.</p>
           </div>
         </div>
+        <div id="tracking-pontos" style="margin-top:16px;display:none"></div>
       </div>
     </div>
   </div>
@@ -1901,6 +1904,7 @@
       });
       saveLocalDB(db);
     }
+
     function normalizeWhatsAppNumber(number) {
       return String(number || "").replace(/\D/g, "");
     }
@@ -1959,6 +1963,13 @@
       lucide.createIcons();
       window.open(`https://wa.me/${whatsapp}?text=${encodeURIComponent(msgFinal)}`, "_blank");
       closeCheckout();
+      // Mostra pontos de fidelidade
+      const pontosGanhos = Math.floor(cartTotal());
+      document.getElementById('success-pontos').innerHTML = `<div style="background:var(--cream);border-radius:8px;padding:10px 14px;font-size:13px;display:flex;align-items:center;gap:10px">
+          <i data-lucide="gift" style="display:inline-block;width:20px;height:20px;color:var(--terracotta);flex-shrink:0"></i>
+          <span style="text-align:left"><strong>Você ganhou ${pontosGanhos} pontos</strong> de fidelidade!<br><span style="color:var(--muted);font-size:12px">Acumule 80 pontos e ganhe R$ 10 de desconto na próxima compra. Acompanhe seus pontos na consulta de pedidos.</span></span>
+        </div>`;
+      lucide.createIcons();
       document.getElementById("success").classList.add("show");
     }
     function resetAll() {
@@ -2004,6 +2015,31 @@
         if (!resp.ok) throw new Error(resp.statusText);
         const pedidos = await resp.json();
         renderTrackingResults(pedidos);
+        // Mostra pontos de fidelidade (calcula dos pedidos retornados)
+        const ptsEl = document.getElementById('tracking-pontos');
+        const totalGasto = pedidos.reduce((s, p) => s + (p.total || 0), 0);
+        if (totalGasto > 0) {
+          const pontos = Math.floor(totalGasto);
+          const saldo = pontos % 80;
+          const descontos = Math.floor(pontos / 80);
+          ptsEl.style.display = 'block';
+          ptsEl.innerHTML = `<div style="background:var(--cream);border-radius:8px;padding:12px 14px;font-size:13px">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+              <i data-lucide="gift" style="display:inline-block;width:18px;height:18px;color:var(--terracotta)"></i>
+              <strong>Programa Fidelidade</strong>
+            </div>
+            <div style="color:var(--muted);font-size:12px;padding-left:26px">
+              Total gasto: ${fmtR(totalGasto)} |
+              Pontos: <strong>${pontos}</strong> |
+              ${descontos > 0
+                ? `<span style="color:var(--green-olive);font-weight:600">${descontos}x R$10 de desconto disponíveis!</span>`
+                : `Faltam <strong>${80 - saldo}</strong> pts para ganhar R$10 de desconto`}
+            </div>
+          </div>`;
+          lucide.createIcons();
+        } else {
+          ptsEl.style.display = 'none';
+        }
       } catch (e) {
         console.warn('Erro ao buscar pedidos:', e);
         document.getElementById('tracking-results').innerHTML = `<div class="tracking-empty"><div style="margin-bottom:12px"><i data-lucide="x-circle" style="display:inline-block;width:40px;height:40px"></i></div><p>Erro ao buscar pedidos. Tente novamente.</p></div>`;
