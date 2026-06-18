@@ -1108,6 +1108,45 @@
         font-size: 13px
       }
     }
+
+    @media(max-width:768px) {
+      table, thead, tbody, tr, th, td { display: block }
+      thead { display: none }
+      table { min-width: 0 }
+      .table-wrap { overflow-x: visible; border: none; background: transparent }
+      .table-wrap table { border: none }
+      tr {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        margin-bottom: 10px;
+        background: var(--white);
+        box-shadow: 0 1px 3px rgba(0,0,0,.04)
+      }
+      td {
+        display: flex;
+        align-items: center;
+        padding: 8px 12px;
+        font-size: 12px;
+        border-bottom: 1px solid var(--border);
+        gap: 6px
+      }
+      td:last-child { border-bottom: none }
+      td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        min-width: 90px;
+        font-size: 11px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: .03em;
+        flex-shrink: 0
+      }
+      td[data-label=""]::before { content: none }
+      tr:hover td { background: none }
+      td:empty { display: none }
+      td[style*="white-space:nowrap"] { white-space: normal !important }
+      td:has(.btn) { flex-wrap: wrap; gap: 4px }
+    }
   </style>
 </head>
 
@@ -2011,8 +2050,20 @@
       if (id === "pedidos") { renderPedidos(); loadPedidosFromServer(); }
       if (id === "analise") renderAnalise();
       if (id === "massa") renderMassa();
+      setTimeout(addTableLabels, 50);
     }
-    function renderAll() { renderDashboard(); renderInsumos(); renderPizzas(); renderBebidas(); renderConfig(); renderMassa(); renderAnalise(); renderPedidos() }
+    function renderAll() { renderDashboard(); renderInsumos(); renderPizzas(); renderBebidas(); renderConfig(); renderMassa(); renderAnalise(); renderPedidos(); addTableLabels() }
+    function addTableLabels() {
+      document.querySelectorAll('table').forEach(table => {
+        const headers = [...table.querySelectorAll('thead th')].map(th => th.textContent.trim());
+        if (!headers.length) return;
+        table.querySelectorAll('tbody tr').forEach(row => {
+          row.querySelectorAll('td').forEach((td, i) => {
+            if (headers[i]) td.dataset.label = headers[i];
+          });
+        });
+      });
+    }
     // ---- VENDAS ----
     function renderVendas() {
       document.getElementById('vendas-list').innerHTML = (DB.vendas || []).sort((a, b) => b.data.localeCompare(a.data)).map(v => {
@@ -2109,6 +2160,7 @@
     }
     function prevStatus(status) {
       if (status === "Agendado") return "Recebido";
+      if (status === "Entregue" || status === "Cancelado") return null;
       const idx = STATUS_FLOW.indexOf(status);
       return idx > 0 ? STATUS_FLOW[idx - 1] : null;
     }
@@ -2244,6 +2296,7 @@
         cachedPedidos = pedidos;
         syncPedidosToVendas(pedidos);
         renderPedidos();
+        setTimeout(addTableLabels, 50);
         if (document.getElementById('tab-dashboard').classList.contains('active')) renderDashboard();
         if (document.getElementById('tab-analise').classList.contains('active')) renderAnalise();
         if (document.getElementById('tab-vendas').classList.contains('active')) renderVendas();
