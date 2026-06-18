@@ -162,47 +162,114 @@
       display: flex;
       flex-direction: column;
       padding: 20px 14px;
-      z-index: 20
+      z-index: 20;
+      transition: width .25s, padding .25s;
+      overflow-x: hidden;
+      overflow-y: hidden
+    }
+    aside.collapsed {
+      width: 72px;
+      padding: 20px 8px;
+      overflow-x: hidden
+    }
+    aside.collapsed .nav-btn {
+      justify-content: center;
+      padding: 11px 0;
+      gap: 0;
+      font-size: 0
+    }
+    aside.collapsed .nav-btn .ni {
+      font-size: 20px
+    }
+    aside.collapsed .sidebar-logo .logo-sub {
+      display: none
+    }
+    aside.collapsed .sidebar-logo {
+      justify-content: center;
+      padding: 6px 0 22px
+    }
+    aside.collapsed .store-link {
+      font-size: 0;
+      display: flex;
+      justify-content: center
+    }
+    aside.collapsed .store-link i:last-child {
+      display: none
+    }
+    aside.collapsed .collapse-btn {
+      justify-content: center
+    }
+    aside.collapsed .collapse-btn .collapse-label {
+      display: none
+    }
+    aside.collapsed .collapse-btn i {
+      transform: rotate(180deg)
     }
 
     .sidebar-logo {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 10px;
       padding: 6px 8px 22px;
       border-bottom: 1px solid rgba(255, 255, 255, .1);
-      margin-bottom: 14px
+      margin-bottom: 14px;
+      flex-shrink: 0
     }
 
-    .sidebar-logo .icon {
+    .sidebar-logo .logo-img {
       width: 38px;
       height: 38px;
       border-radius: 9px;
       background: var(--terracotta);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px
+      object-fit: cover;
+      flex-shrink: 0
     }
 
-    .sidebar-logo span {
+    .sidebar-logo .logo-text {
+      flex: 1;
+      min-width: 0
+    }
+
+    .sidebar-logo .logo-name {
       display: block;
       font-weight: 700;
       font-family: 'Playfair Display', serif
     }
 
-    .sidebar-logo small {
+    .sidebar-logo .logo-sub {
       display: block;
       color: rgba(255, 255, 255, .6);
       font-size: 12px;
       margin-top: 1px
     }
 
+    .close-x {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 22px;
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px
+    }
+    #sidebar-close {
+      display: none
+    }
+
     nav {
       display: flex;
       flex-direction: column;
       gap: 5px;
-      flex: 1
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      -ms-overflow-style: none;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,.2) transparent
     }
 
     .nav-btn {
@@ -231,7 +298,30 @@
 
     .sidebar-footer {
       border-top: 1px solid rgba(255, 255, 255, .1);
-      padding: 14px 8px 4px
+      padding: 14px 8px 4px;
+      flex-shrink: 0;
+      margin-top: auto
+    }
+    .collapse-btn {
+      background: rgba(255, 255, 255, .06);
+      border: 1px solid rgba(255, 255, 255, .08);
+      color: rgba(255, 255, 255, .8);
+      cursor: pointer;
+      padding: 8px 6px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      margin-top: 6px;
+      transition: background .2s, color .2s, border-color .2s;
+      font-size: 12px;
+      font-family: inherit
+    }
+    .collapse-btn:hover {
+      background: rgba(255, 255, 255, .14);
+      border-color: rgba(255, 255, 255, .2);
+      color: #fff
     }
 
     .store-link {
@@ -249,7 +339,11 @@
       margin-left: 250px;
       min-height: 100vh;
       padding: 28px;
-      overflow-x: hidden
+      overflow-x: hidden;
+      transition: margin-left .25s
+    }
+    aside.collapsed+.main {
+      margin-left: 72px
     }
 
     .page-header {
@@ -689,6 +783,11 @@
       text-transform: uppercase;
       letter-spacing: .04em
     }
+    .ing-head span:nth-child(1) { flex: 1; min-width: 0 }
+    .ing-head span:nth-child(2) { width: 100px; flex: none; text-align: center }
+    .ing-head span:nth-child(3) { flex: none }
+    .ing-head span:nth-child(4) { width: 90px; flex: none; text-align: right }
+    .ing-head span:nth-child(5) { width: 32px; flex: none }
 
     .ing-row select,
     .ing-row input {
@@ -1240,16 +1339,10 @@
   </div>
   <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
   <aside id="sidebar">
-    <div
-      style="display:flex;align-items:center;justify-content:space-between;padding:6px 8px 22px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:14px">
-      <div style="display:flex;align-items:center;gap:10px">
-        <img src="src/logo.svg" alt="Tonda"
-          style="width:38px;height:38px;border-radius:9px;background:var(--terracotta);object-fit:cover">
-        <div><span style="display:block;font-weight:700">Tonda</span><small
-            style="display:block;color:rgba(255,255,255,.6);font-size:12px;margin-top:1px">Admin</small></div>
-      </div>
+    <div class="sidebar-logo">
+      <img src="src/logo.svg" alt="Tonda" class="logo-img">
+      <div class="logo-text"><span class="logo-name">Tonda</span><small class="logo-sub">Admin</small></div>
       <button onclick="toggleSidebar()" class="close-x"
-        style="background:none;border:none;color:#fff;font-size:22px;cursor:pointer;display:none;width:32px;height:32px;align-items:center;justify-content:center;border-radius:6px"
         id="sidebar-close"><i data-lucide="x" style="display:inline-block;width:22px;height:22px"></i></button>
     </div>
     <nav>
@@ -1269,11 +1362,9 @@
       <button class="nav-btn" data-tab="estoque" onclick="showTab('estoque')"><span class="ni"><i data-lucide="package"
             style="display:inline-block;width:20px;height:20px;vertical-align:middle"></i></span>
         Estoque</button>
-      <button class="nav-btn" data-tab="massa" onclick="showTab('massa')"><span class="ni"><i data-lucide="bread"
+      <button class="nav-btn" data-tab="massa" onclick="showTab('massa')"><span class="ni"><i data-lucide="utensils"
             style="display:inline-block;width:20px;height:20px;vertical-align:middle"></i></span>
         Massa</button>
-      <button class="nav-btn" data-tab="vendas" onclick="showTab('vendas')"><span class="ni"><i data-lucide="receipt"
-            style="display:inline-block;width:20px;height:20px;vertical-align:middle"></i></span> Vendas</button>
       <button class="nav-btn" data-tab="pedidos" onclick="showTab('pedidos')"><span class="ni"><i
             data-lucide="clipboard-list"
             style="display:inline-block;width:20px;height:20px;vertical-align:middle"></i></span>
@@ -1290,6 +1381,8 @@
       <a href="index.html" target="_blank" class="store-link"><i data-lucide="link"
           style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Ver loja online <i
           data-lucide="arrow-right" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i></a>
+      <button class="collapse-btn" onclick="toggleSidebarCollapse()" title="Recolher sidebar"><i data-lucide="chevron-left"
+          style="display:inline-block;width:18px;height:18px"></i> <span class="collapse-label">Recolher</span></button>
     </div>
   </aside>
 
@@ -1319,6 +1412,8 @@
         </div>
         <div id="dash-ranking"></div>
       </div>
+      <div id="dash-matriz" style="margin-top:24px"></div>
+      <div id="dash-cmv-real" style="margin-top:24px"></div>
     </div>
 
     <!-- INSUMOS -->
@@ -1378,6 +1473,8 @@
             <tr>
               <th>Bebida</th>
               <th>Preço venda</th>
+              <th>Custo</th>
+              <th>CMV</th>
               <th style="width:110px">Ações</th>
             </tr>
           </thead>
@@ -1433,27 +1530,6 @@
           custo</button>
       </div>
     </div>
-    <!-- VENDAS -->
-    <div class="tab-content" id="tab-vendas">
-      <div class="page-header">
-        <div class="page-title">Vendas <small>Todas as vendas (pedidos online + registros manuais)</small></div>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Data</th>
-              <th>Pizza</th>
-              <th>Qtd</th>
-              <th>Valor total</th>
-            </tr>
-          </thead>
-          <tbody id="vendas-list"></tbody>
-        </table>
-      </div>
-    </div>
-
-
     <!-- ESTOQUE -->
     <div class="tab-content" id="tab-estoque">
       <div class="page-header">
@@ -1607,11 +1683,11 @@
           <div class="field"><label>PIN de acesso (4 dígitos)</label><input type="password" id="cfg-pin" maxlength="4"
               placeholder="1103"></div>
         </div>
+        <div class="field"><label>Custo fixo por pizza (R$) <small style="color:var(--muted);font-weight:400">gás, luz, embalagem, mão de obra</small></label><input type="number" id="cfg-custo-fixo" step="0.10" min="0" placeholder="0,00"></div>
         <button class="btn btn-primary" onclick="saveConfig()">Salvar configurações</button>
         <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:16px">
           <button class="btn btn-ghost" onclick="exportBackup()">Exportar backup</button>
           <button class="btn btn-ghost" onclick="exportCSV('insumos')">Exportar insumos CSV</button>
-          <button class="btn btn-ghost" onclick="exportCSV('vendas')">Exportar vendas CSV</button>
           <button class="btn btn-ghost" onclick="exportCSV('estoque')">Exportar estoque CSV</button>
           <button class="btn btn-ghost" onclick="document.getElementById('backup-file').click()">Importar
             backup</button>
@@ -1646,30 +1722,6 @@
       <div class="modal-foot">
         <button class="btn btn-ghost" onclick="closeModal('modal-compra')">Cancelar</button>
         <button class="btn btn-primary" onclick="saveCompra()">Salvar compra</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL VENDA -->
-  <div class="modal-overlay" id="modal-venda">
-    <div class="modal">
-      <div class="modal-head">
-        <h3>Registrar venda</h3>
-        <button class="close-x" onclick="closeModal('modal-venda')"><i data-lucide="x"
-            style="display:inline-block;width:20px;height:20px"></i></button>
-      </div>
-      <div class="modal-body">
-        <div class="field"><label>Pizza *</label>
-          <select id="venda-pizza"></select>
-        </div>
-        <div class="field-row">
-          <div class="field"><label>Quantidade *</label><input type="number" id="venda-qtd" step="1" min="1"></div>
-          <div class="field"><label>Data</label><input type="date" id="venda-data"></div>
-        </div>
-      </div>
-      <div class="modal-foot">
-        <button class="btn btn-ghost" onclick="closeModal('modal-venda')">Cancelar</button>
-        <button class="btn btn-primary" onclick="saveVenda()">Salvar venda</button>
       </div>
     </div>
   </div>
@@ -1740,10 +1792,10 @@
             <div style="display:flex;gap:4px;flex-wrap:wrap">
               <input type="text" id="pz-foto" placeholder="https://... ou upload" style="flex:1;min-width:120px"
                 oninput="showFotoPreview('pz-foto','pz-foto-preview')">
-              <input type="file" id="pz-foto-file" accept="image/*" style="width:100px;font-size:12px"
+              <input type="file" id="pz-foto-file" accept="image/*" style="min-width:140px;flex:1"
                 onchange="handleFotoUpload('pz-foto','pz-foto-preview')">
             </div>
-            <div id="pz-foto-preview" style="margin-top:4px;max-width:100px;display:none"></div>
+            <div id="pz-foto-preview" style="margin-top:4px;max-width:140px;display:none"></div>
           </div>
         </div>
         <div class="field-row">
@@ -1767,7 +1819,7 @@
           Ingredientes / Ficha técnica</div>
         <div class="ing-list">
           <div class="ing-row ing-head">
-            <span>Insumo</span><span>Qtd usada</span><span>Un</span><span></span>
+            <span>Insumo</span><span>Qtd usada</span><span>Un</span><span>Preço</span><span></span>
           </div>
           <div id="ing-rows"></div>
         </div>
@@ -1780,11 +1832,15 @@
           <div class="cmv-preview-row" style="color:var(--muted)"><span>CMV (Custo / Venda)</span><span id="pv-cmv"
               style="font-weight:700">— %</span></div>
           <div class="cmv-preview-row"><span>Margem bruta</span><span id="pv-margem">R$ 0,00</span></div>
-          <div class="cmv-preview-row" style="background:var(--cream);border-radius:6px;padding:4px 0;margin-top:4px">
-            <span style="font-weight:700" id="pv-faixa-label"><i data-lucide="lightbulb"
-                style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Faixa ideal</span><span
-              id="pv-sugerido" style="font-weight:700">R$ 0,00</span>
+          <div class="cmv-preview-row" style="margin-top:6px">
+            <span style="font-size:13px">🎯 Meta CMV</span>
+            <span><input type="number" id="pv-meta-cmv" value="30" min="20" max="50" step="1" style="width:60px;padding:2px 6px;border:1px solid var(--border);border-radius:4px;font-size:13px;text-align:center" oninput="updateCmvPreview()"> %</span>
           </div>
+          <div class="cmv-preview-row" style="background:var(--cream);border-radius:6px;padding:6px 0;margin-top:4px">
+            <span style="font-weight:700;font-size:14px">💡 Preço sugerido</span>
+            <span id="pv-sugerido" style="font-weight:700;font-size:15px">R$ 0,00</span>
+          </div>
+          <div id="pv-warning" style="margin-top:4px"></div>
         </div>
       </div>
       <div class="modal-foot">
@@ -1808,14 +1864,15 @@
         <div class="field-row">
           <div class="field"><label>Preço de venda (R$) *</label><input type="number" id="beb-preco" step="0.50" min="0"
               placeholder="0,00"></div>
+          <div class="field"><label>Custo (R$) *</label><input type="number" id="beb-custo" step="0.10" min="0" placeholder="0,00"></div>
           <div class="field"><label>Foto da bebida</label>
             <div style="display:flex;gap:4px;flex-wrap:wrap">
               <input type="text" id="beb-foto" placeholder="https://... ou upload" style="flex:1;min-width:120px"
                 oninput="showFotoPreview('beb-foto','beb-foto-preview')">
-              <input type="file" id="beb-foto-file" accept="image/*" style="width:100px;font-size:12px"
+              <input type="file" id="beb-foto-file" accept="image/*" style="min-width:140px;flex:1"
                 onchange="handleFotoUpload('beb-foto','beb-foto-preview')">
             </div>
-            <div id="beb-foto-preview" style="margin-top:4px;max-width:100px;display:none"></div>
+            <div id="beb-foto-preview" style="margin-top:4px;max-width:140px;display:none"></div>
           </div>
         </div>
         <div class="field"><label style="display:flex;align-items:center;gap:6px"><input type="checkbox" id="beb-ativo"
@@ -1857,7 +1914,7 @@
 
     // ---- DEFAULT DATA ----
     const DEFAULT = {
-      config: { nome: "Tonda Pizza Artesanal", whatsapp: "5511983746277", taxaEntrega: 0, tempoEstimado: "30-40 minutos", pin: PIN, cmvIdeal: 30, massaRecipe: [{ insumoId: "i16", qtd: 1 }, { insumoId: "i17", qtd: 650 }, { insumoId: "i18", qtd: 1 }, { insumoId: "i19", qtd: 24 }, { insumoId: "i20", qtd: 13 }], massaPesoPaneto: 270 },
+      config: { nome: "Tonda Pizza Artesanal", whatsapp: "5511983746277", taxaEntrega: 0, tempoEstimado: "30-40 minutos", pin: PIN, cmvIdeal: 30, custoFixoPorPizza: 0, massaRecipe: [{ insumoId: "i16", qtd: 1 }, { insumoId: "i17", qtd: 650 }, { insumoId: "i18", qtd: 1 }, { insumoId: "i19", qtd: 24 }, { insumoId: "i20", qtd: 13 }], massaPesoPaneto: 270 },
       insumos: [
         { id: "i1", nome: "Massa artesanal", unidade: "un", custo: 1.13, grupo: "massa" },
         { id: "i2", nome: "Mussarela Bacio", unidade: "kg", custo: 41.83, grupo: "cobertura" },
@@ -1887,10 +1944,10 @@
         { id: "p5", nome: "Pepperoni", categoria: "Premium", preco: 72, ativo: true, foto: "", complementos: [{ nome: "Extra pepperoni", preco: 8 }], ingredientes: [{ insumoId: "i1", quantidade: 1 }, { insumoId: "i2", quantidade: 0.20 }, { insumoId: "i12", quantidade: 0.10 }, { insumoId: "i7", quantidade: 0.15 }] },
       ],
       bebidas: [
-        { id: "b1", nome: "Coca-Cola 2L", preco: 12, ativo: true },
-        { id: "b2", nome: "Água Mineral 500ml", preco: 5, ativo: true },
-        { id: "b3", nome: "Guaraná Antarctica 2L", preco: 10, ativo: true },
-        { id: "b4", nome: "Heineken Long Neck", preco: 9, ativo: true },
+        { id: "b1", nome: "Coca-Cola 2L", preco: 12, custo: 0, ativo: true },
+        { id: "b2", nome: "Água Mineral 500ml", preco: 5, custo: 0, ativo: true },
+        { id: "b3", nome: "Guaraná Antarctica 2L", preco: 10, custo: 0, ativo: true },
+        { id: "b4", nome: "Heineken Long Neck", preco: 9, custo: 0, ativo: true },
       ],
       estoque: [], // [{insumoId, qtd, data, valorTotal}]
       vendas: [], // [{pizzaId, qtd, data}]
@@ -2119,6 +2176,7 @@
       if (pin === correctPin) {
         document.getElementById("login").style.display = "none";
         document.getElementById("app").style.display = "flex";
+        if (localStorage.getItem('tonda_sidebar_collapsed') === 'true') document.getElementById('sidebar').classList.add('collapsed');
         renderAll();
         loadPedidosFromServer();
       } else {
@@ -2152,6 +2210,15 @@
       document.getElementById('sidebar').classList.toggle('open');
       document.getElementById('sidebar-overlay').classList.toggle('open');
     }
+    function toggleSidebarCollapse() {
+      const side = document.getElementById('sidebar');
+      side.classList.toggle('collapsed');
+      const isCollapsed = side.classList.contains('collapsed');
+      localStorage.setItem('tonda_sidebar_collapsed', isCollapsed);
+      document.querySelector('.collapse-btn').title = isCollapsed ? 'Expandir sidebar' : 'Recolher sidebar';
+      document.querySelector('.collapse-label').textContent = isCollapsed ? 'Expandir' : 'Recolher';
+      setTimeout(lucide.createIcons, 50);
+    }
 
     // ---- TABS ----
     function showTab(id) {
@@ -2169,7 +2236,6 @@
       if (id === "bebidas") renderBebidas();
       if (id === "config") renderConfig();
       if (id === "estoque") renderEstoque();
-      if (id === "vendas") renderVendas();
       if (id === "pedidos") { renderPedidos(); loadPedidosFromServer(); }
       if (id === "analise") renderAnalise();
       if (id === "massa") renderMassa();
@@ -2187,64 +2253,7 @@
         });
       });
     }
-    // ---- VENDAS ----
-    function renderVendas() {
-      document.getElementById('vendas-list').innerHTML = (DB.vendas || []).sort((a, b) => b.data.localeCompare(a.data)).map(v => {
-        const pz = DB.pizzas.find(p => p.id === v.pizzaId);
-        return `<tr>
-      <td>${new Date(v.data).toLocaleDateString()}</td>
-      <td>${pz ? pz.nome : '-'}</td>
-      <td>${v.qtd}</td>
-      <td>${pz ? fmtR((pz.preco || 0) * v.qtd) : '-'}</td>
-    </tr>`;
-      }).join('') || `<tr><td colspan='4' style='text-align:center;color:var(--muted);padding:24px'>Nenhuma venda registrada.</td></tr>`;
-      lucide.createIcons();
-      renderAnalise();
-    }
-
-    function openVendaModal() {
-      const sel = document.getElementById('venda-pizza');
-      sel.innerHTML = DB.pizzas.filter(p => p.ativo).map(pz => `<option value="${pz.id}">${pz.nome}</option>`).join('');
-      document.getElementById('venda-qtd').value = '';
-      const today = new Date().toISOString().slice(0, 10);
-      document.getElementById('venda-data').value = today;
-      openModal('modal-venda');
-    }
-
-    function saveVenda() {
-      const pizzaId = document.getElementById('venda-pizza').value;
-      const qtd = parseInt(document.getElementById('venda-qtd').value);
-      const data = document.getElementById('venda-data').value || new Date().toISOString().slice(0, 10);
-      if (!pizzaId || isNaN(qtd) || qtd <= 0) {
-        toast('<i data-lucide="alert-triangle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Preencha todos os campos corretamente.');
-        return;
-      }
-      DB.vendas = DB.vendas || [];
-      DB.vendas.push({ pizzaId, qtd, data: new Date(data).toISOString() });
-      // Atualiza vendas acumuladas na pizza
-      const pz = DB.pizzas.find(p => p.id === pizzaId);
-      if (pz) {
-        pz.vendas = (pz.vendas || 0) + qtd;
-      }
-      // Baixa automática de estoque
-      DB.consumo = DB.consumo || [];
-      if (pz && pz.ingredientes) {
-        pz.ingredientes.forEach(ing => {
-          DB.consumo.push({
-            insumoId: ing.insumoId,
-            qtd: ing.quantidade * qtd,
-            data: new Date(data).toISOString(),
-            pizzaNome: pz.nome
-          });
-        });
-      }
-      save(DB);
-      renderVendas();
-      renderEstoque();
-      renderDashboard();
-      closeModal('modal-venda');
-      toast('<i data-lucide="check-circle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Venda registrada!');
-    }
+    // ---- VENDAS (dados internos, semaba UI) ----
 
     // ---- PEDIDOS (dos clientes) ----
     let cachedPedidos = [];
@@ -2425,7 +2434,6 @@
         setTimeout(addTableLabels, 50);
         if (document.getElementById('tab-dashboard').classList.contains('active')) renderDashboard();
         if (document.getElementById('tab-analise').classList.contains('active')) renderAnalise();
-        if (document.getElementById('tab-vendas').classList.contains('active')) renderVendas();
         toast('<i data-lucide="check-circle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Pedidos carregados do servidor.');
       } catch (e) {
         console.warn('Não foi possível carregar pedidos:', e);
@@ -2434,22 +2442,37 @@
     }
     // ---- CMV HELPERS ----
     function calcCmv(pizza) {
-      const custo = (pizza.ingredientes || []).reduce((s, ing) => {
+      const custoIngredientes = (pizza.ingredientes || []).reduce((s, ing) => {
         const ins = DB.insumos.find(i => i.id === ing.insumoId);
         return s + (ins ? ins.custo * ing.quantidade : 0);
       }, 0);
+      const custoFixo = DB.config.custoFixoPorPizza || 0;
+      const custo = custoIngredientes + custoFixo;
       const pct = pizza.preco > 0 ? (custo / pizza.preco) * 100 : 0;
-      return { custo, pct, margem: pizza.preco - custo };
+      return { custo, pct, margem: pizza.preco - custo, custoFixo };
     }
-    function cmvClass(pct) {
-      if (pct <= 30) return "badge-green";
-      if (pct <= 42) return "badge-amber";
+    function cmvClass(pct, cat) {
+      const [min, max] = cat === "Premium" ? [30, 35] : cat === "Doces" ? [25, 32] : [25, 32];
+      if (pct <= min) return "badge-green";
+      if (pct <= max) return "badge-amber";
       return "badge-red";
     }
-    function cmvColor(pct) {
-      if (pct <= 30) return "#5A6B45";
-      if (pct <= 42) return "#C9A86A";
+    function cmvColor(pct, cat) {
+      const [min, max] = cat === "Premium" ? [30, 35] : cat === "Doces" ? [25, 32] : [25, 32];
+      if (pct <= min) return "#5A6B45";
+      if (pct <= max) return "#C9A86A";
       return "#B85C38";
+    }
+    function cmvLabel(pct, cat) {
+      const [min, max] = cat === "Premium" ? [30, 35] : cat === "Doces" ? [25, 32] : [25, 32];
+      if (pct <= min) return "Ótimo";
+      if (pct <= max) return "Atenção";
+      return "Alto";
+    }
+    function cmvFaixa(cat) {
+      if (cat === "Premium") return [28, 35];
+      if (cat === "Doces") return [25, 32];
+      return [25, 32];
     }
     function fmtR(n) {
       if (n === 0) return "R$ 0,00";
@@ -2524,9 +2547,9 @@
       <span>${fmtR(p.preco)}</span>
       <span style="color:var(--green-olive)">${fmtR(p.margem)}</span>
       <span><div class="cmv-bar-wrap">
-        <div class="cmv-bar-bg"><div class="cmv-bar-fill" style="width:${Math.min(p.pct, 100)}%;background:${cmvColor(p.pct)}"></div></div>
-        <span class="cmv-pct" style="color:${cmvColor(p.pct)}">${fmtP(p.pct)}</span>
-        <span class="badge ${cmvClass(p.pct)}">${p.pct <= 30 ? "Ótimo" : p.pct <= 42 ? "Atenção" : "Alto"}</span>
+         <div class="cmv-bar-bg"><div class="cmv-bar-fill" style="width:${Math.min(p.pct, 100)}%;background:${cmvColor(p.pct, p.categoria)}"></div></div>
+        <span class="cmv-pct" style="color:${cmvColor(p.pct, p.categoria)}">${fmtP(p.pct)}</span>
+        <span class="badge ${cmvClass(p.pct, p.categoria)}">${cmvLabel(p.pct, p.categoria)}</span>
       </div></span>
     </div>`;
       }).join("") || "<div style='padding:20px;text-align:center;color:var(--muted);font-size:13px'>Nenhuma pizza com ingredientes cadastrados.</div>";
@@ -2555,6 +2578,42 @@
         }).join('') : '<div style="padding:16px;text-align:center;color:var(--muted);font-size:13px">Nenhuma venda registrada ainda.</div>';
         lucide.createIcons();
       }
+      // ---- Menu Engineering Matrix ----
+      const matriz = { star: [], cashCow: [], enigma: [], dog: [] };
+      cmvs.forEach(p => {
+        const margemPct = p.margem / p.preco;
+        if (margemPct >= 0.5) matriz.star.push(p);
+        else if (margemPct >= 0.3) matriz.cashCow.push(p);
+        else if (margemPct >= 0.15) matriz.enigma.push(p);
+        else matriz.dog.push(p);
+      });
+      document.getElementById("dash-matriz").innerHTML = `
+        <div class="page-title" style="font-size:17px;margin-bottom:12px">📊 Matriz Menu Engineering</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px">
+          <div style="background:#e8f5e9;border-radius:8px;padding:12px"><b>⭐ Estrelas</b><br>Alta margem (>50%)<br>${matriz.star.map(p => p.nome).join(', ') || '—'}</div>
+          <div style="background:#fff3e0;border-radius:8px;padding:12px"><b>🐄 Vaca leiteira</b><br>Margem média (30-50%)<br>${matriz.cashCow.map(p => p.nome).join(', ') || '—'}</div>
+          <div style="background:#e3f2fd;border-radius:8px;padding:12px"><b>❓ Enigma</b><br>Margem baixa (15-30%)<br>${matriz.enigma.map(p => p.nome).join(', ') || '—'}</div>
+          <div style="background:#fce4ec;border-radius:8px;padding:12px"><b>🐕 Cachorro</b><br>Margem crítica (<15%)<br>${matriz.dog.map(p => p.nome).join(', ') || '—'}</div>
+        </div>`;
+      // ---- CMV Real vs Teórico ----
+      const cmvReal = { custo: 0, venda: 0 };
+      vendas.forEach(v => {
+        const p = DB.pizzas.find(x => x.id === v.pizzaId);
+        if (p) {
+          const cmv = calcCmv(p);
+          cmvReal.custo += cmv.custo * v.qtd;
+          cmvReal.venda += p.preco * v.qtd;
+        }
+      });
+      const realPct = cmvReal.venda > 0 ? (cmvReal.custo / cmvReal.venda) * 100 : 0;
+      const diff = realPct - avgCmv;
+      document.getElementById("dash-cmv-real").innerHTML = `
+        <div class="page-title" style="font-size:17px;margin-bottom:12px">📈 CMV: Teórico vs Real</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;font-size:13px">
+          <div style="background:var(--cream);border-radius:8px;padding:12px;text-align:center"><div style="color:var(--muted);font-size:11px">CMV Teórico (médio)</div><div style="font-size:22px;font-weight:700">${fmtP(avgCmv)}</div></div>
+          <div style="background:var(--cream);border-radius:8px;padding:12px;text-align:center"><div style="color:var(--muted);font-size:11px">CMV Real (vendas)</div><div style="font-size:22px;font-weight:700;color:${cmvColor(realPct)}">${fmtP(realPct)}</div></div>
+          <div style="background:var(--cream);border-radius:8px;padding:12px;text-align:center"><div style="color:var(--muted);font-size:11px">Diferença</div><div style="font-size:22px;font-weight:700;color:${diff > 3 ? 'var(--terracotta)' : 'var(--green-olive)'}">${diff > 0 ? '+' : ''}${fmtP(diff)}</div></div>
+        </div>`;
     }
 
     // ---- INSUMOS ----
@@ -2604,7 +2663,7 @@
       <td><span class="badge badge-gray">${p.categoria}</span></td>
       <td>${fmtR(custo)}</td>
       <td>${fmtR(p.preco)}</td>
-      <td><span class="badge ${cmvClass(pct)}">${fmtP(pct)}</span></td>
+      <td><span class="badge ${cmvClass(pct, p.categoria)}">${fmtP(pct)}</span></td>
       <td style="color:var(--green-olive);font-weight:600">${fmtR(margem)}</td>
       <td>
         <div style="display:flex;gap:6px">
@@ -2631,6 +2690,7 @@
       document.getElementById("cfg-taxa").value = cfg.taxaEntrega || 0;
       document.getElementById("cfg-tempo").value = cfg.tempoEstimado || "30-40 minutos";
       document.getElementById("cfg-cmv").value = cfg.cmvIdeal || 30;
+      document.getElementById("cfg-custo-fixo").value = cfg.custoFixoPorPizza || 0;
       cfgPhonePreview();
     }
     function saveConfig() {
@@ -2639,6 +2699,7 @@
       DB.config.taxaEntrega = parseNum(document.getElementById("cfg-taxa").value) || 0;
       DB.config.tempoEstimado = document.getElementById("cfg-tempo").value.trim();
       DB.config.cmvIdeal = parseNum(document.getElementById("cfg-cmv").value) || 30;
+      DB.config.custoFixoPorPizza = parseNum(document.getElementById("cfg-custo-fixo").value) || 0;
       const newPin = document.getElementById("cfg-pin").value.trim();
       if (newPin.length === 4 && /^[0-9]{4}$/.test(newPin)) DB.config.pin = newPin;
       if (save(DB)) toast(`<i data-lucide="check-circle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Configurações salvas!`);
@@ -2681,11 +2742,6 @@
     function exportCSV(type) {
       if (type === "insumos") {
         downloadCSV("insumos.csv", ["Nome", "Unidade", "Custo", "Grupo"], DB.insumos.map(i => [i.nome, i.unidade, i.custo, i.grupo]));
-      } else if (type === "vendas") {
-        downloadCSV("vendas.csv", ["Data", "Pizza", "Qtd", "Valor"], (DB.vendas || []).map(v => {
-          const p = DB.pizzas.find(x => x.id === v.pizzaId);
-          return [new Date(v.data).toLocaleDateString(), p ? p.nome : "", v.qtd, p ? "R$" + (p.preco * v.qtd).toFixed(2).replace(".", ",") : ""];
-        }));
       } else if (type === "estoque") {
         downloadCSV("estoque.csv", ["Data", "Insumo", "Qtd", "Unidade", "Valor total", "Preço unit."], (DB.estoque || []).map(e => {
           const ins = DB.insumos.find(i => i.id === e.insumoId);
@@ -2744,7 +2800,13 @@
       const editId = document.getElementById("insumo-edit-id").value;
       if (editId) {
         const ins = DB.insumos.find(i => i.id === editId);
-        if (ins) { ins.nome = nome; ins.unidade = un; ins.custo = custo }
+        if (ins) {
+          if (ins.custo !== undefined && ins.custo !== custo) {
+            ins.historico = ins.historico || [];
+            ins.historico.push({ custo: ins.custo, data: new Date().toISOString().split('T')[0] });
+          }
+          ins.nome = nome; ins.unidade = un; ins.custo = custo
+        }
       } else {
         DB.insumos.push({ id: uid(), nome, unidade: un, custo });
       }
@@ -2777,6 +2839,8 @@
       document.getElementById("pz-foto-preview").innerHTML = '';
       ingRowCount = 0;
       compCount = 0;
+      document.getElementById("pv-meta-cmv").value = DB.config.cmvIdeal || 30;
+      addIngRow({ insumoId: "i14", quantidade: 1 });
       updateCmvPreview();
       openModal("modal-pizza");
     }
@@ -2802,7 +2866,11 @@
     }
     function addIngRow(data) {
       const rowId = ingRowCount++;
-      const opts = DB.insumos.filter(ins => ins.grupo === "cobertura" || ins.id === "i1").map(ins => `<option value="${ins.id}" ${data && data.insumoId === ins.id ? "selected" : ""}>${ins.nome} (${ins.unidade})</option>`).join("");
+      const sorted = [...DB.insumos.filter(ins => ins.grupo === "cobertura" || ins.id === "i1")].sort((a, b) => {
+        const priority = { i1: 0, i12: 1, i2: 2 };
+        return (priority[a.id] ?? 99) - (priority[b.id] ?? 99) || a.nome.localeCompare(b.nome);
+      });
+      const opts = sorted.map(ins => `<option value="${ins.id}" ${data && data.insumoId === ins.id ? "selected" : ""}>${ins.nome} (${ins.unidade})</option>`).join("");
       const row = document.createElement("div");
       row.className = "ing-row";
       row.id = "ing-row-" + rowId;
@@ -3076,21 +3144,30 @@
       }, 0);
       const pct = preco > 0 ? (custo / preco) * 100 : 0;
       const margem = preco - custo;
+
+      const metaCmv = parseNum(document.getElementById("pv-meta-cmv").value) || 30;
+      const precoSugerido = custo > 0 ? custo / (metaCmv / 100) : 0;
+
       const cat = document.getElementById("pz-cat").value;
       const isPremium = cat === "Premium";
       const cmvMin = isPremium ? 0.28 : 0.25;
       const cmvMax = 0.32;
       const precoMin = custo > 0 ? custo / cmvMax : 0;
       const precoMax = custo > 0 ? custo / cmvMin : 0;
-      document.getElementById("pv-faixa-label").innerHTML = `<i data-lucide="lightbulb" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Faixa ideal (${(cmvMin * 100).toFixed(0)}%-${(cmvMax * 100).toFixed(0)}%)`;
-      lucide.createIcons();
       document.getElementById("pv-custo").textContent = fmtR(custo);
       document.getElementById("pv-preco").textContent = fmtR(preco);
       document.getElementById("pv-margem").textContent = fmtR(margem);
-      document.getElementById("pv-sugerido").textContent = custo > 0 ? `${fmtR(precoMin)} — ${fmtR(precoMax)}` : "—";
+      document.getElementById("pv-sugerido").textContent = custo > 0 ? fmtR(precoSugerido) : "R$ 0,00";
       const cmvEl = document.getElementById("pv-cmv");
       cmvEl.textContent = preco > 0 ? fmtP(pct) : "— %";
-      cmvEl.style.color = preco > 0 ? cmvColor(pct) : "var(--muted)";
+      cmvEl.style.color = preco > 0 ? cmvColor(pct, cat) : "var(--muted)";
+
+      // Warning alerts
+      let warning = "";
+      if (preco > 0 && pct > 42) warning = '<div style="color:var(--terracotta);font-size:12px;margin-top:6px;font-weight:600">⚠️ CMV alto! Preço muito baixo para o custo.</div>';
+      else if (preco > 0 && margem > preco * 0.7) warning = '<div style="color:#C9A86A;font-size:12px;margin-top:6px">💡 Margem muito alta — preço pode estar acima do mercado.</div>';
+      else if (preco > 0 && pct < 20) warning = '<div style="color:var(--green-olive);font-size:12px;margin-top:6px">✅ Margem confortável, mas verifique se o preço condiz com o mercado.</div>';
+      document.getElementById("pv-warning").innerHTML = warning;
     }
     function savePizza() {
       const nome = document.getElementById("pz-nome").value.trim();
@@ -3131,12 +3208,14 @@
             ${!b.ativo ? '<span class="badge badge-gray" style="margin-left:6px">Inativo</span>' : ''}
           </td>
           <td>${fmtR(b.preco)}</td>
+          <td>${fmtR(b.custo || 0)}</td>
+          <td><span class="badge ${cmvClass(b.preco > 0 ? ((b.custo||0)/b.preco)*100 : 0)}">${b.preco > 0 ? fmtP(((b.custo||0)/b.preco)*100) : "—"}</span></td>
           <td>
             <button class="btn btn-sm btn-ghost" onclick="editBebida('${b.id}')"><i data-lucide="pencil" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i></button>
             <button class="btn btn-sm btn-danger" onclick="delBebida('${b.id}')"><i data-lucide="trash-2" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i></button>
           </td>
         </tr>
-      `).join("") || `<tr><td colspan="3" style="text-align:center;color:var(--muted);padding:24px">Nenhuma bebida cadastrada.</td></tr>`;
+      `).join("") || `<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:24px">Nenhuma bebida cadastrada.</td></tr>`;
       lucide.createIcons();
     }
     function openBebidaModal() {
@@ -3144,6 +3223,7 @@
       document.getElementById("beb-edit-id").value = "";
       document.getElementById("beb-nome").value = "";
       document.getElementById("beb-preco").value = "";
+      document.getElementById("beb-custo").value = "";
       document.getElementById("beb-foto").value = "";
       document.getElementById("beb-foto-file").value = "";
       document.getElementById("beb-ativo").checked = true;
@@ -3158,6 +3238,7 @@
       document.getElementById("beb-edit-id").value = id;
       document.getElementById("beb-nome").value = b.nome;
       document.getElementById("beb-preco").value = b.preco;
+      document.getElementById("beb-custo").value = b.custo || 0;
       document.getElementById("beb-foto").value = b.foto || "";
       document.getElementById("beb-foto-file").value = "";
       document.getElementById("beb-ativo").checked = b.ativo !== false;
@@ -3168,15 +3249,16 @@
       const editId = document.getElementById("beb-edit-id").value;
       const nome = document.getElementById("beb-nome").value.trim();
       const preco = parseNum(document.getElementById("beb-preco").value);
+      const custo = parseNum(document.getElementById("beb-custo").value) || 0;
       const foto = document.getElementById("beb-foto").value.trim();
       const ativo = document.getElementById("beb-ativo").checked;
       if (!nome || !preco || preco <= 0) { toast(`<i data-lucide="alert-triangle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Preencha nome e preço.`); return }
       DB.bebidas = DB.bebidas || [];
       if (editId) {
         const b = DB.bebidas.find(x => x.id === editId);
-        if (b) { b.nome = nome; b.preco = preco; b.foto = foto; b.ativo = ativo }
+        if (b) { b.nome = nome; b.preco = preco; b.custo = custo; b.foto = foto; b.ativo = ativo }
       } else {
-        DB.bebidas.push({ id: uid(), nome, preco, foto, ativo });
+        DB.bebidas.push({ id: uid(), nome, preco, custo, foto, ativo });
       }
       save(DB); renderBebidas(); closeModal("modal-bebida"); toast(`<i data-lucide="check-circle" style="display:inline-block;width:1em;height:1em;vertical-align:-.15em"></i> Bebida salva!`);
     }
@@ -3252,7 +3334,7 @@
           <td>${fmtR(r.fat)}</td>
           <td>${fmtR(custoTotal)}</td>
           <td style="color:var(--green-olive)">${fmtR(lucro)}</td>
-          <td><span class="badge ${cmvClass(cmv.pct)}">${fmtP(cmv.pct)}</span></td>
+          <td><span class="badge ${cmvClass(cmv.pct, p.categoria)}">${fmtP(cmv.pct)}</span></td>
         </tr>`;
       }).join("") : "<tr><td colspan='7' style='text-align:center;color:var(--muted);padding:24px'>Nenhuma venda registrada.</td></tr>";
       lucide.createIcons();
